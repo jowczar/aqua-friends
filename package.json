@@ -11,5 +11,10 @@
   "bugs": {
     "url": "https://github.com/jowczar/aqua-friends/issues"
   },
-  "homepage": "https://github.com/jowczar/aqua-friends#readme"
+  "homepage": "https://github.com/jowczar/aqua-friends#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
+  }
 }
