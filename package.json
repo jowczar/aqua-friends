@@ -1,0 +1,15 @@
+{
+  "name": "aqua-friends",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jowczar/aqua-friends.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jowczar/aqua-friends/issues"
+  },
+  "homepage": "https://github.com/jowczar/aqua-friends#readme"
+}
