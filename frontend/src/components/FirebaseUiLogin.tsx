@@ -3,6 +3,7 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { FirebaseApp } from "firebase/app";
 import { getAuth }from "firebase/auth";
+import 'firebaseui/dist/firebaseui.css'
 
 interface Props {
   firebaseClient: FirebaseApp;
