@@ -1,6 +1,7 @@
 "use client";
 
 import FirebaseUiLogin from "@/components/FirebaseUiLogin";
+import Loader from "@/components/Loader";
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, EmailAuthProvider }from "firebase/auth";
 import Image from "next/image";
@@ -16,6 +17,17 @@ const firebaseConfig = {
 
 export default function Login() {
     const app = initializeApp(firebaseConfig);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // TODO: probably should be in a higher place, the whole checking if user is logged in
+    // and redirecting to login page if not, but I'm just gonna leave it here for now as I'm styling the login page atm
+    if (isLoading) {
+        return (
+            <div className="grid h-screen place-items-center animate-pulse duration-500">
+                <Loader text="Please wait a moment" />
+            </div>
+        );
+    }
 
     return (
         <div className="grid h-screen place-items-center">
