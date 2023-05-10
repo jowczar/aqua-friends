@@ -1,7 +1,7 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Gothic_A1 } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] })
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${font.className} bg-background`}>{children}</body>
     </html>
   )
 }
