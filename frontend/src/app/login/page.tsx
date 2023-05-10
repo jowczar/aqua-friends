@@ -2,21 +2,14 @@
 
 import FirebaseUiLogin from "@/components/FirebaseUiLogin";
 import Loader from "@/components/Loader";
-import { initializeApp } from "firebase/app";
+import useFirebaseApp from "@/hooks/useFirebaseApp";
 import { GoogleAuthProvider, EmailAuthProvider }from "firebase/auth";
 import Image from "next/image";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAH13HYYacBDxbdRvIk5m7_uxwqeePdkWg",
-  authDomain: "aquafriends-f8367.firebaseapp.com",
-  projectId: "aquafriends-f8367",
-  storageBucket: "aquafriends-f8367.appspot.com",
-  messagingSenderId: "184957897431",
-  appId: "1:184957897431:web:093a877a4ecf804beb3e92"
-};
+import { useState } from "react";
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Login() {
-    const app = initializeApp(firebaseConfig);
+    const app = useFirebaseApp();
     const [isLoading, setIsLoading] = useState(true);
 
     // TODO: probably should be in a higher place, the whole checking if user is logged in

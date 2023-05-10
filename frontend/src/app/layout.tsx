@@ -1,3 +1,4 @@
+import FirebaseProvider from '@/context/FirebaseProvider'
 import './globals.css'
 import { Gothic_A1 } from 'next/font/google'
 
@@ -15,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${font.className} bg-background`}>{children}</body>
+      <body className={`${font.className} bg-background`}>
+        <FirebaseProvider>
+          {children}
+        </FirebaseProvider>
+      </body>
     </html>
   )
 }
