@@ -1,25 +1,37 @@
 "use client";
 
 import FirebaseUiLogin from "@/components/FirebaseUiLogin";
-import Loader from "@/components/Loader";
+import { ScreenLoader } from "@/components/Loader";
 import useFirebaseApp from "@/hooks/useFirebaseApp";
-import { GoogleAuthProvider, EmailAuthProvider }from "firebase/auth";
+import { GoogleAuthProvider, EmailAuthProvider, getAuth }from "firebase/auth";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Login() {
     const app = useFirebaseApp();
-    const [isLoading, setIsLoading] = useState(true);
+    const auth = getAuth(app);
+    const [user, loading, error] = useAuthState(auth);
+    const router = useRouter();
+    
+    useEffect(() => {
+        if (user) {
+            router.push("/");
+        }
+    }, [user, router]);
 
-    // TODO: probably should be in a higher place, the whole checking if user is logged in
-    // and redirecting to login page if not, but I'm just gonna leave it here for now as I'm styling the login page atm
-    if (isLoading) {
-        return (
-            <div className="grid h-screen place-items-center animate-pulse duration-500">
-                <Loader text="Please wait a moment" />
-            </div>
-        );
+    if (loading) {
+        return <ScreenLoader />;
+    }
+
+    if (error) {
+        console.error(error);
+        return <p>Error: {error.message}</p>;
+    }
+
+    if (user) {
+        return;
     }
 
     return (
