@@ -4,13 +4,19 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
+type User = {
+    displayName: string;
+    email: string;
+    photoURL: string;
+};
+
 type NavbarProps = {
   navigation: {
     name: string;
     href: string;
     current: boolean;
   }[];
-  user: any;
+  user: User;
   signOut: () => void;
 };
 
