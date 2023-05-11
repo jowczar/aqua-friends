@@ -26,7 +26,7 @@ const Navbar = () => {
         return nav;
       })
     );
-  }, [navigation, pathname]);
+  }, [pathname]);
 
   const signOut = () => {
     const auth = getAuth();
@@ -35,7 +35,7 @@ const Navbar = () => {
   };
 
   if (!user) {
-    return;
+    return null;
   }
 
   return (

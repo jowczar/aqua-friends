@@ -8,6 +8,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Gothic_A1 } from 'next/font/google'
+
+const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 export default function Login() {
     const app = useFirebaseApp();
@@ -35,7 +38,7 @@ export default function Login() {
     }
 
     return (
-        <div className="grid h-screen place-items-center">
+        <div className={`grid h-screen place-items-center ${font.className}`}>
             <div className="flex flex-col gap-4 items-center">
                 <Image 
                     src="logo.svg" 

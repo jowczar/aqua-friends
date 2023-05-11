@@ -1,8 +1,8 @@
 import FirebaseProvider from '@/context/FirebaseProvider'
 import './globals.css'
-import { Gothic_A1 } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
-const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] })
+const font = Inter({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 export const metadata = {
   title: 'Aqua Friends',

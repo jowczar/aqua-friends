@@ -23,6 +23,6 @@ const firebaseUser = {
 type Story = StoryObj<typeof Navbar>;
 
 export const Authenticated: Story = {
-    name: 'Authenticated user',
+    name: 'Navbar',
     render: () => <Navbar signOut={() => {}} user={firebaseUser} navigation={INITIAL_ROUTES} />,
 };
