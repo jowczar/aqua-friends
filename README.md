@@ -33,6 +33,13 @@ firebase login
 firebase serve
 ```
 
+### Develop frontend components
+Use storybook to develop frontend components. 
+Inside `frontend` folder run storybook server:
+```
+npm run storybook
+```
+
 ### Develop frontend locally
 Inside `frontend` folder run development server:
 ```
