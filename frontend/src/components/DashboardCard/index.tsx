@@ -11,8 +11,8 @@ const DashboardCard = ({ icon, text, title, link }: DashboardCardProps) => {
             <div className="bg-primary w-32 h-32 rounded-2xl flex items-center justify-center">
                 <img src={icon} alt="icon" className="w-16 h-16" />
             </div>
-            <h3 className="text-center font-bold text-2xl mt-6">{title}</h3>
-            <p className="text-center text-xl text-gray-500 mt-4 leading-6">{text}</p>
+            <h3 className="text-center font-bold text-xl mt-6">{title}</h3>
+            <p className="text-center text-lg text-gray-500 mt-4 leading-6">{text}</p>
         </a>
     );
 };
