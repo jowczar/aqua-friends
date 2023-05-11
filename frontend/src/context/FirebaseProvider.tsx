@@ -19,6 +19,7 @@ type FirebaseProviderProps = {
 };
 
 export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
+    // TODO: check how many times it rerenders, if many then use useMemo or something similar
     const app = initializeApp(firebaseConfig);
     console.log('🔥 Firebase app initialized');
     

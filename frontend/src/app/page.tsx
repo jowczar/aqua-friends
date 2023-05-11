@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { ScreenLoader } from "@/components/Loader";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const auth = getAuth();
@@ -26,6 +27,8 @@ export default function Home() {
   }
   
   return (
-    <div>Home page</div>
+    <div>
+      <Navbar />
+    </div>
   )
 }
