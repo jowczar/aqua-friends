@@ -1,8 +1,7 @@
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import NavbarContainer from "./Navbar.component";
 
 export const INITIAL_ROUTES = [
@@ -26,6 +25,7 @@ const Navbar = () => {
         return nav;
       })
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const signOut = () => {
