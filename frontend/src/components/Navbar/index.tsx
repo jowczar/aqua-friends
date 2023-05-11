@@ -41,7 +41,7 @@ const Navbar = () => {
                 <div className="relative flex h-16 items-center justify-between">
                   <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                     {/* Mobile menu button*/}
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 hover:text-white focus:outline-none focus:ring-1 focus:ring-inset focus:ring-white">
                       <span className="sr-only">Open main menu</span>
                       <svg className="w-6 h-6" color="white" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
                     </Disclosure.Button>
@@ -79,14 +79,14 @@ const Navbar = () => {
                   <div className="absolute flex flex-row gap-3 inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button
                       type="button"
-                      className="rounded-full bg-white w-8 h-8 group flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      className="rounded-full bg-white hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">View messages</span>
                       <Image src="chat.svg" alt="chat" className="group-hover:scale-110 transition" height={16} width={18} aria-hidden="true" />
                     </button>
                     <button
                       type="button"
-                      className="rounded-full bg-white h-8 w-8 group flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      className="rounded-full bg-white hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">View favorites</span>
                       <Image src="heart.svg" alt="heart" className="group-hover:scale-110 transition" height={16} width={18} aria-hidden="true" />
@@ -95,7 +95,7 @@ const Navbar = () => {
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative">
                       <div>
-                        <Menu.Button className="flex rounded-full group bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                        <Menu.Button className="flex rounded-full group bg-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <span className="sr-only">Open user menu</span>
                           <img className="w-8 h-8 transition group-hover:scale-110 rounded-full" src={user?.photoURL || "man.png"} alt="user photo" />
                         </Menu.Button>
@@ -155,8 +155,8 @@ const Navbar = () => {
                       as="a"
                       href={item.href}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
+                        item.current ? 'bg-white text-primary font-bold' : 'text-white',
+                        'block rounded-md px-3 py-2 transition text-sm'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
