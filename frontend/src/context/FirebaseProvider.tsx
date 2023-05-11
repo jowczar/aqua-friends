@@ -22,7 +22,6 @@ type FirebaseProviderProps = {
 };
 
 export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
-
     return (
         <FirebaseContext.Provider value={app}>
             {children}

@@ -5,9 +5,9 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
 type User = {
-    displayName: string;
-    email: string;
-    photoURL: string;
+    displayName: string | null;
+    email: string | null;
+    photoURL: string | null;
 };
 
 type NavbarProps = {

@@ -26,13 +26,17 @@ const Navbar = () => {
         return nav;
       })
     );
-  }, [pathname]);
+  }, [navigation, pathname]);
 
   const signOut = () => {
     const auth = getAuth();
     auth.signOut();
     router.push("/login");
   };
+
+  if (!user) {
+    return;
+  }
 
   return (
     <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
