@@ -1,11 +1,12 @@
 type SearchProps = {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+    className?: string;
 }; 
 
-const Search = ({ onChange, onSubmit }: SearchProps) => {
+const Search = ({ onChange, onSubmit, className }: SearchProps) => {
     return (
-        <form className="flex items-center" onSubmit={onSubmit}>   
+        <form className={"flex items-center " + (className || "")} onSubmit={onSubmit}>   
             <label htmlFor="simple-search" className="sr-only">Search</label>
             <div className="relative w-full">
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
