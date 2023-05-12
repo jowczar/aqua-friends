@@ -1,5 +1,5 @@
 import { HexColor } from '@/common/types';
-import { TinyArea } from '@ant-design/plots';
+import dynamic from 'next/dynamic';
 
 type ChartProps = {
     data: number[];
@@ -7,6 +7,9 @@ type ChartProps = {
 };
 
 const Chart = ({ data, color }: ChartProps) => {
+    // Charts are not SSR compatible, so we need to use dynamic import
+    const TinyArea = dynamic(() => import('@ant-design/plots').then((mod) => mod.TinyArea), { ssr: false });
+
     const config = {
       autoFit: true,
       data,
