@@ -15,7 +15,7 @@ const Chart = ({ data, color }: ChartProps) => {
       data,
       smooth: true,
       areaStyle: {
-        fill: `l(90) 0:${color} 0.8:${color} 1:#FFFFFF`
+        fill: `l(90) 0:${color} 0.5:${color} 1:#FFFFFF`
       },
       line: {
         color
@@ -31,7 +31,7 @@ const Chart = ({ data, color }: ChartProps) => {
     };
   
     return (
-        <TinyArea {...config} />
+        <TinyArea className='!h-full' {...config} />
     );
 }
 
