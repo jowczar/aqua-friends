@@ -1,6 +1,5 @@
+import { HexColor } from '@/common/types';
 import { TinyArea } from '@ant-design/plots';
-
-type HexColor = `#${string}`;
 
 type ChartProps = {
     data: number[];
