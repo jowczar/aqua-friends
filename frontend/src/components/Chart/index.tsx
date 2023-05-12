@@ -16,6 +16,11 @@ const Chart = ({ data, color }: ChartProps) => {
       },
       line: {
         color
+      },
+      meta: {
+        x: {
+            range: [0,1]
+        }
       }
     };
   
