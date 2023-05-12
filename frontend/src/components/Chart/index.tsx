@@ -23,6 +23,9 @@ const Chart = ({ data, color }: ChartProps) => {
       meta: {
         x: {
             range: [0,1]
+        },
+        y: {
+            range: [0,1]
         }
       }
     };

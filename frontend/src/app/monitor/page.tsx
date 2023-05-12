@@ -62,7 +62,7 @@ export default function Monitor() {
                 <div className="flex flex-row gap-6 overflow-x-auto h-full w-full">
                     {sensors.map((sensor, index) => (
                         // aspect-square 
-                        <div className="flex-1 aspect-square" key={`sensor_${index}`}>
+                        <div className="flex-1 aspect-square overflow-hidden" key={`sensor_${index}`}>
                             <MonitorCard 
                                 parameter={sensor.parameter} 
                                 currentValue={sensor.currentValue} 
