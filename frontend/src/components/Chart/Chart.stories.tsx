@@ -16,5 +16,5 @@ const data = [
 
 export const Primary: Story = {
     name: 'Chart',
-    render: () => <Chart color='#d6e3fd' data={data} />,
+    render: () => <Chart color='#D4F5EC' data={data} />,
 };
