@@ -2,7 +2,7 @@ import { HexColor } from "@/common/types";
 import Chart from "../Chart";
 import classNames from "classnames";
 
-type MonitorCardProps = {
+export type MonitorCardProps = {
     parameter: string;
     currentValue: number | null;
     changePercentage: number | null;
@@ -48,13 +48,13 @@ const MonitorCard = ({ parameter, currentValue, changePercentage, currentValueDa
     }
 
     return (
-        <div className="flex flex-col gap-10 items-center justify-center w-full shadow-sm rounded-md bg-white">
-            <div className="flex flex-col items-center justify-center p-7">
-                <h3 className="text-base font-medium">{parameter}</h3>
+        <div className="flex flex-col gap-10 items-center justify-center w-full h-full shadow-sm rounded-md bg-white">
+            <div className="flex flex-col items-center justify-center p-7 flex-none">
+                <h3 className="text-base font-medium text-center">{parameter}</h3>
                 <h6 className="text-sm font-light text-gray-500">{currentValueDate}</h6>
             </div>
-            <div className="w-full">
-                <div className="flex flex-row gap-1 items-end mx-7">
+            <div className="w-full h-3/4">
+                <div className="flex flex-row gap-1 mx-7 items-end flex-none">
                     <span className="text-2xl font-bold">{currentValue}</span>
                     <span className={classNames(
                         getChangeClass(changePercentage), 
