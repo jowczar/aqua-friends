@@ -31,7 +31,7 @@ const Chart = ({ data, color }: ChartProps) => {
     };
   
     return (
-        <TinyArea className='!h-full' {...config} />
+        <TinyArea {...config} />
     );
 }
 

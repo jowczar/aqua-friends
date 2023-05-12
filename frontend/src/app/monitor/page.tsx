@@ -56,13 +56,10 @@ export default function Monitor() {
         <div>
             {/* TODO: move navbar higher */}
             <Navbar />
-            {/*  mx-auto max-w-7xl */}
             <div className="my-10 px-4 md:px-20">
-                {/* items-stretch */}
-                <div className="flex flex-row gap-6 overflow-x-auto h-full w-full">
+                <div className="flex flex-col md:flex-row gap-4 overflow-x-auto overflow-y-hidden">
                     {sensors.map((sensor, index) => (
-                        // aspect-square 
-                        <div className="flex-1 aspect-square overflow-hidden" key={`sensor_${index}`}>
+                        <div className="flex-1" key={`sensor_${index}`}>
                             <MonitorCard 
                                 parameter={sensor.parameter} 
                                 currentValue={sensor.currentValue} 

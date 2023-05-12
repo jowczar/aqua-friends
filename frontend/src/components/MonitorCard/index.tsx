@@ -48,12 +48,12 @@ const MonitorCard = ({ parameter, currentValue, changePercentage, currentValueDa
     }
 
     return (
-        <div className="flex flex-col gap-10 items-center justify-center w-full h-full shadow-sm rounded-md bg-white">
+        <div className="flex flex-col gap-5 items-center justify-center w-full aspect-square shadow-sm rounded-md bg-white">
             <div className="flex flex-col items-center justify-center p-7 flex-none">
-                <h3 className="text-base font-medium text-center">{parameter}</h3>
-                <h6 className="text-sm font-light text-gray-500">{currentValueDate}</h6>
+                <h3 className="text-sm lg:text-base font-medium text-center">{parameter}</h3>
+                <h6 className="text-xs lg:text-sm font-light text-gray-500">{currentValueDate}</h6>
             </div>
-            <div className="w-full h-3/4">
+            <div className="w-full flex-1 h-3/4">
                 <div className="flex flex-row gap-1 mx-7 items-end flex-none">
                     <span className="text-2xl font-bold">{currentValue}</span>
                     <span className={classNames(
