@@ -13,7 +13,7 @@ const Chart = ({ data, color }: ChartProps) => {
       data,
       smooth: true,
       areaStyle: {
-        fill: `l(90) 0:${color} 0.9:${color} 1:#FFFFFF`
+        fill: `l(90) 0:${color} 0.8:${color} 1:#FFFFFF`
       },
       line: {
         color
