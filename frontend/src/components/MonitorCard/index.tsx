@@ -48,7 +48,7 @@ const MonitorCard = ({ parameter, currentValue, changePercentage, currentValueDa
     }
 
     return (
-        <div className="flex flex-col gap-5 items-center justify-center w-full aspect-square shadow-sm rounded-md bg-white">
+        <div className="flex flex-col gap-5 items-center justify-center w-full h-full aspect-square shadow-sm rounded-md bg-white">
             <div className="flex flex-col items-center justify-center p-7 flex-none">
                 <h3 className="text-sm lg:text-base font-medium text-center">{parameter}</h3>
                 <h6 className="text-xs lg:text-sm font-light text-gray-500">{currentValueDate}</h6>

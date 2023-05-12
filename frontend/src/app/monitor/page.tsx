@@ -57,7 +57,7 @@ export default function Monitor() {
             {/* TODO: move navbar higher */}
             <Navbar />
             <div className="my-10 px-4 md:px-20">
-                <div className="flex flex-col md:flex-row gap-4 overflow-x-auto overflow-y-hidden">
+                <div className="grid md:grid-flow-col grid-rows-2 lg:grid-rows-1 auto-cols-fr gap-4 overflow-x-auto overflow-y-hidden">
                     {sensors.map((sensor, index) => (
                         <div className="flex-1" key={`sensor_${index}`}>
                             <MonitorCard 
