@@ -4,14 +4,12 @@ type HexColor = `#${string}`;
 
 type ChartProps = {
     data: number[];
-    height: number;
     color: HexColor;
 };
 
-const Chart = ({ data, height, color }: ChartProps) => {
+const Chart = ({ data, color }: ChartProps) => {
     const config = {
-      height,
-      autoFit: false,
+      autoFit: true,
       data,
       smooth: true,
       areaStyle: {
