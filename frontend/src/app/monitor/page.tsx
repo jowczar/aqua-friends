@@ -1,7 +1,6 @@
 "use client";
 
 import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
-import Navbar from "@/components/Navbar";
 import Search from "@/components/Search";
 
 export default function Monitor() {
@@ -54,31 +53,27 @@ export default function Monitor() {
     // ================
 
     return (
-        <div>
-            {/* TODO: move navbar higher */}
-            <Navbar />
-            <div className="my-10 px-4 md:px-20">
-                <div className="flex flex-col md:flex-row mb-4 gap-5">
-                    <Search />
-                    <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-                        {/* TODO: Idk what this does but it's fast to style so I add it here anyway */}
-                        Active: Aquarium one by Jan Kowalski
+        <div className="my-10 px-4 md:px-20">
+            <div className="flex flex-col md:flex-row mb-4 gap-5">
+                <Search />
+                <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                    {/* TODO: Idk what this does but it's fast to style so I add it here anyway */}
+                    Active: Aquarium one by Jan Kowalski
+                </div>
+            </div>
+            <div className="grid md:grid-flow-col grid-rows-2 lg:grid-rows-1 auto-cols-fr gap-4 overflow-x-auto overflow-y-hidden">
+                {sensors.map((sensor, index) => (
+                    <div className="flex-1" key={`sensor_${index}`}>
+                        <MonitorCard 
+                            parameter={sensor.parameter} 
+                            currentValue={sensor.currentValue} 
+                            history={sensor.history} 
+                            changePercentage={sensor.changePercentage}
+                            currentValueDate={sensor.currentValueDate}
+                            color={sensor.color}
+                        />
                     </div>
-                </div>
-                <div className="grid md:grid-flow-col grid-rows-2 lg:grid-rows-1 auto-cols-fr gap-4 overflow-x-auto overflow-y-hidden">
-                    {sensors.map((sensor, index) => (
-                        <div className="flex-1" key={`sensor_${index}`}>
-                            <MonitorCard 
-                                parameter={sensor.parameter} 
-                                currentValue={sensor.currentValue} 
-                                history={sensor.history} 
-                                changePercentage={sensor.changePercentage}
-                                currentValueDate={sensor.currentValueDate}
-                                color={sensor.color}
-                            />
-                        </div>
-                    ))}
-                </div>
+                ))}
             </div>
         </div>
     );
