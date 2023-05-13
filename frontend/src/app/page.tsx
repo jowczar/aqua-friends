@@ -5,8 +5,10 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { ScreenLoader } from "@/components/Loader";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
+  // TODO: Example usage (remove it later)
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
@@ -24,8 +26,10 @@ export default function Home() {
   if (!user) {
     return;
   }
-  
+
   return (
-    <div>Home page</div>
+    <div>
+      <Navbar />
+    </div>
   )
 }

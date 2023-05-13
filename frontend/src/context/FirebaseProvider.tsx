@@ -12,6 +12,9 @@ const firebaseConfig = {
     appId: "1:184957897431:web:093a877a4ecf804beb3e92"
 };
 
+const app = initializeApp(firebaseConfig);
+console.log('🔥 Firebase app initialized');
+
 export const FirebaseContext = createContext<FirebaseApp | null>(null);
 
 type FirebaseProviderProps = {
@@ -19,9 +22,7 @@ type FirebaseProviderProps = {
 };
 
 export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
-    const app = initializeApp(firebaseConfig);
-    console.log('🔥 Firebase app initialized');
-    
+
     return (
         <FirebaseContext.Provider value={app}>
             {children}
