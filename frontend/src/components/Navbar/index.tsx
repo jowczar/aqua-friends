@@ -34,6 +34,10 @@ const Navbar = () => {
     router.push("/login");
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
   );

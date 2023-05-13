@@ -6,6 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { ScreenLoader } from "@/components/Loader";
 import Navbar from "@/components/Navbar";
+import Dashboard from "./dashboard/page";
 
 export default function Home() {
   // TODO: Example usage (remove it later)
@@ -28,8 +29,6 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <Navbar />
-    </div>
+    <Dashboard />
   )
 }

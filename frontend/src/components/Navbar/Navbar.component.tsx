@@ -3,11 +3,14 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
+import { Gothic_A1 } from 'next/font/google'
+
+const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 type User = {
-    displayName: string;
-    email: string;
-    photoURL: string;
+    displayName: string | null;
+    email: string | null;
+    photoURL: string | null;
 };
 
 type NavbarProps = {
@@ -21,7 +24,7 @@ type NavbarProps = {
 };
 
 const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
-  <Disclosure as="nav" className="bg-primary shadow-sm">
+  <Disclosure as="nav" className={`bg-primary shadow-sm ${font.className}`}>
     {({ open }) => (
       <>
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -54,11 +57,11 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                     alt="Aqua friends"
                     height={32}
                     width={166}
-                    className="sm:scale-100 scale-75"
+                    className="md:scale-100 scale-75"
                   />
                 </Link>
               </div>
-              <div className="hidden sm:flex gap-4 grow items-center justify-center">
+              <div className="hidden sm:flex mx-2 lg:gap-4 grow items-center justify-center">
                 {navigation.map((item) => (
                   <a
                     key={item.name}
@@ -67,7 +70,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                       item.current
                         ? "text-primary bg-white hover:bg-gray-50"
                         : "text-white hover:bg-blue-800",
-                      "rounded-md px-3 py-2 text-sm transition"
+                      "rounded-md px-3 py-2 text-xs lg:text-sm text-center transition"
                     )}
                     aria-current={item.current ? "page" : undefined}
                   >
@@ -84,7 +87,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                   <Image
                     src="chat.svg"
                     alt="chat"
-                    className="group-hover:scale-110 transition"
+                    className="group-hover:scale-110 transition flex-none"
                     height={16}
                     width={18}
                     aria-hidden="true"
@@ -98,7 +101,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                   <Image
                     src="heart.svg"
                     alt="heart"
-                    className="group-hover:scale-110 transition"
+                    className="group-hover:scale-110 transition flex-none"
                     height={16}
                     width={18}
                     aria-hidden="true"
@@ -111,7 +114,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                     <Menu.Button className="flex rounded-full group bg-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
                       <img
-                        className="w-8 h-8 transition group-hover:scale-110 rounded-full"
+                        className="w-8 h-8 transition group-hover:scale-110 rounded-full flex-none"
                         src={user?.photoURL || "man.png"}
                         alt="user photo"
                       />
