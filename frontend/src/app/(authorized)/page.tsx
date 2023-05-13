@@ -17,10 +17,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       router.push("/login");
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   if (loading) {
     return <ScreenLoader />;
