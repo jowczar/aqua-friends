@@ -13,6 +13,12 @@ module.exports = {
       },
       transform: ["hover", "focus"],
       scale: ["hover", "focus"],
+      width: {
+        lastStep: "31.5%",
+      },
+      inset: {
+        firstStep: "5%",
+      },
     },
   },
   variants: {

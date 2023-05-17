@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Pagination from "../Pagination";
+import Pagination from "../../Pagination";
 import Image from "next/image";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 
-const TableList = () => {
+const AquaViewDataTable = ({ columnTitles }: any) => {
   const usersMock = [
     {
       avatar: "https://i.ibb.co/1T0bCkC/man.png",
@@ -244,26 +244,28 @@ const TableList = () => {
                     scope="col"
                     className="px-6 py-6 text-left text-base font-medium"
                   >
-                    Owner
+                    {columnTitles.firstColumn}
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-6 text-left text-base font-medium"
                   >
-                    Aquarium Title
+                    {columnTitles.secondColumn}
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-6 text-left text-base font-medium"
                   >
-                    Health Status
+                    {columnTitles.thirdColumn}
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-6 text-left text-base font-medium"
-                  >
-                    Aquarium Size
-                  </th>
+                  {columnTitles.fourthColumn && (
+                    <th
+                      scope="col"
+                      className="px-6 py-6 text-left text-base font-medium"
+                    >
+                      {columnTitles.fourthColumn}
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody className=" divide-y divide-gray-200">
@@ -366,4 +368,4 @@ const TableList = () => {
   );
 };
 
-export default TableList;
+export default AquaViewDataTable;

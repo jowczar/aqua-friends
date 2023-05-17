@@ -1,7 +1,14 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import DataTable from "@/components/DataTable";
+import AquaViewDataTable from "@/components/DataTables/AquaViewDataTable";
+
+const columnTitles = {
+  firstColumn: "Owner",
+  secondColumn: "Aquarium Title",
+  thirdColumn: "Health Status",
+  fourthColumn: "Aquarium Size",
+};
 
 export default function View() {
   return (
@@ -10,7 +17,7 @@ export default function View() {
       <Navbar />
 
       <div className="my-2 px-1 md:px-20">
-        <DataTable />
+        <AquaViewDataTable columnTitles={columnTitles} />
       </div>
     </div>
   );
