@@ -5,7 +5,6 @@ import CreatorSteps from "@/components/CreatorSteps";
 import Navbar from "@/components/Navbar";
 import ProgressBar from "@/components/ProgressBar";
 import { Unit } from "@/enums/Unit.enum";
-import AquaViewDataTable from "@/components/DataTables/AquaViewDataTable";
 import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
 
 type AquariumDimensions = {
@@ -94,8 +93,6 @@ export default function Creator() {
     }
   };
 
-  console.log("stepsCompleted", stepsCompleted);
-
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
@@ -106,7 +103,6 @@ export default function Creator() {
   };
 
   const handleSave = () => {
-    // TODO: implement save logic
     console.log("Saved");
   };
 
@@ -134,8 +130,8 @@ export default function Creator() {
         </div>
       )}
 
-      <div className="fixed bottom-2 w-full mb-5 flex justify-between md:px-20">
-        <div>
+      <div className="fixed bottom-2 w-full mb-5 md:px-20">
+        <div className="absolute left-20 -top-20">
           {currentStep > 0 && (
             <button
               onClick={handlePrevious}
@@ -145,7 +141,7 @@ export default function Creator() {
             </button>
           )}
         </div>
-        <div>
+        <div className="absolute right-20 -top-20">
           {currentStep < totalSteps - 1 && (
             <button
               onClick={handleNext}

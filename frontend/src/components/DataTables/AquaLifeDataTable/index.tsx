@@ -4,106 +4,114 @@ import Image from "next/image";
 
 import { Environment } from "@/enums/Environment.enum";
 
-const AquaLifeDataTable = ({ columnTitles }: any) => {
-  const itemsMock = [
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Not Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Not Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Not Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-    {
-      image: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Fish 1",
-      description: "description of fish",
-      size: "12-23 cm",
-      environment: "Compatible",
-    },
-  ];
+const itemsMock = [
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Not Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Not Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Not Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+  {
+    image: "",
+    name: "Fish 1",
+    description: "description of fish",
+    size: "12-23 cm",
+    environment: "Compatible",
+  },
+];
 
+type AquaLifeDataTableProps = {
+  columnTitles: {
+    firstColumn: string;
+    secondColumn: string;
+    thirdColumn: string;
+  };
+};
+
+const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
   const [items, setItems] = useState(itemsMock);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 7;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -137,14 +145,6 @@ const AquaLifeDataTable = ({ columnTitles }: any) => {
                   >
                     {columnTitles.thirdColumn}
                   </th>
-                  {columnTitles.fourthColumn && (
-                    <th
-                      scope="col"
-                      className="px-6 py- text-left text-base font-medium"
-                    >
-                      {columnTitles.fourthColumn}
-                    </th>
-                  )}
                 </tr>
               </thead>
               <tbody className=" divide-y divide-gray-200">
@@ -154,11 +154,11 @@ const AquaLifeDataTable = ({ columnTitles }: any) => {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-15 w-15">
                           <Image
-                            className="h-12 w-20 rounded"
-                            src={item.image ? item.image : "man.png"}
-                            alt="Default avatar"
+                            className="rounded-full"
+                            src={item.image ? item.image : "default_fish.png"}
+                            alt="Default image"
                             height={62}
-                            width={80}
+                            width={124}
                           />
                         </div>
                         <div className="ml-4">
@@ -171,6 +171,7 @@ const AquaLifeDataTable = ({ columnTitles }: any) => {
                         </div>
                       </div>
                     </td>
+
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">{item.size}</div>
                     </td>
@@ -178,8 +179,8 @@ const AquaLifeDataTable = ({ columnTitles }: any) => {
                       <span
                         className={`px-8 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
                           item?.environment === Environment.COMPATIBLE
-                            ? "bg-green-500 bg-opacity-25 text-green-600"
-                            : "px-9 bg-red-500 bg-opacity-25 text-red-600"
+                            ? "px-12 bg-green-500 bg-opacity-25 text-green-600"
+                            : "bg-red-500 bg-opacity-25 text-red-600"
                         }`}
                       >
                         {item.environment}
@@ -206,7 +207,7 @@ const AquaLifeDataTable = ({ columnTitles }: any) => {
                 ))}
               </tbody>
             </table>
-            <div className="fixed bottom-2 w-full mb-3">
+            <div className="fixed bottom-9 w-1/2 mb-3 z-10">
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
