@@ -6,6 +6,11 @@ import Navbar from "@/components/Navbar";
 import ProgressBar from "@/components/ProgressBar";
 import { Unit } from "@/enums/Unit.enum";
 import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
+import Summary from "@/components/Summary";
+import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
+import Tabs from "@/components/DataTables/AquaDecorDataTable/Tabs";
+import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
+import { TabEnum } from "@/enums/Tab.enum";
 
 type AquariumDimensions = {
   length: number;
@@ -73,6 +78,8 @@ export default function Creator() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
 
+  const [aquariumName, setAquariumName] = useState("");
+
   const [aquariumDimensions, setAquariumDimensions] =
     useState<AquariumDimensions>({
       length: 10,
@@ -106,6 +113,13 @@ export default function Creator() {
     console.log("Saved");
   };
 
+  const [currentTab, setCurrentTab] = useState({
+    tabName: TabEnum.PUMP,
+    numberOfElements: 0,
+    shouldShowSuccess: false,
+    shouldShowWarning: false,
+  });
+
   return (
     <div>
       <Navbar />
@@ -124,9 +138,147 @@ export default function Creator() {
         />
       )}
 
+      {currentStep === 1 && (
+        <div className="my-10 px-1 md:px-20 flex">
+          <div className="w-1/3 pr-4">
+            <AquaDecorSummaryCard
+              pump={"[pump"}
+              heater={"heater"}
+              light={"light"}
+              plants={[
+                "some plant",
+                "ok its plant",
+                "does it return some hp?",
+                "what if no?",
+              ]}
+              decors={[
+                "some decor",
+                "next decor",
+                "test decor",
+                "omg what a decor",
+                "is this a decor?",
+              ]}
+              terrains={[
+                "some terrain",
+                "next terrain",
+                "but this terrrrrain is kinda big",
+                "as all things should be",
+                "man what are you saying",
+                "stop being so dumb",
+                "its not a balenciaga anymore, its movie about harry squatter",
+              ]}
+            />
+          </div>
+          <div className="w-2/3 pl-4 pr-20">
+            <AquaDecorDataTable
+              columnTitles={{
+                firstColumn: "Testowy",
+                secondColumn: "Drugi",
+                thirdColumn: "",
+              }}
+              isSingleAnswer={false}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+            />
+          </div>
+        </div>
+      )}
+
       {currentStep === 2 && (
         <div className="my-10 px-1 md:px-20">
           <AquaLifeDataTable columnTitles={columnTitles} />
+        </div>
+      )}
+
+      {currentStep === 3 && (
+        <div className="my-10 px-1 md:px-20 flex">
+          <div className="w-1/3 pr-4">
+            <AquaDecorSummaryCard
+              pump={"[pump"}
+              heater={"heater"}
+              light={"light"}
+              plants={[
+                "some plant",
+                "ok its plant",
+                "does it return some hp?",
+                "what if no?",
+              ]}
+              decors={[
+                "some decor",
+                "next decor",
+                "test decor",
+                "omg what a decor",
+                "is this a decor?",
+              ]}
+              terrains={[
+                "some terrain",
+                "next terrain",
+                "but this terrrrrain is kinda big",
+                "as all things should be",
+                "man what are you saying",
+                "stop being so dumb",
+                "its not a balenciaga anymore, its movie about harry squatter",
+              ]}
+            />
+          </div>
+          <div className="w-1/3 pr-4">
+            <AquaDecorSummaryCard
+              pump={"[pump"}
+              heater={"heater"}
+              light={"light"}
+              plants={[
+                "some plant",
+                "ok its plant",
+                "does it return some hp?",
+                "what if no?",
+              ]}
+              decors={[
+                "some decor",
+                "next decor",
+                "test decor",
+                "omg what a decor",
+                "is this a decor?",
+              ]}
+              terrains={[
+                "some terrain",
+                "next terrain",
+                "but this terrrrrain is kinda big",
+                "as all things should be",
+                "man what are you saying",
+                "stop being so dumb",
+                "its not a balenciaga anymore, its movie about harry squatter",
+              ]}
+            />
+          </div>
+          <div className="w-1/3 pr-4">
+            <AquaDecorSummaryCard
+              pump={"[pump"}
+              heater={"heater"}
+              light={"light"}
+              plants={[
+                "some plant",
+                "ok its plant",
+                "does it return some hp?",
+                "what if no?",
+              ]}
+              decors={[
+                "some decor",
+                "next decor",
+                "test decor",
+                "omg what a decor",
+                "is this a decor?",
+              ]}
+              terrains={[
+                "some terrain",
+                "next terrain",
+                "but this terrrrrain is kinda big",
+                "as all things should be",
+                "man what are you saying",
+                "stop being so dumb",
+                "its not a balenciaga anymore, its movie about harry squatter",
+              ]}
+            />
+          </div>
         </div>
       )}
 

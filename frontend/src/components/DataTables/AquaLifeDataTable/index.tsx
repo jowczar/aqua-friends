@@ -179,7 +179,7 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                       <span
                         className={`px-8 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
                           item?.environment === Environment.COMPATIBLE
-                            ? "px-12 bg-green-500 bg-opacity-25 text-green-600"
+                            ? "px-11 bg-green-500 bg-opacity-25 text-green-600"
                             : "bg-red-500 bg-opacity-25 text-red-600"
                         }`}
                       >
@@ -207,7 +207,7 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                 ))}
               </tbody>
             </table>
-            <div className="fixed bottom-9 w-1/2 mb-3 z-10">
+            <div className="fixed bottom-9 w-1/2 mb-3 z-10 left-1/4 flex justify-center">
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
