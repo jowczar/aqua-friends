@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
-import Navbar from "@/components/Navbar";
 import ProgressBar from "@/components/ProgressBar";
 import { Unit } from "@/enums/Unit.enum";
 import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
@@ -122,8 +121,6 @@ export default function Creator() {
 
   return (
     <div>
-      <Navbar />
-
       <div className="mt-20 px-1 md:px-20">
         <CreatorSteps
           currentStep={currentStep}
