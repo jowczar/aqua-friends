@@ -1,3 +1,5 @@
+"use client";
+
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { usePathname, useRouter } from "next/navigation";
@@ -33,10 +35,6 @@ const Navbar = () => {
     auth.signOut();
     router.push("/login");
   };
-
-  if (!user) {
-    return null;
-  }
 
   return (
     <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
