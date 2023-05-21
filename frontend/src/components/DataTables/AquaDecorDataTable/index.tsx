@@ -2,120 +2,23 @@ import React, { useState } from "react";
 import Tabs from "./Tabs";
 import Search from "@/components/Search";
 import Pagination from "@/components/Pagination";
-
-const itemsMock = [
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Not Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Not Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Not Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-  {
-    image: "",
-    name: "Fish 1",
-    description: "description of fish",
-    size: "12-23 cm",
-    environment: "Compatible",
-  },
-];
+import Image from "next/image";
 
 type AquaDecorDataTableProps = {
-  columnTitles: {
-    firstColumn: string;
-    secondColumn: string;
-    thirdColumn: string;
-  };
+  columnTitle: string;
   isSingleAnswer: boolean;
   currentTab: any;
   setCurrentTab: any;
+  items: any[];
 };
 
 const AquaDecorDataTable = ({
-  columnTitles,
+  columnTitle,
   isSingleAnswer,
   currentTab,
   setCurrentTab,
+  items,
 }: AquaDecorDataTableProps) => {
-  const [items, setItems] = useState(itemsMock);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 6;
@@ -137,33 +40,40 @@ const AquaDecorDataTable = ({
           <div className="align-middle inline-block min-w-full">
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table className="min-w-full divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="mt-3">
                   <tr>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-8 pt-6 pb-3 text-left text-lg font-medium text-gray-600 "
                     >
-                      {columnTitles.firstColumn}
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      {columnTitles.secondColumn}
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      {columnTitles.thirdColumn}
+                      {columnTitle}
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentItems.map((item: any, index: number) => (
                     <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap"></td>
-                      <td className="px-6 py-4 whitespace-nowrap"></td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-15 w-15">
+                            <Image
+                              className="rounded-full"
+                              src={item.image ? item.image : "default_fish.png"}
+                              alt="Default image"
+                              height={70}
+                              width={80}
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.name}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {item.description}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         {isSingleAnswer ? (
                           <input type="radio" name="item" />
