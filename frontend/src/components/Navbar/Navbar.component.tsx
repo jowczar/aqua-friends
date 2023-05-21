@@ -19,7 +19,7 @@ type NavbarProps = {
     href: string;
     current: boolean;
   }[];
-  user: User;
+  user?: User | null;
   signOut: () => void;
 };
 
@@ -63,7 +63,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
               </div>
               <div className="hidden sm:flex mx-2 lg:gap-4 grow items-center justify-center">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     className={classNames(
@@ -75,7 +75,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                     aria-current={item.current ? "page" : undefined}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
               <div className="flex flex-row gap-3 flex items-center pr-2 sm:pr-0">

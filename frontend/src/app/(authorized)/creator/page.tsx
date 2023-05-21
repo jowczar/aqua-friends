@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
+<<<<<<< HEAD:frontend/src/app/creator/page.tsx
 import Navbar from "@/components/Navbar";
+=======
+import ProgressBar from "@/components/ProgressBar";
+import { Unit } from "@/enums/Unit.enum";
+import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
+import Summary from "@/components/Summary";
+import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
+import Tabs from "@/components/DataTables/AquaDecorDataTable/Tabs";
+import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
+>>>>>>> aqua-creator-components:frontend/src/app/(authorized)/creator/page.tsx
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
 import AquaDecorPage from "./AquaDecorPage";
@@ -58,8 +68,6 @@ export default function Creator() {
 
   return (
     <div>
-      <Navbar />
-
       <div className="mt-20 px-1 md:px-20">
         <CreatorSteps
           currentStep={currentStep}
