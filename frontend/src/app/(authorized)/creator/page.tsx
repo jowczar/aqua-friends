@@ -2,22 +2,20 @@
 
 import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
-<<<<<<< HEAD:frontend/src/app/creator/page.tsx
-import Navbar from "@/components/Navbar";
-=======
-import ProgressBar from "@/components/ProgressBar";
-import { Unit } from "@/enums/Unit.enum";
-import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
-import Summary from "@/components/Summary";
-import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
-import Tabs from "@/components/DataTables/AquaDecorDataTable/Tabs";
-import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
->>>>>>> aqua-creator-components:frontend/src/app/(authorized)/creator/page.tsx
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
 import AquaDecorPage from "./AquaDecorPage";
 import AquaSummaryPage from "./AquaSummaryPage";
 import AquaLifePage from "./AquaLifePage";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@material-ui/core";
+import { useRouter } from "next/navigation";
+import Modal from "@/components/Modal";
 
 export type AquariumDimensions = {
   length: number;
@@ -26,11 +24,15 @@ export type AquariumDimensions = {
 };
 
 export default function Creator() {
+  const router = useRouter();
+
   const totalSteps = 4;
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
 
   const [aquariumName, setAquariumName] = useState("");
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [aquariumDimensions, setAquariumDimensions] =
     useState<AquariumDimensions>({
@@ -56,7 +58,22 @@ export default function Creator() {
   };
 
   const handleSave = () => {
+    if (currentStep !== 4) {
+      setStepsCompleted([...stepsCompleted, currentStep]);
+      setCurrentStep(4);
+    }
+
+    setOpenDialog(true);
+
     console.log("Saved");
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 3000);
   };
 
   const [currentTab, setCurrentTab] = useState({
@@ -88,7 +105,18 @@ export default function Creator() {
 
       {currentStep === 2 && <AquaLifePage />}
 
-      {currentStep === 3 && <AquaSummaryPage />}
+      {currentStep > 2 && <AquaSummaryPage />}
+
+      {currentStep === 4 && openDialog && (
+        <Modal
+          title={"Modal title"}
+          message={"Data saved successfully!"}
+          cancelButtonText={"Close"}
+          detailsButtonText={"Ok"}
+          onCancelClick={handleClose}
+          onDetailsClick={handleClose}
+        />
+      )}
 
       <div className="fixed bottom-2 w-full mb-5 md:px-20">
         <div className="absolute left-20 -top-20">

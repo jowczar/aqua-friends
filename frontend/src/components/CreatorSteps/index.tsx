@@ -8,6 +8,12 @@ type StepsProps = {
 const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
   const steps = ["Aqua Size", "Aqua Decor", "Aqua Life", "Summary"];
 
+  const getLastStepClass = () => {
+    if (currentStep === 3) return "bg-blue-500";
+    if (currentStep === 4) return "bg-stepsGreen";
+    return "bg-gray-300";
+  };
+
   return (
     <>
       <div className="py-5 w-2/3 mx-auto relative">
@@ -16,7 +22,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
             <div key={index} className="text-center">
               <div
                 className={`${
-                  stepsCompleted.includes(index) || currentStep === 3
+                  stepsCompleted.includes(index) || currentStep === 4
                     ? "bg-stepsGreen text-white"
                     : index === currentStep
                     ? "bg-blue-500 text-white"
@@ -30,27 +36,25 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
           ))}
           <div
             className={`absolute top-14 left-firstStep w-1/3 h-1 ${
-              currentStep === 0 ? "bg-blue-500" : "bg-stepsGreen"
-            } z-0`}
-          ></div>
-          <div
-            className={`absolute top-14 left-1/3 w-1/3 h-1 ${
-              currentStep > 0 || stepsCompleted.includes(0)
+              currentStep > 0
                 ? currentStep === 1
                   ? "bg-blue-500"
                   : "bg-stepsGreen"
                 : "bg-gray-300"
             } z-0`}
-          ></div>
+          />
           <div
-            className={`absolute top-14 left-2/3 w-lastStep h-1 ${
+            className={`absolute top-14 left-1/3 w-1/3 h-1 ${
               currentStep > 1 || stepsCompleted.includes(1)
                 ? currentStep === 2
                   ? "bg-blue-500"
                   : "bg-stepsGreen"
                 : "bg-gray-300"
             } z-0`}
-          ></div>
+          />
+          <div
+            className={`absolute top-14 left-2/3 w-lastStep h-1 ${getLastStepClass()} z-0`}
+          />
         </div>
       </div>
 
