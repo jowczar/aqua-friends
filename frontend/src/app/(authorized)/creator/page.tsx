@@ -23,6 +23,45 @@ export type AquariumDimensions = {
   height: number;
 };
 
+export type AquariumData = {
+  pump: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  };
+  heater: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  };
+  light: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  };
+  plants: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  }[];
+  decors: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  }[];
+  terrains: {
+    image: string;
+    name: string;
+    description: string;
+    value: string;
+  }[];
+};
+
 export default function Creator() {
   const router = useRouter();
 
@@ -40,6 +79,38 @@ export default function Creator() {
       width: 10,
       height: 10,
     });
+
+  const [aquariumData, setAquariumData] = useState<AquariumData>({
+    pump: {
+      image: "",
+      name: "Pump 1",
+      description: "some desc",
+      value: "some",
+    },
+    heater: {
+      image: "",
+      name: "Heater 1",
+      description: "some desc",
+      value: "some",
+    },
+    light: {
+      image: "",
+      name: "Light 1",
+      description: "some desc",
+      value: "some",
+    },
+    plants: [
+      { image: "", name: "Plant 1", description: "some desc", value: "some" },
+      { image: "", name: "Plant 2", description: "some desc", value: "some" },
+      { image: "", name: "Plant 3", description: "some desc", value: "some" },
+    ],
+    decors: [
+      { image: "", name: "Decor 1", description: "some desc", value: "some" },
+    ],
+    terrains: [
+      { image: "", name: "Terrain 1", description: "some desc", value: "some" },
+    ],
+  });
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -100,7 +171,11 @@ export default function Creator() {
       )}
 
       {currentStep === 1 && (
-        <AquaDecorPage currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        <AquaDecorPage
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          aquariumData={aquariumData}
+        />
       )}
 
       {currentStep === 2 && <AquaLifePage />}
