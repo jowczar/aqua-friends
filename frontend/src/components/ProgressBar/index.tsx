@@ -18,17 +18,59 @@ const ProgressBar = ({
   element,
   setElement,
 }: ProgressBarProps) => {
-  const handleIncrement = () => {
-    console.log("element to", element);
+  const [internalValue, setInternalValue] = useState(element.toString());
 
-    if (element < max) setElement(element + 1);
+  const progressBarRef = React.useRef<HTMLDivElement | null>(null);
+
+  const handleIncrement = () => {
+    if (element < max) {
+      setInternalValue((+element + 1).toString());
+      setElement(element + 1);
+    }
   };
 
   const handleDecrement = () => {
-    if (element > min) setElement(element - 1);
+    if (element > min) {
+      setInternalValue((+element - 1).toString());
+      setElement(element - 1);
+    }
   };
 
   const progressPercentage = ((element - min) / (max - min)) * 100;
+
+  const handleChangeElement = () => {
+    let value = +internalValue;
+
+    if (value < min) {
+      setInternalValue(min.toString());
+      setElement(min);
+    } else if (value > max) {
+      setInternalValue(max.toString());
+      setElement(max);
+    } else {
+      setElement(value);
+      setInternalValue(value.toString());
+    }
+  };
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      handleChangeElement();
+    }
+  };
+
+  const handleClickProgressBar = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const clickedPercentage = (x / rect.width) * 100;
+
+    const newValue = Math.round(((max - min) * clickedPercentage) / 100 + min);
+
+    setInternalValue(newValue.toString());
+    setElement(newValue);
+  };
 
   return (
     <div className="w-[80%] mx-auto my-6 flex items-center">
@@ -45,20 +87,40 @@ const ProgressBar = ({
           ></path>
         </svg>
       </button>
+
       <div className="w-full relative">
         <div className="w-full bg-light h-[13px] rounded-2xl relative">
           <div
-            className="bg-primary absolute h-full left-0 rounded-2xl"
-            style={{ width: `${progressPercentage}%` }}
+            className="bg-primary absolute h-full left-0 rounded-2xl cursor-pointer"
+            style={{ width: `${progressPercentage}%`, zIndex: 2 }}
+            onClick={handleClickProgressBar}
           >
-            <span className="bg-primary absolute -right-4 bottom-full mb-2 rounded-sm py-1 px-4 text-m font-semibold text-white flex items-center justify-center">
+            <span className="bg-primary absolute -right-12 bottom-full mb-2 rounded-sm py-1 px-4 text-m font-semibold text-white flex items-center justify-center">
               <span className="bg-primary absolute bottom-[-2px] left-1/2 -z-10 h-5 w-5 -translate-x-1/2 rotate-45 rounded-sm"></span>
-              {element} <span className="ml-1">{unit}</span>
+              <input
+                type="text"
+                value={internalValue}
+                onChange={(event) => setInternalValue(event?.target.value)}
+                onBlur={handleChangeElement}
+                onKeyDown={handleKeyDown}
+                style={{ width: `${element.toString().length + 2.5}ch` }}
+                className="appearance-none bg-primary  bottom-full  rounded-sm py-1  text-m font-semibold text-white flex items-center justify-center"
+              />
+
+              <span className="ml-1">{unit}</span>
             </span>
           </div>
+
+          <div
+            ref={progressBarRef}
+            className="bg-gray-200 absolute h-full left-0 rounded-2xl cursor-pointer"
+            style={{ width: `${100}%`, zIndex: 1 }}
+            onClick={handleClickProgressBar}
+          ></div>
         </div>
         <span className="absolute top-[-70px] font-bold text-xl">{title}</span>
       </div>
+
       <button onClick={handleIncrement} className="ml-4">
         <svg
           width="20"

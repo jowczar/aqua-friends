@@ -109,10 +109,10 @@ export default function Creator() {
 
       {currentStep === 4 && openDialog && (
         <Modal
-          title={"Modal title"}
+          title={"Aqua Friends"}
           message={"Data saved successfully!"}
           cancelButtonText={"Close"}
-          detailsButtonText={"Ok"}
+          detailsButtonText={"I understand"}
           onCancelClick={handleClose}
           onDetailsClick={handleClose}
         />
