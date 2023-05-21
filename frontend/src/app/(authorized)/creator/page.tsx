@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
@@ -69,7 +69,7 @@ export default function Creator() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
 
-  const [aquariumName, setAquariumName] = useState("");
+  const [aquariumName, setAquariumName] = useState("✨Your new aquarium✨");
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -180,7 +180,14 @@ export default function Creator() {
 
       {currentStep === 2 && <AquaLifePage />}
 
-      {currentStep > 2 && <AquaSummaryPage />}
+      {currentStep > 2 && (
+        <AquaSummaryPage
+          aquariumName={aquariumName}
+          setAquariumName={setAquariumName}
+          aquariumDimensions={aquariumDimensions}
+          aquariumData={aquariumData}
+        />
+      )}
 
       {currentStep === 4 && openDialog && (
         <Modal
@@ -218,7 +225,7 @@ export default function Creator() {
               onClick={handleSave}
               className="bg-green-600 inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              Save
+              Create your new world
             </button>
           )}
         </div>
