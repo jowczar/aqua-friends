@@ -44,14 +44,14 @@ const Tab = ({
   );
 };
 
-type CurrentTab = {
+export type CurrentTab = {
   tabName: TabEnum;
   numberOfElements: number;
   shouldShowSuccess: boolean;
   shouldShowWarning: boolean;
 };
 
-type TabsProps = {
+export type TabsProps = {
   currentTab: CurrentTab;
   setCurrentTab: React.Dispatch<React.SetStateAction<CurrentTab>>;
 };

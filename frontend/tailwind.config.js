@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         primary: "#3056D3",
         background: "#F4F7FF",
+        stepsGreen: "#26C196",
       },
       transform: ["hover", "focus"],
       scale: ["hover", "focus"],

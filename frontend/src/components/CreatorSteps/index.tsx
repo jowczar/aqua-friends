@@ -17,7 +17,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               <div
                 className={`${
                   stepsCompleted.includes(index) || currentStep === 3
-                    ? "bg-green-500 text-white"
+                    ? "bg-stepsGreen text-white"
                     : index === currentStep
                     ? "bg-blue-500 text-white"
                     : "bg-gray-300 text-gray-500"
@@ -30,7 +30,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
           ))}
           <div
             className={`absolute top-14 left-firstStep w-1/3 h-1 ${
-              currentStep === 0 ? "bg-blue-500" : "bg-green-500"
+              currentStep === 0 ? "bg-blue-500" : "bg-stepsGreen"
             } z-0`}
           ></div>
           <div
@@ -38,7 +38,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               currentStep > 0 || stepsCompleted.includes(0)
                 ? currentStep === 1
                   ? "bg-blue-500"
-                  : "bg-green-500"
+                  : "bg-stepsGreen"
                 : "bg-gray-300"
             } z-0`}
           ></div>
@@ -47,7 +47,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               currentStep > 1 || stepsCompleted.includes(1)
                 ? currentStep === 2
                   ? "bg-blue-500"
-                  : "bg-green-500"
+                  : "bg-stepsGreen"
                 : "bg-gray-300"
             } z-0`}
           ></div>

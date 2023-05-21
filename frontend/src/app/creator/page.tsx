@@ -3,74 +3,16 @@
 import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
 import Navbar from "@/components/Navbar";
-import ProgressBar from "@/components/ProgressBar";
-import { Unit } from "@/enums/Unit.enum";
-import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
-import Summary from "@/components/Summary";
-import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
-import Tabs from "@/components/DataTables/AquaDecorDataTable/Tabs";
-import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
 import { TabEnum } from "@/enums/Tab.enum";
+import AquaSizePage from "./AquaSizePage";
+import AquaDecorPage from "./AquaDecorPage";
+import AquaSummaryPage from "./AquaSummaryPage";
+import AquaLifePage from "./AquaLifePage";
 
-type AquariumDimensions = {
+export type AquariumDimensions = {
   length: number;
   width: number;
   height: number;
-};
-
-type ProgressBarPageProps = {
-  aquariumDimensions: AquariumDimensions;
-  setAquariumDimensions: React.Dispatch<
-    React.SetStateAction<AquariumDimensions>
-  >;
-};
-
-const ProgressBarsPage = ({
-  aquariumDimensions,
-  setAquariumDimensions,
-}: ProgressBarPageProps) => {
-  return (
-    <>
-      <div className="my-40 px-1 md:px-20">
-        <ProgressBar
-          title={"Aquarium Length"}
-          min={10}
-          max={200}
-          unit={Unit.CENTIMETER}
-          element={aquariumDimensions.length}
-          setElement={(newValue: number) =>
-            setAquariumDimensions((prev) => ({ ...prev, length: newValue }))
-          }
-        />
-      </div>
-
-      <div className="my-60 px-1 md:px-20">
-        <ProgressBar
-          title={"Aquarium Width"}
-          min={10}
-          max={200}
-          unit={Unit.CENTIMETER}
-          element={aquariumDimensions.width}
-          setElement={(newValue: number) =>
-            setAquariumDimensions((prev) => ({ ...prev, width: newValue }))
-          }
-        />
-      </div>
-
-      <div className="my-60 px-1 md:px-20">
-        <ProgressBar
-          title={"Aquarium Height"}
-          min={10}
-          max={200}
-          unit={Unit.CENTIMETER}
-          element={aquariumDimensions.height}
-          setElement={(newValue: number) =>
-            setAquariumDimensions((prev) => ({ ...prev, height: newValue }))
-          }
-        />
-      </div>
-    </>
-  );
 };
 
 export default function Creator() {
@@ -86,12 +28,6 @@ export default function Creator() {
       width: 10,
       height: 10,
     });
-
-  const columnTitles = {
-    firstColumn: "Product",
-    secondColumn: "Size",
-    thirdColumn: "Environment",
-  };
 
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
@@ -132,155 +68,19 @@ export default function Creator() {
       </div>
 
       {currentStep === 0 && (
-        <ProgressBarsPage
+        <AquaSizePage
           aquariumDimensions={aquariumDimensions}
           setAquariumDimensions={setAquariumDimensions}
         />
       )}
 
       {currentStep === 1 && (
-        <div className="my-10 px-1 md:px-20 flex">
-          <div className="w-1/3 pr-4">
-            <AquaDecorSummaryCard
-              pump={"[pump"}
-              heater={"heater"}
-              light={"light"}
-              plants={[
-                "some plant",
-                "ok its plant",
-                "does it return some hp?",
-                "what if no?",
-              ]}
-              decors={[
-                "some decor",
-                "next decor",
-                "test decor",
-                "omg what a decor",
-                "is this a decor?",
-              ]}
-              terrains={[
-                "some terrain",
-                "next terrain",
-                "but this terrrrrain is kinda big",
-                "as all things should be",
-                "man what are you saying",
-                "stop being so dumb",
-                "its not a balenciaga anymore, its movie about harry squatter",
-              ]}
-            />
-          </div>
-          <div className="w-2/3 pl-4 pr-20">
-            <AquaDecorDataTable
-              columnTitles={{
-                firstColumn: "Testowy",
-                secondColumn: "Drugi",
-                thirdColumn: "",
-              }}
-              isSingleAnswer={false}
-              currentTab={currentTab}
-              setCurrentTab={setCurrentTab}
-            />
-          </div>
-        </div>
+        <AquaDecorPage currentTab={currentTab} setCurrentTab={setCurrentTab} />
       )}
 
-      {currentStep === 2 && (
-        <div className="my-10 px-1 md:px-20">
-          <AquaLifeDataTable columnTitles={columnTitles} />
-        </div>
-      )}
+      {currentStep === 2 && <AquaLifePage />}
 
-      {currentStep === 3 && (
-        <div className="my-10 px-1 md:px-20 flex">
-          <div className="w-1/3 pr-4">
-            <AquaDecorSummaryCard
-              pump={"[pump"}
-              heater={"heater"}
-              light={"light"}
-              plants={[
-                "some plant",
-                "ok its plant",
-                "does it return some hp?",
-                "what if no?",
-              ]}
-              decors={[
-                "some decor",
-                "next decor",
-                "test decor",
-                "omg what a decor",
-                "is this a decor?",
-              ]}
-              terrains={[
-                "some terrain",
-                "next terrain",
-                "but this terrrrrain is kinda big",
-                "as all things should be",
-                "man what are you saying",
-                "stop being so dumb",
-                "its not a balenciaga anymore, its movie about harry squatter",
-              ]}
-            />
-          </div>
-          <div className="w-1/3 pr-4">
-            <AquaDecorSummaryCard
-              pump={"[pump"}
-              heater={"heater"}
-              light={"light"}
-              plants={[
-                "some plant",
-                "ok its plant",
-                "does it return some hp?",
-                "what if no?",
-              ]}
-              decors={[
-                "some decor",
-                "next decor",
-                "test decor",
-                "omg what a decor",
-                "is this a decor?",
-              ]}
-              terrains={[
-                "some terrain",
-                "next terrain",
-                "but this terrrrrain is kinda big",
-                "as all things should be",
-                "man what are you saying",
-                "stop being so dumb",
-                "its not a balenciaga anymore, its movie about harry squatter",
-              ]}
-            />
-          </div>
-          <div className="w-1/3 pr-4">
-            <AquaDecorSummaryCard
-              pump={"[pump"}
-              heater={"heater"}
-              light={"light"}
-              plants={[
-                "some plant",
-                "ok its plant",
-                "does it return some hp?",
-                "what if no?",
-              ]}
-              decors={[
-                "some decor",
-                "next decor",
-                "test decor",
-                "omg what a decor",
-                "is this a decor?",
-              ]}
-              terrains={[
-                "some terrain",
-                "next terrain",
-                "but this terrrrrain is kinda big",
-                "as all things should be",
-                "man what are you saying",
-                "stop being so dumb",
-                "its not a balenciaga anymore, its movie about harry squatter",
-              ]}
-            />
-          </div>
-        </div>
-      )}
+      {currentStep === 3 && <AquaSummaryPage />}
 
       <div className="fixed bottom-2 w-full mb-5 md:px-20">
         <div className="absolute left-20 -top-20">
