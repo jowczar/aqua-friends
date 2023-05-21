@@ -144,7 +144,7 @@ export default function Creator() {
 
     setTimeout(() => {
       router.push("/dashboard");
-    }, 3000);
+    }, 300);
   };
 
   const [currentTab, setCurrentTab] = useState({
@@ -190,14 +190,16 @@ export default function Creator() {
       )}
 
       {currentStep === 4 && openDialog && (
-        <Modal
-          title={"Aqua Friends"}
-          message={"Data saved successfully!"}
-          cancelButtonText={"Close"}
-          detailsButtonText={"I understand"}
-          onCancelClick={handleClose}
-          onDetailsClick={handleClose}
-        />
+        <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <Modal
+            title={"Aqua Friends"}
+            message={"Data saved successfully!"}
+            cancelButtonText={"Close"}
+            detailsButtonText={"I understand"}
+            onCancelClick={handleClose}
+            onDetailsClick={handleClose}
+          />
+        </div>
       )}
 
       <div className="fixed bottom-2 w-full mb-5 md:px-20">

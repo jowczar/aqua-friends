@@ -3,217 +3,217 @@ import Pagination from "../../Pagination";
 import Image from "next/image";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 
-const AquaViewDataTable = ({ columnTitles }: any) => {
-  const usersMock = [
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Musharof Chowdhury",
-      email: "musharos@example.com",
-      aquariumTitle: "Multidisciplinary Web Entrepreneur",
-      healthStatus: "Good",
-      aquariumSize: "2m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Nenifer Lofess",
-      email: "loffes.cooper@example.com",
-      aquariumTitle: "Regional Paradigm Technician",
-      healthStatus: "Good",
-      aquariumSize: "3m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Jhon Smith",
-      email: "jhon.smith@example.com",
-      aquariumTitle: "Lead Implementation Liaison",
-      healthStatus: "Bad",
-      aquariumSize: "4m^3",
-      isLiked: true,
-    },
-    {
-      avatar: "",
-      name: "Suliym Info",
-      email: "suliym.info@example.com",
-      aquariumTitle: "Applications Engineer",
-      healthStatus: "Bad",
-      aquariumSize: "5m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: true,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: true,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "https://i.ibb.co/1T0bCkC/man.png",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-    {
-      avatar: "",
-      name: "Lorem Ipsumiński",
-      email: "lorem.ipsum@example.com",
-      aquariumTitle: "Lorem Ipsum Guy",
-      healthStatus: "Good",
-      aquariumSize: "6m^3",
-      isLiked: false,
-    },
-  ];
+const usersMock = [
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Musharof Chowdhury",
+    email: "musharos@example.com",
+    aquariumTitle: "Multidisciplinary Web Entrepreneur",
+    healthStatus: "Good",
+    aquariumSize: "2m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Nenifer Lofess",
+    email: "loffes.cooper@example.com",
+    aquariumTitle: "Regional Paradigm Technician",
+    healthStatus: "Good",
+    aquariumSize: "3m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Jhon Smith",
+    email: "jhon.smith@example.com",
+    aquariumTitle: "Lead Implementation Liaison",
+    healthStatus: "Bad",
+    aquariumSize: "4m^3",
+    isLiked: true,
+  },
+  {
+    avatar: "",
+    name: "Suliym Info",
+    email: "suliym.info@example.com",
+    aquariumTitle: "Applications Engineer",
+    healthStatus: "Bad",
+    aquariumSize: "5m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: true,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: true,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "https://i.ibb.co/1T0bCkC/man.png",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+  {
+    avatar: "",
+    name: "Lorem Ipsumiński",
+    email: "lorem.ipsum@example.com",
+    aquariumTitle: "Lorem Ipsum Guy",
+    healthStatus: "Good",
+    aquariumSize: "6m^3",
+    isLiked: false,
+  },
+];
 
+const AquaViewDataTable = ({ columnTitles }: any) => {
   const [users, setUsers] = useState(usersMock);
 
   const switchLikeStatus = (index: number) => {
@@ -235,8 +235,8 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 flex flex-col min-h-screen">
+          <div className="overflow-hidden  sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="">
                 <tr>
@@ -248,20 +248,20 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-6 text-left text-base font-medium"
+                    className="px-6 py-6 text-center text-base font-medium"
                   >
                     {columnTitles.secondColumn}
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-6 text-left text-base font-medium"
+                    className="px-6 py-6 text-center text-base font-medium"
                   >
                     {columnTitles.thirdColumn}
                   </th>
                   {columnTitles.fourthColumn && (
                     <th
                       scope="col"
-                      className="px-6 py-6 text-left text-base font-medium"
+                      className="px-6 py-6 text-center text-base font-medium"
                     >
                       {columnTitles.fourthColumn}
                     </th>
@@ -292,12 +292,12 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="text-sm text-gray-500">
                         {user.aquariumTitle}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
                       <span
                         className={`px-8 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
                           user?.healthStatus === HealthStatus.GOOD
@@ -308,7 +308,7 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                         {user.healthStatus}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                       {user.aquariumSize}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -354,7 +354,8 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                 ))}
               </tbody>
             </table>
-            <div className="fixed bottom-2 w-full mb-3">
+
+            <div className="w-full flex justify-center mt-8">
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}

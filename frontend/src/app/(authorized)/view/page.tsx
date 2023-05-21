@@ -12,7 +12,7 @@ const columnTitles = {
 export default function View() {
   return (
     <div>
-      <div className="my-2 px-1 md:px-20">
+      <div className="my-10 px-1 md:px-60">
         <AquaViewDataTable columnTitles={columnTitles} />
       </div>
     </div>

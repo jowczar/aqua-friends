@@ -10,7 +10,7 @@ const Modal = ({
 }: any) => {
   return (
     <>
-      <div className="fixed top-0 left-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-20 px-4 py-5 ">
+      <div className="fixed top-0 left-0 flex h-full min-h-screen w-full items-center justify-center  px-4 py-5 ">
         <div
           onClick={(e) => e.stopPropagation()}
           className="w-full max-w-[570px] rounded-[20px] bg-white py-12 px-8 text-center md:py-[60px] md:px-[70px]"

@@ -118,7 +118,7 @@ const ProgressBar = ({
             onClick={handleClickProgressBar}
           ></div>
         </div>
-        <span className="absolute top-[-70px] font-bold text-xl">{title}</span>
+        <span className="absolute top-[-90px] font-bold text-xl">{title}</span>
       </div>
 
       <button onClick={handleIncrement} className="ml-4">
