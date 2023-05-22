@@ -202,22 +202,20 @@ export default function Creator() {
         </div>
       )}
 
-      <div className="fixed bottom-2 w-full mb-5 md:px-20">
-        <div className="absolute left-20 -top-20">
-          {currentStep > 0 && (
-            <button
-              onClick={handlePrevious}
-              className="bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-            >
-              Previous Step
-            </button>
-          )}
-        </div>
-        <div className="absolute right-20 -top-20">
+      <div className="fixed bottom-2 w-full mb-5 px-6 md:px-20 md:flex md:justify-between">
+        {currentStep > 0 && (
+          <button
+            onClick={handlePrevious}
+            className="w-full md:w-auto bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
+          >
+            Previous Step
+          </button>
+        )}
+        <div className="w-full md:w-auto">
           {currentStep < totalSteps - 1 && (
             <button
               onClick={handleNext}
-              className="bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+              className="w-full bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
             >
               Next Step
             </button>
@@ -225,7 +223,7 @@ export default function Creator() {
           {stepsCompleted.length === totalSteps - 1 && (
             <button
               onClick={handleSave}
-              className="bg-green-600 inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+              className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
               Create your new world
             </button>
