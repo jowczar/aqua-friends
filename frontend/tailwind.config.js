@@ -13,6 +13,8 @@ module.exports = {
 
       md: "768px",
 
+      mdAquaView: "840px",
+
       lg: "1024px",
 
       xl: "1280px",
