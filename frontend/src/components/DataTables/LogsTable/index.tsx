@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Pagination from "../../Pagination";
-import Image from "next/image";
-import { HealthStatus } from "@/enums/HealthStatus.enum";
 
 const logsMock = [
   {

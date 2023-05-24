@@ -162,7 +162,7 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                 </tr>
               </thead>
               <tbody className=" divide-y divide-gray-200">
-                {currentItems.map((item, index) => (
+                {currentItems.map((item) => (
                   <tr key={item.id} onClick={() => setActiveItemId(item.id)}>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <div className="mdAquaView:hidden">

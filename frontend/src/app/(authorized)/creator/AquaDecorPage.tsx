@@ -5,9 +5,10 @@ import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
 import { TabsProps } from "@/components/DataTables/AquaDecorDataTable/Tabs";
 import { TabEnum } from "@/enums/Tab.enum";
 import { useState, useEffect } from "react";
+import { AquariumData } from "./page";
 
 type AquaDecorPageProps = Omit<TabsProps, "className"> & {
-  aquariumData: any;
+  aquariumData: AquariumData;
 };
 
 const terrainsMock = [

@@ -1,19 +1,12 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
 import AquaDecorPage from "./AquaDecorPage";
 import AquaSummaryPage from "./AquaSummaryPage";
 import AquaLifePage from "./AquaLifePage";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-} from "@material-ui/core";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 

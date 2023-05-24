@@ -1,5 +1,7 @@
+import { AquariumData } from "@/app/(authorized)/creator/page";
+
 type AquaDecorSummaryCardProps = {
-  aquariumData: any;
+  aquariumData: AquariumData;
 };
 
 const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {

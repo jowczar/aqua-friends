@@ -2,7 +2,6 @@
 
 import ImagesSummaryCard from "@/components/ImagesSummaryCard";
 import { AquariumData, AquariumDimensions } from "./page";
-import { useState } from "react";
 
 type AquaSummaryPageProps = {
   aquariumName: string;
