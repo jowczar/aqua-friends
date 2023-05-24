@@ -6,7 +6,7 @@ import { TabsProps } from "@/components/DataTables/AquaDecorDataTable/Tabs";
 import { TabEnum } from "@/enums/Tab.enum";
 import { useState, useEffect } from "react";
 
-type AquaDecorPageProps = TabsProps & {
+type AquaDecorPageProps = Omit<TabsProps, "className"> & {
   aquariumData: any;
 };
 
@@ -122,11 +122,11 @@ const AquaDecorPage = ({
   }, [currentTab]);
 
   return (
-    <div className="my-10 px-1 md:px-20 flex">
-      <div className="w-1/3 pr-4">
+    <div className="my-10 xs:px-5 sm:px-20 flex flex-col 2xl:flex-row">
+      <div className="w-full 2xl:w-1/3 2xl:pr-4 mt-4 2xl:mt-0">
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>
-      <div className="w-2/3 pl-4 pr-20">
+      <div className="w-full 2xl:w-2/3 2xl:pl-4">
         <AquaDecorDataTable
           columnTitle={currentTab.tabName}
           isSingleAnswer={isSingleAnswer}

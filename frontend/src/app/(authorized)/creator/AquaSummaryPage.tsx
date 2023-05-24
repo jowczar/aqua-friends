@@ -18,7 +18,7 @@ const AquaSummaryPage = ({
   aquariumData,
 }: AquaSummaryPageProps) => {
   return (
-    <div className="my-10 px-1 md:px-20 flex flex-col items-center">
+    <div className="my-10 xs:px-10 md:px-20 flex flex-col items-center">
       <input
         value={aquariumName}
         onChange={(e) => setAquariumName(e.target.value)}
@@ -33,7 +33,7 @@ const AquaSummaryPage = ({
         <p>Height: {aquariumDimensions.height} cm</p>
       </div>
       <div className="flex flex-col md:flex-row mt-4 w-full">
-        <div className="w-full md:w-1/3 pr-4 mb-4 md:mb-0">
+        <div className="w-full  md:w-1/3 pr-4 mb-4 md:mb-0">
           <ImagesSummaryCard
             title={"Equipment"}
             data={[aquariumData.pump, aquariumData.heater, aquariumData.light]}

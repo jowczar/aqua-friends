@@ -31,9 +31,13 @@ const AquaDecorDataTable = ({
 
   return (
     <div className="flex flex-col items-center justify-center w-full mx-auto">
-      <div className="flex justify-between w-full mb-2">
-        <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
-        <Search />
+      <div className="xl:flex xl:justify-between xl:w-full w-full xl:-flex-col mb-2">
+        <Tabs
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          className="w-full mr-4"
+        />
+        <Search className="xl:w-full" />
       </div>
       <div className="bg-white rounded-xl shadow-sm mt-4 pb-2 w-full">
         <div className="overflow-x-auto">
@@ -55,7 +59,7 @@ const AquaDecorDataTable = ({
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-15 w-15">
+                          <div className="flex-shrink-0 h-15 w-15 sm:hidden">
                             <Image
                               className="rounded-full"
                               src={item.image ? item.image : "default_fish.png"}
@@ -68,7 +72,7 @@ const AquaDecorDataTable = ({
                             <div className="text-sm font-medium text-gray-900">
                               {item.name}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 whitespace-normal break-all">
                               {item.description}
                             </div>
                           </div>

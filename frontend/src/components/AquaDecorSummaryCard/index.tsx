@@ -6,7 +6,7 @@ const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {
   const formatArrayToString = (array: string[]) => array.join(", ");
 
   return (
-    <div className="max-w-sm mx-auto bg-white rounded-xl  shadow-sm overflow-hidden md:max-w-lg m-4 py-4">
+    <div className="w-full  2xl:max-w-full mx-auto bg-white rounded-xl shadow-sm overflow-hidden  m-4 py-4">
       <div className="text-2xl font-light text-center mt-4">Your Aquarium</div>
       <div className="md:flex">
         <div className="p-8">

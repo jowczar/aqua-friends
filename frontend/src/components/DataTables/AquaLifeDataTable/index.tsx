@@ -6,6 +6,7 @@ import { Environment } from "@/enums/Environment.enum";
 
 const itemsMock = [
   {
+    id: 3,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -13,6 +14,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 6,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -20,6 +22,7 @@ const itemsMock = [
     environment: "Not Compatible",
   },
   {
+    id: 8,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -27,6 +30,7 @@ const itemsMock = [
     environment: "Not Compatible",
   },
   {
+    id: 20,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -34,6 +38,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 22,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -41,6 +46,7 @@ const itemsMock = [
     environment: "Not Compatible",
   },
   {
+    id: 25,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -48,6 +54,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 31,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -55,6 +62,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 32,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -62,6 +70,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 35,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -69,6 +78,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 45,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -76,6 +86,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 55,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -83,6 +94,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 100,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -90,6 +102,7 @@ const itemsMock = [
     environment: "Compatible",
   },
   {
+    id: 101,
     image: "",
     name: "Fish 1",
     description: "description of fish",
@@ -108,6 +121,7 @@ type AquaLifeDataTableProps = {
 
 const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
   const [items, setItems] = useState(itemsMock);
+  const [activeItemId, setActiveItemId] = useState<number>(0);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -149,44 +163,78 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
               </thead>
               <tbody className=" divide-y divide-gray-200">
                 {currentItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-15 w-15">
-                          <Image
-                            className="rounded-full"
-                            src={item.image ? item.image : "default_fish.png"}
-                            alt="Default image"
-                            height={62}
-                            width={124}
-                          />
+                  <tr key={item.id} onClick={() => setActiveItemId(item.id)}>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <div className="mdAquaView:hidden">
+                        <div className="mdAquaView:text-left text-sm font-medium text-gray-900">
+                          {item.name}
                         </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {item.name}
+                        {activeItemId === item.id && (
+                          <>
+                            <div className="text-sm text-gray-500">
+                              Description: {item.description}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              Size: {item.size}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              Environment: {item.environment}
+                            </div>
+                            <div className="flex items-center justify-center">
+                              <button
+                                className="rounded-lg p-4  gap-3 text-blue-500 hover:text-blue-300"
+                                onClick={() => console.log("Add button")}
+                              >
+                                <span>Add</span>
+                              </button>
+                              <button
+                                className="rounded-lg p-4 gap-3 text-blue-500 hover:text-blue-300"
+                                onClick={() => console.log("Remove button")}
+                              >
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="hidden mdAquaView:block">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-15 w-15 hidden lg:block">
+                            <Image
+                              className="h-15 w-15 rounded-full"
+                              src={item.image ? item.image : "man.png"}
+                              alt="Default avatar"
+                              height={62}
+                              width={62}
+                            />
                           </div>
-                          <div className="text-sm text-gray-500">
-                            {item.description}
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.name}
+                            </div>
+                            <div className="text-sm text-gray-500 whitespace-normal break-all">
+                              {item.description}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-center">
                       <div className="text-sm text-gray-500">{item.size}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-center">
                       <span
-                        className={`px-8 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
+                        className={` lg:px-4 xl:px-8 py-2 inline-flex  md:text-xs xl:text-sm leading-5 font-semibold rounded-full ${
                           item?.environment === Environment.COMPATIBLE
-                            ? "px-11 bg-green-500 bg-opacity-25 text-green-600"
+                            ? "bg-green-500 bg-opacity-25 text-green-600"
                             : "bg-red-500 bg-opacity-25 text-red-600"
                         }`}
                       >
                         {item.environment}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center">
                         <button
                           className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
@@ -207,7 +255,7 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                 ))}
               </tbody>
             </table>
-            <div className="fixed bottom-9 w-1/2 mb-3 z-10 left-1/4 flex justify-center">
+            <div className="w-full flex justify-center mt-8">
               <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
