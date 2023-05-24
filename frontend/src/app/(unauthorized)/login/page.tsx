@@ -12,7 +12,7 @@ import { Gothic_A1 } from 'next/font/google'
 
 const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
-export default function Login() {
+const Login = () => {
     const app = useFirebaseApp();
     const auth = getAuth(app);
     const [user, loading, error] = useAuthState(auth);
@@ -62,3 +62,5 @@ export default function Login() {
         </div>
     );
 }
+
+export default Login;
