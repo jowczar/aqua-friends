@@ -13,7 +13,7 @@ export default meta;
 
 type Story = StoryObj<typeof ProgressBar>;
 
-const Test = (args: ProgressBarProps) => {
+const ParentalComponentMock = (args: ProgressBarProps) => {
   const [internalElement, setInternalElement] = useState(50);
 
   return (
@@ -26,7 +26,7 @@ const Test = (args: ProgressBarProps) => {
 };
 
 // eslint-disable-next-line react/display-name
-const Template = (args: ProgressBarProps) => Test(args);
+const Template = (args: ProgressBarProps) => ParentalComponentMock(args);
 
 export const One: Story = {
   name: "ProgressBar",

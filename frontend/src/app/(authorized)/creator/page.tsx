@@ -73,6 +73,8 @@ export default function Creator() {
       height: 10,
     });
 
+  console.log("aquariumDimensions", aquariumDimensions);
+
   const [aquariumData, setAquariumData] = useState<AquariumData>({
     pump: {
       image: "",

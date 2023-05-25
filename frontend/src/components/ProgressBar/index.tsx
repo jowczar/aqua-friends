@@ -1,6 +1,6 @@
 import { Unit } from "@/enums/Unit.enum";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export type ProgressBarProps = {
   title: string;
@@ -22,7 +22,9 @@ const ProgressBar = ({
   const GEHProgressBarRef = useRef<HTMLDivElement | null>(null);
   const blueProgressBarRef = useRef<HTMLDivElement | null>(null);
 
-  const changePercentageOfBlueProgressBar = (value: number) => {
+  const [isRendered, setIsRendered] = useState(false);
+
+  const changeBlueProgressBar = (value: number) => {
     const progressPercentage = ((value - min) / (max - min)) * 100;
 
     if (!blueProgressBarRef.current) return;
@@ -30,11 +32,19 @@ const ProgressBar = ({
     blueProgressBarRef.current.style.width = progressPercentage + "%";
   };
 
+  useEffect(() => {
+    if (!isRendered) {
+      changeBlueProgressBar(element);
+      setIsRendered(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleIncrement = () => {
     if (element < max) {
       const newValue = element + 1;
       setElement(newValue);
-      changePercentageOfBlueProgressBar(newValue);
+      changeBlueProgressBar(newValue);
     }
   };
 
@@ -42,7 +52,7 @@ const ProgressBar = ({
     if (element > min) {
       const newValue = element - 1;
       setElement(newValue);
-      changePercentageOfBlueProgressBar(newValue);
+      changeBlueProgressBar(newValue);
     }
   };
 
@@ -57,22 +67,24 @@ const ProgressBar = ({
 
     setElement(newValue);
 
-    changePercentageOfBlueProgressBar(newValue);
+    changeBlueProgressBar(newValue);
   };
 
   return (
-    <div className="w-[80%] mx-auto my-6 flex items-center">
-      <button onClick={handleDecrement} className="mr-4">
-        <Image
-          src={"left-arrow-aqua-creator.svg"}
-          alt="Left arrow"
-          height={25}
-          width={25}
-        />
-      </button>
+    <div className="w-[80%] mx-auto my-6 flex flex-col items-center">
+      <div className="font-bold text-xl ">{title}</div>
 
-      <div className="w-full relative">
-        <div className="w-full bg-light h-[13px] rounded-2xl relative">
+      <div className="w-full  mt-14 relative flex flex-row">
+        <button onClick={handleDecrement} className="mr-4 ">
+          <Image
+            src={"left-arrow-aqua-creator.svg"}
+            alt="Left arrow"
+            height={25}
+            width={25}
+          />
+        </button>
+
+        <div className="w-full bg-light h-[14px] mt-1 rounded-2xl relative">
           <div
             ref={GEHProgressBarRef}
             className="bg-gray-200 absolute h-full left-0 rounded-2xl w-full cursor-pointer"
@@ -99,17 +111,16 @@ const ProgressBar = ({
             </div>
           </div>
         </div>
-        <span className="absolute top-[-90px] font-bold text-xl">{title}</span>
-      </div>
 
-      <button onClick={handleIncrement} className="ml-4">
-        <Image
-          src={"right-arrow-aqua-creator.svg"}
-          alt="Right arrow"
-          height={25}
-          width={25}
-        />
-      </button>
+        <button onClick={handleIncrement} className="ml-4">
+          <Image
+            src={"right-arrow-aqua-creator.svg"}
+            alt="Right arrow"
+            height={25}
+            width={25}
+          />
+        </button>
+      </div>
     </div>
   );
 };
