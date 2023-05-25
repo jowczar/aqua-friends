@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-type PaginationProps = {
+export type PaginationProps = {
   totalPages: number;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
