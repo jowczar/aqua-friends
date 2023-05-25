@@ -317,7 +317,8 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                             <div className="flex items-center justify-center">
                               <button
                                 className="rounded-lg p-4  gap-3 text-blue-500 hover:text-blue-300"
-                                onClick={() => console.log("View button")}
+                                //TODO: implement view button logic
+                                onClick={() => {}}
                               >
                                 <span>View</span>
                               </button>
@@ -402,7 +403,8 @@ const AquaViewDataTable = ({ columnTitles }: any) => {
                       <div className="flex items-center">
                         <button
                           className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
-                          onClick={() => console.log("View button")}
+                          //TODO: implement view logic
+                          onClick={() => {}}
                         >
                           <span>View</span>
                         </button>

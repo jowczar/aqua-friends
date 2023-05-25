@@ -183,13 +183,15 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                             <div className="flex items-center justify-center">
                               <button
                                 className="rounded-lg p-4  gap-3 text-blue-500 hover:text-blue-300"
-                                onClick={() => console.log("Add button")}
+                                //TODO: implement add button logic and connect with api
+                                onClick={() => {}}
                               >
                                 <span>Add</span>
                               </button>
                               <button
                                 className="rounded-lg p-4 gap-3 text-blue-500 hover:text-blue-300"
-                                onClick={() => console.log("Remove button")}
+                                //TODO: implement remove button logic and connect with api
+                                onClick={() => {}}
                               >
                                 <span>Remove</span>
                               </button>
@@ -238,14 +240,16 @@ const AquaLifeDataTable = ({ columnTitles }: AquaLifeDataTableProps) => {
                       <div className="flex items-center">
                         <button
                           className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
-                          onClick={() => console.log("View button")}
+                          //TODO: implement add button logic
+                          onClick={() => {}}
                         >
                           <span>Add</span>
                         </button>
 
                         <button
                           className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
-                          onClick={() => console.log("View button")}
+                          //TODO: implement remove button logic
+                          onClick={() => {}}
                         >
                           <span>Remove</span>
                         </button>

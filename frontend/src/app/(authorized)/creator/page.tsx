@@ -9,6 +9,9 @@ import AquaSummaryPage from "./AquaSummaryPage";
 import AquaLifePage from "./AquaLifePage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
+import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
+
+const TOTAL_NUMBER_OF_STEPS = 4;
 
 export type AquariumDimensions = {
   length: number;
@@ -16,49 +19,25 @@ export type AquariumDimensions = {
   height: number;
 };
 
+export type Equipment = {
+  image: string;
+  name: string;
+  description: string;
+  value: string;
+};
+
 export type AquariumData = {
-  pump: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  };
-  heater: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  };
-  light: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  };
-  plants: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  }[];
-  decors: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  }[];
-  terrains: {
-    image: string;
-    name: string;
-    description: string;
-    value: string;
-  }[];
+  pump: Equipment;
+  heater: Equipment;
+  light: Equipment;
+  plants: Equipment[];
+  decors: Equipment[];
+  terrains: Equipment[];
 };
 
 export default function Creator() {
   const router = useRouter();
 
-  const totalSteps = 4;
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
 
@@ -72,8 +51,6 @@ export default function Creator() {
       width: 10,
       height: 10,
     });
-
-  console.log("aquariumDimensions", aquariumDimensions);
 
   const [aquariumData, setAquariumData] = useState<AquariumData>({
     pump: {
@@ -108,7 +85,7 @@ export default function Creator() {
   });
 
   const handleNext = () => {
-    if (currentStep < totalSteps - 1) {
+    if (currentStep < TOTAL_NUMBER_OF_STEPS - 1) {
       setStepsCompleted([...stepsCompleted, currentStep]);
       setCurrentStep(currentStep + 1);
     }
@@ -131,7 +108,7 @@ export default function Creator() {
 
     setOpenDialog(true);
 
-    console.log("Saved");
+    //TODO: implement saving logic and connect with api
   };
 
   const handleClose = () => {
@@ -151,7 +128,7 @@ export default function Creator() {
 
   const buttons = (
     <>
-      {currentStep > 0 && (
+      {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
         <button
           onClick={handlePrevious}
           className="w-full md:w-auto bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
@@ -160,7 +137,7 @@ export default function Creator() {
         </button>
       )}
       <div className="w-full md:w-auto">
-        {currentStep < totalSteps - 1 && (
+        {currentStep < TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleNext}
             className="w-full bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
@@ -168,7 +145,7 @@ export default function Creator() {
             Next Step
           </button>
         )}
-        {stepsCompleted.length === totalSteps - 1 && (
+        {stepsCompleted.length === TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleSave}
             className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
@@ -193,44 +170,65 @@ export default function Creator() {
         />
       </div>
 
-      {currentStep === 0 && (
-        <AquaSizePage
-          aquariumDimensions={aquariumDimensions}
-          setAquariumDimensions={setAquariumDimensions}
-        />
-      )}
+      {(() => {
+        switch (currentStep) {
+          case AquaCreatorStep.AQUA_SIZE_PAGE:
+            return (
+              <AquaSizePage
+                aquariumDimensions={aquariumDimensions}
+                setAquariumDimensions={setAquariumDimensions}
+              />
+            );
 
-      {currentStep === 1 && (
-        <AquaDecorPage
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
-          aquariumData={aquariumData}
-        />
-      )}
+          case AquaCreatorStep.AQUA_DECOR_PAGE:
+            return (
+              <AquaDecorPage
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                aquariumData={aquariumData}
+              />
+            );
 
-      {currentStep === 2 && <AquaLifePage />}
+          case AquaCreatorStep.AQUA_LIFE_PAGE:
+            return <AquaLifePage />;
 
-      {currentStep > 2 && (
-        <AquaSummaryPage
-          aquariumName={aquariumName}
-          setAquariumName={setAquariumName}
-          aquariumDimensions={aquariumDimensions}
-          aquariumData={aquariumData}
-        />
-      )}
+          case AquaCreatorStep.AQUA_SUMMARY_PAGE:
+            return (
+              <AquaSummaryPage
+                aquariumName={aquariumName}
+                setAquariumName={setAquariumName}
+                aquariumDimensions={aquariumDimensions}
+                aquariumData={aquariumData}
+              />
+            );
+          case AquaCreatorStep.AQUA_MODAL:
+            return (
+              <>
+                <AquaSummaryPage
+                  aquariumName={aquariumName}
+                  setAquariumName={setAquariumName}
+                  aquariumDimensions={aquariumDimensions}
+                  aquariumData={aquariumData}
+                />
+                {openDialog && (
+                  <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <Modal
+                      title={"Aqua Friends"}
+                      message={"Data saved successfully!"}
+                      cancelButtonText={"Close"}
+                      detailsButtonText={"I understand"}
+                      onCancelClick={handleClose}
+                      onDetailsClick={handleClose}
+                    />
+                  </div>
+                )}
+              </>
+            );
 
-      {currentStep === 4 && openDialog && (
-        <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <Modal
-            title={"Aqua Friends"}
-            message={"Data saved successfully!"}
-            cancelButtonText={"Close"}
-            detailsButtonText={"I understand"}
-            onCancelClick={handleClose}
-            onDetailsClick={handleClose}
-          />
-        </div>
-      )}
+          default:
+            return null;
+        }
+      })()}
 
       <div className="md:hidden w-full mb-5 mt-5 xs:px-5 sm:px-20 md:flex md:justify-between">
         {buttons}

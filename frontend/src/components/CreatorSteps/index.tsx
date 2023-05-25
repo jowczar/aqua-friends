@@ -1,3 +1,4 @@
+import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -8,7 +9,6 @@ type StepsProps = {
 };
 
 const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
-  console.log("stepsCompleted", stepsCompleted);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [selectedStep, setSelectedStep] = useState(currentStep);
 
@@ -35,8 +35,8 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
   const steps = ["Aqua Size", "Aqua Decor", "Aqua Life", "Summary"];
 
   const getLastStepClass = () => {
-    if (currentStep === 3) return "bg-blue-500";
-    if (currentStep === 4) return "bg-stepsGreen";
+    if (currentStep === AquaCreatorStep.AQUA_SUMMARY_PAGE) return "bg-blue-500";
+    if (currentStep === AquaCreatorStep.AQUA_MODAL) return "bg-stepsGreen";
     return "bg-gray-300";
   };
 
@@ -55,7 +55,8 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               <div key={index} className="text-center">
                 <div
                   className={`w-28 h-28 mx-auto rounded-full ${
-                    stepsCompleted.includes(index) || currentStep === 4
+                    stepsCompleted.includes(index) ||
+                    currentStep === AquaCreatorStep.AQUA_MODAL
                       ? "bg-stepsGreen text-white"
                       : index === currentStep
                       ? "bg-blue-500 text-white"
@@ -81,7 +82,8 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               <div key={index} className="text-center">
                 <div
                   className={`${
-                    stepsCompleted.includes(index) || currentStep === 4
+                    stepsCompleted.includes(index) ||
+                    currentStep === AquaCreatorStep.AQUA_MODAL
                       ? "bg-stepsGreen text-white"
                       : index === currentStep
                       ? "bg-blue-500 text-white"
@@ -95,8 +97,8 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
             ))}
             <div
               className={`absolute top-14 left-firstStep w-1/3 h-1 ${
-                currentStep > 0
-                  ? currentStep === 1
+                currentStep > AquaCreatorStep.AQUA_SIZE_PAGE
+                  ? currentStep === AquaCreatorStep.AQUA_DECOR_PAGE
                     ? "bg-blue-500"
                     : "bg-stepsGreen"
                   : "bg-gray-300"
@@ -104,8 +106,9 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
             />
             <div
               className={`absolute top-14 left-1/3 w-1/3 h-1 ${
-                currentStep > 1 || stepsCompleted.includes(1)
-                  ? currentStep === 2
+                currentStep > AquaCreatorStep.AQUA_DECOR_PAGE ||
+                stepsCompleted.includes(AquaCreatorStep.AQUA_DECOR_PAGE)
+                  ? currentStep === AquaCreatorStep.AQUA_LIFE_PAGE
                     ? "bg-blue-500"
                     : "bg-stepsGreen"
                   : "bg-gray-300"

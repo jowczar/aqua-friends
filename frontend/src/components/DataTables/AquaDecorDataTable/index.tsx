@@ -62,7 +62,7 @@ const AquaDecorDataTable = ({
                           <div className="flex-shrink-0 h-15 w-15 sm:hidden">
                             <Image
                               className="rounded-full"
-                              src={item.image ? item.image : "default_fish.png"}
+                              src={item.image ? item.image : "default-fish.png"}
                               alt="Default image"
                               height={70}
                               width={80}
@@ -82,9 +82,8 @@ const AquaDecorDataTable = ({
                         {isSingleAnswer ? (
                           <input type="radio" name="item" />
                         ) : (
-                          <button onClick={() => console.log("Add item")}>
-                            Add
-                          </button>
+                          //TODO: implement adding logic and connect with api
+                          <button onClick={() => {}}>Add</button>
                         )}
                       </td>
                     </tr>
