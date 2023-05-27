@@ -3,14 +3,14 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
-import { Gothic_A1 } from 'next/font/google'
+import { Gothic_A1 } from "next/font/google";
 
 const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 type User = {
-    displayName: string | null;
-    email: string | null;
-    photoURL: string | null;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
 };
 
 type NavbarProps = {

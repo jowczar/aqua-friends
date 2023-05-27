@@ -1,6 +1,9 @@
 {
   "name": "aqua-friends",
   "version": "1.0.0",
+  "scripts": {
+    "prepare": "husky install"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jowczar/aqua-friends.git"
@@ -26,10 +29,24 @@
     "firebase": "^9.21.0",
     "firebase-tools": "^11.29.1",
     "firebaseui": "^6.0.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "next": "^13.3.2",
+    "prettier": "^2.8.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.1",
     "typescript": "5.0.4"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
