@@ -23,7 +23,7 @@ const FormInputImage = ({ name, control, rules, label }: FormInputProps) => {
       control={control}
       rules={rules}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <label htmlFor={name} className="flex flex-col gap-1">
+        <label htmlFor={name} className="flex flex-col gap-1 w-fit">
           {label && <span className="text-xs font-semibold">{label}</span>}
           <div className="group cursor-pointer relative rounded-full w-fit">
             <Image
