@@ -16,6 +16,13 @@ __Warning:__ Do not use SSR in NextJS, because it will not work on Firebase host
 ### CI/CD
 Firebase automatically runs CI and deploys to production when code is pushed to `master` branch.
 
+### Code formatting
+This project uses eslint rules to uphold code quality and adhere to best practices, complemented by prettier for proficient code formatting. To prepare your environment for development, run in the root directory:
+```
+npm run prepare
+```
+This command will set up git hooks that automatically run eslint and prettier on every commit, thanks to [husky](https://github.com/typicode/husky).
+
 ### Run Firebase locally
 ##### Install dependencies
 Install firebase tools inside root folder:
