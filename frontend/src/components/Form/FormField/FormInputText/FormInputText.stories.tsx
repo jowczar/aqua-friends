@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { FormInputText } from "./FormField";
-import StorybookFormProvider from "./StorybookFormProvider";
+import FormInputText from "./FormInputText";
+import StorybookFormProvider from "../../StorybookFormProvider";
 
 const meta: Meta<typeof FormInputText> = {
-  title: "Form Fields/Other Inputs",
+  title: "Form Fields/Text Input",
   component: FormInputText,
   decorators: [StorybookFormProvider(true)],
 };
