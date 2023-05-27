@@ -10,10 +10,10 @@ const FormInputText = ({ name, control, rules, label }: FormInputProps) => {
       control={control}
       rules={rules}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <label htmlFor={label} className="flex flex-col gap-1">
+        <label htmlFor={name} className="flex flex-col gap-1">
           <span className="text-xs font-semibold">{label}</span>
           <input
-            id={label}
+            id={name}
             value={value}
             onChange={onChange}
             type="text"
