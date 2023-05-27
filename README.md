@@ -1,5 +1,7 @@
 # Aqua friends
 
+
+## Project Architecture
 ### Backend
 Firebase cloud functions written in Typescript – `functions` folder.
 
@@ -11,20 +13,22 @@ NextJS app written in Typescript – `frontend` folder. We are using TailwindCSS
 
 ### Hosting
 Firebase automatically serves `frontend/dist` folder which is built NextJS app.<br/>
-__Warning:__ Do not use SSR in NextJS, because it will not work on Firebase hosting. If you need SSR, set up Firebase cloud function for serving this content or migrate frontend to different hosting, e.g. Vercel.
+__Warning:__ Do not use SSR in NextJS, because it will not work on static Firebase hosting. If you need SSR, set up Firebase cloud function for serving this content or migrate frontend to different hosting, e.g. Vercel.
 
 ### CI/CD
 Firebase automatically runs CI and deploys to production when code is pushed to `master` branch.
 
-### Code formatting
-This project uses eslint rules to uphold code quality and adhere to best practices, complemented by prettier for proficient code formatting. To prepare your environment for development, run in the root directory:
+## Development
+To prepare your environment for development, run in the root directory:
 ```
 npm run prepare
 ```
 This command will set up git hooks that automatically run eslint and prettier on every commit, thanks to [husky](https://github.com/typicode/husky).
 
+### Code formatting
+This project uses eslint rules to uphold code quality and adhere to best practices, complemented by prettier for proficient code formatting. 
+
 ### Run Firebase locally
-##### Install dependencies
 Install firebase tools inside root folder:
 ```
 npm i
@@ -35,7 +39,7 @@ Then login to firebase:
 firebase login
 ```
 
-##### Run Firebase emulators
+You can run Firebase emulators by using:
 ```
 firebase serve
 ```
@@ -55,13 +59,11 @@ npm run dev
 Remember to `npm i` every time dependencies are changed.
 
 ### Deploy 
-
-##### Deploy everything
+Deploy everything
 ```
 firebase deploy
 ```
-
-##### Deploy one part of the project
+Deploy one part of the project
 ```
 firebase deploy --only functions
 ```
