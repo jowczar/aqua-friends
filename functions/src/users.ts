@@ -1,7 +1,7 @@
-import {FirebaseError} from "firebase/app";
 import express, {Request, Response} from "express";
 import * as admin from "firebase-admin";
 import {logger} from "firebase-functions/v1";
+import isFirebaseError from "./utils";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -28,7 +28,7 @@ router.post("/", async (req: Request, res: Response) => {
     return res.status(201).send({uid});
   } catch (err) {
     logger.error(err);
-    if (err instanceof FirebaseError) {
+    if (isFirebaseError(err)) {
       return res.status(500).send({message: `${err.code} - ${err.message}`});
     } else if (err instanceof Error) {
       return res.status(500).send({message: err.message});
