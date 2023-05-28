@@ -51,7 +51,6 @@ export const FileUploaderProvider = ({
     return uploadBytes(imageRef, imageToUpload)
       .then(async (snapshot) => {
         const url = await getDownloadURL(snapshot.ref);
-        toast(url);
         setUploadedUrl(url);
         return url;
       })

@@ -9,6 +9,13 @@ import {
 } from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
+import {
+  getAuth,
+  updateEmail,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
+import { toast } from "react-toastify";
 
 const formSchema = object().shape({
   displayName: string()
@@ -27,7 +34,7 @@ const formSchema = object().shape({
 });
 
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
-  const { control, handleSubmit } = useForm<UserData>({
+  const { control, handleSubmit } = useForm<UserData & { password: string }>({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -37,18 +44,29 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   });
   const { uploadFile } = useFileUploader();
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
-    if (data.photoUrl) {
-      console.log("Uploading");
-      const url = await uploadFile();
+    const user = getAuth().currentUser;
+    if (!user) return toast.error("User not logged in");
 
-      console.log("Uploaded", { url });
+    let url = user.photoURL;
+    if (data.photoUrl) {
+      url = await uploadFile();
     }
 
-    await new Promise((res) => setTimeout(() => res(null), 2000));
+    try {
+      await updateEmail(user, data.email);
+      await updatePassword(user, data.password);
+      await updateProfile(user, {
+        displayName: data.displayName,
+        photoURL: url || user.photoURL,
+      });
+      toast.success("Profile updated!");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   });
 
-  // TODO: implement changes in firebase (getAuth() has all the needed methods)
   // TODO: fix typescript control type warning
 
   return (
