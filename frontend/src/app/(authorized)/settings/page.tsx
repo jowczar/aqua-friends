@@ -3,13 +3,19 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 import FileUploaderProvider from "@/context/FileUploaderProvider";
-import { FormInputImage } from "@/components/Form/FormField";
+import {
+  FormInputImage,
+  FormInputSubmit,
+  FormInputText,
+} from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
+import Loader from "@/components/Loader";
 
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "@/components/Loader";
 
 type UserData = {
   email: string;
@@ -17,28 +23,77 @@ type UserData = {
   photoUrl: string;
 };
 
+const formSchema = Yup.object().shape({
+  password: Yup.string()
+    .min(4, "Password length should be at least 4 characters")
+    .max(12, "Password cannot exceed more than 12 characters"),
+  passwordConfirm: Yup.string()
+    .min(4, "Password length should be at least 4 characters")
+    .max(12, "Password cannot exceed more than 12 characters")
+    .oneOf([Yup.ref("password")], "Passwords do not match"),
+});
+
 const Form = () => {
-  const { control, handleSubmit } = useForm<UserData>({ mode: "onBlur" });
-  const [loading, setLoading] = useState(false);
+  // TODO: add default values
+  const { control, watch, handleSubmit } = useForm<UserData>({
+    mode: "onTouched",
+    resolver: yupResolver(formSchema),
+  });
   const { uploadFile } = useFileUploader();
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true);
-    const url = await uploadFile();
-    setLoading(false);
+    console.log({ data });
+    if (data.photoUrl) {
+      console.log("Uploading");
+      const url = await uploadFile();
+      console.log("Uploaded", { url });
+    }
+
+    await new Promise((res) => setTimeout(() => res(null), 2000));
   });
 
-  // TODO: add loading
-  // TODO: add whole form
   // TODO: implement changes in firebase (getAuth() has all the needed methods)
 
   return (
-    <form onSubmit={onSubmit}>
-      <FormInputImage name="avatar" control={control} />
-      <input
-        type="submit"
-        className="bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer"
-        value="Save profile"
-      />
+    <form
+      onSubmit={onSubmit}
+      className="flex flex-col md:flex-row gap-10 items-center mx-auto bg-white px-12 py-8 rounded shadow my-10 max-w-2xl"
+    >
+      <div className="grow flex gap-4 flex-col order-2 md:order-1 w-full">
+        <FormInputText
+          name="displayName"
+          type="text"
+          control={control}
+          label="Display name"
+        />
+        <FormInputText
+          name="email"
+          type="email"
+          control={control}
+          label="Email"
+        />
+        <FormInputText
+          name="password"
+          type="password"
+          control={control}
+          label="Password"
+        />
+        <FormInputText
+          name="passwordConfirm"
+          type="password"
+          control={control}
+          label="Confirm password"
+        />
+        <FormInputSubmit name="submit" control={control} onClick={onSubmit}>
+          Save profile
+        </FormInputSubmit>
+      </div>
+      <div className="shrink-0 order-1 md:order-2">
+        <FormInputImage
+          name="photoUrl"
+          className="w-40 h-40 md:w-60 md:h-60 aspect-square"
+          control={control}
+        />
+      </div>
     </form>
   );
 };
