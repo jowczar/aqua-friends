@@ -29,12 +29,12 @@ const formSchema = Yup.object().shape({
     .max(30, "Name is too long")
     .required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .min(4, "Password length should be at least 4 characters")
-    .max(12, "Password cannot exceed more than 12 characters"),
+  password: Yup.string().min(
+    6,
+    "Password length should be at least 6 characters"
+  ),
   passwordConfirm: Yup.string()
-    .min(4, "Password length should be at least 4 characters")
-    .max(12, "Password cannot exceed more than 12 characters")
+    .min(6, "Password length should be at least 6 characters")
     .oneOf([Yup.ref("password")], "Passwords do not match"),
 });
 
