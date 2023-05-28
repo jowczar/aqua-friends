@@ -43,7 +43,7 @@ const FormInputSubmit = ({
           )}
         >
           {!loading && children}
-          {loading && <Loader className="h-5" />}
+          {loading && <Loader className="h-4" />}
         </button>
       )}
     />

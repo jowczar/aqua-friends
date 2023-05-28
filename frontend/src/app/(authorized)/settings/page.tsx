@@ -33,11 +33,14 @@ const formSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords do not match"),
 });
 
-const Form = () => {
-  // TODO: add default values
-  const { control, watch, handleSubmit } = useForm<UserData>({
+const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
+  const { control, handleSubmit } = useForm<UserData>({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
+    defaultValues: {
+      email,
+      displayName,
+    },
   });
   const { uploadFile } = useFileUploader();
   const onSubmit = handleSubmit(async (data) => {
@@ -52,6 +55,8 @@ const Form = () => {
   });
 
   // TODO: implement changes in firebase (getAuth() has all the needed methods)
+  // TODO: add default values
+  // TODO: add validation (allow only one field change)
 
   return (
     <form
@@ -68,12 +73,14 @@ const Form = () => {
         <FormInputText
           name="email"
           type="email"
+          autocomplete={false}
           control={control}
           label="Email"
         />
         <FormInputText
           name="password"
           type="password"
+          autocomplete={false}
           control={control}
           label="Password"
         />
@@ -81,6 +88,7 @@ const Form = () => {
           name="passwordConfirm"
           type="password"
           control={control}
+          autocomplete={false}
           label="Confirm password"
         />
         <FormInputSubmit name="submit" control={control} onClick={onSubmit}>
@@ -119,8 +127,8 @@ export default function Settings() {
   }
 
   return (
-    <FileUploaderProvider defaultImage="man.png">
-      <Form />
+    <FileUploaderProvider defaultImage={user.photoUrl || "man.png"}>
+      <Form displayName={user.displayName} email={user.email} />
     </FileUploaderProvider>
   );
 }
