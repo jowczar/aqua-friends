@@ -1,17 +1,21 @@
 "use client";
 
-import AquaLifeDataTable from "@/components/DataTables/AquaLifeDataTable";
+import DataTable from "@/components/DataTables";
+import { aquaLifeItemsMock } from "@/components/DataTables/data-mock";
 
+const aquaLifeColumns = ["Product", "Size", "Environment"];
+
+//TODO: for now its using data mock, should implement data from api
 const AquaLifePage = () => {
-  const columnTitles = {
-    firstColumn: "Product",
-    secondColumn: "Size",
-    thirdColumn: "Environment",
-  };
-
   return (
     <div className="my-10 px-1 md:px-20">
-      <AquaLifeDataTable columnTitles={columnTitles} />
+      <DataTable
+        columns={aquaLifeColumns}
+        data={aquaLifeItemsMock}
+        itemsPerPage={5}
+        allowImages={true}
+        allowAquaLifeActions
+      />
     </div>
   );
 };

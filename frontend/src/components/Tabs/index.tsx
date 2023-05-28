@@ -1,4 +1,4 @@
-import { TabEnum } from "@/enums/Tab.enum";
+import { TabEnum } from "../../enums/Tab.enum";
 import React from "react";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 
@@ -55,7 +55,7 @@ const Tab = ({
     if (isRight)
       return `inline-flex items-center justify-center rounded-r-lg border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
 
-    return `inline-flex items-center justify-center border-y py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
+    return `inline-flex items-center justify-center border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
   };
   return (
     <a
@@ -93,7 +93,7 @@ export type TabsProps = {
 const Tabs = ({ currentTab, setCurrentTab, className }: TabsProps) => {
   return (
     <div
-      className={`inline-flex justify-center rounded-lg w-full xl:w-4/5 mx-auto ${className}`}
+      className={`inline-flex justify-center rounded-lg w-full mx-auto ${className}`}
     >
       <div className="inline-flex w-full mb-1 sm:hidden">
         <SelectTab currentTab={currentTab} setCurrentTab={setCurrentTab} />

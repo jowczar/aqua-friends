@@ -1,96 +1,20 @@
 "use client";
 
 import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
-import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
-import { TabsProps } from "@/components/DataTables/AquaDecorDataTable/Tabs";
+import CardDataTable from "@/components/DataTables/CardDataTable";
+import { TabsProps } from "@/components/Tabs";
 import { TabEnum } from "@/enums/Tab.enum";
 import { useState, useEffect } from "react";
 import { AquariumData } from "./page";
+import {
+  pumpsMock,
+  heatersMock,
+  terrainsMock,
+} from "@/components/DataTables/CardDataTable/data-mock";
 
 type AquaDecorPageProps = Omit<TabsProps, "className"> & {
   aquariumData: AquariumData;
 };
-
-const terrainsMock = [
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-];
-
-const pumpsMock = [
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-];
-
-const heatersMock = [
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-];
 
 const AquaDecorPage = ({
   currentTab,
@@ -128,11 +52,9 @@ const AquaDecorPage = ({
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>
       <div className="w-full 2xl:w-2/3 2xl:pl-4">
-        <AquaDecorDataTable
+        <CardDataTable
           columnTitle={currentTab.tabName}
           isSingleAnswer={isSingleAnswer}
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
           items={items}
         />
       </div>
