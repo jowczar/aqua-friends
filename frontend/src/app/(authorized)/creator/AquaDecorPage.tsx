@@ -48,7 +48,7 @@ const AquaDecorPage = ({
   }, [currentTab]);
 
   return (
-    <div className="my-10 xs:px-5 lg:px-20 flex flex-col 2xl:flex-row">
+    <div className="my-10 px-5 lg:px-20 flex flex-col 2xl:flex-row">
       <div className="w-full 2xl:w-1/3 2xl:pr-4 mt-4 2xl:mt-0">
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>
