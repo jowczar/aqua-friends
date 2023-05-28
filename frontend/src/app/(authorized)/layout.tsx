@@ -1,8 +1,8 @@
-import FirebaseProvider from "@/context/FirebaseProvider";
-import "../globals.css";
 import { Inter } from "next/font/google";
+
+import FirebaseProvider from "@/context/FirebaseProvider";
 import Navbar from "@/components/Navbar";
-import { ToastContainer } from "react-toastify";
+import "../globals.css";
 
 const font = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -26,18 +26,6 @@ export default function RootLayout({
           <Navbar />
           {children}
         </FirebaseProvider>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
       </body>
     </html>
   );
