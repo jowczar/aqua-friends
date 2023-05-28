@@ -19,7 +19,7 @@ type FileUploaderProviderProps = {
 type FileUploader = {
   imageToUpload: File | null;
   setImageToUpload: (image: File) => void;
-  uploadFile: () => Promise<string | void>;
+  uploadFile: () => Promise<string | null>;
   uploadedUrl: string | null;
   defaultImage: string;
 };
@@ -36,14 +36,14 @@ export const FileUploaderProvider = ({
   const uploadFile = async () => {
     if (imageToUpload === null) {
       toast.error("Please select an image");
-      return;
+      return null;
     }
 
     const storage = getStorage();
     const userId = getAuth()?.currentUser?.uid;
     if (!userId) {
       toast.error("Please sign in to upload an image");
-      return;
+      return null;
     }
 
     const imageRef = storageRef(storage, `avatars/${userId}/${uuid()}`);
@@ -57,6 +57,7 @@ export const FileUploaderProvider = ({
       })
       .catch((error) => {
         toast.error(error.message);
+        return null;
       });
   };
 
