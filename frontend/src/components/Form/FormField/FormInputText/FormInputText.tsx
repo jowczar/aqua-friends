@@ -5,6 +5,7 @@ import classNames from "classnames";
 
 type FormInputTextProps = FormInputProps & {
   type: string;
+  autocomplete: boolean;
 };
 
 const FormInputText = ({
@@ -12,6 +13,7 @@ const FormInputText = ({
   control,
   rules,
   label,
+  autocomplete = true,
   type = "text",
 }: FormInputTextProps) => {
   return (
@@ -26,6 +28,7 @@ const FormInputText = ({
             id={name}
             value={value}
             onChange={onChange}
+            autoComplete={autocomplete ? "on" : "new-password"}
             type={type}
             className={classNames(
               "border bg-gray-50 text-xs px-2 py-2 rounded transition-colors",
