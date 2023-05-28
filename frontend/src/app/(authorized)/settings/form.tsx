@@ -126,7 +126,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
           label="Confirm password"
         />
         {needsReauthentication && (
-          <div className="border-t pt-4 transition ease-out transform origin-top-right">
+          <div className="border-t pt-4">
             <FormInputText
               name="currentPassword"
               type="password"
