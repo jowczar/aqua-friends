@@ -35,8 +35,8 @@ export const One: Story = {
   args: {
     currentTab: {
       tabName: TabEnum.PUMP,
-      numberOfElements: 0,
-      shouldShowSuccess: false,
+      numberOfElements: 2,
+      shouldShowSuccess: true,
       shouldShowWarning: false,
     },
     setCurrentTab: () => {},

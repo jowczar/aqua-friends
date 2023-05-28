@@ -45,24 +45,21 @@ const Tab = ({
   className,
 }: any) => {
   const getClassName = () => {
+    const mainClass =
+      "inline-flex items-center justify-center cursor-pointer border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6";
+
     let baseClass = isActive
       ? "bg-primary text-white flex-grow flex-shrink"
       : "border-light text-black hover:bg-primary hover:text-white flex-grow flex-shrink";
 
-    if (isLeft)
-      return `inline-flex items-center justify-center rounded-l-lg border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
+    if (isLeft) return `${mainClass} rounded-l-lg ${baseClass}`;
 
-    if (isRight)
-      return `inline-flex items-center justify-center rounded-r-lg border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
+    if (isRight) return `${mainClass} rounded-r-lg ${baseClass}`;
 
-    return `inline-flex items-center justify-center border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6 ${baseClass}`;
+    return `${mainClass} ${baseClass}`;
   };
   return (
-    <a
-      href="javascript:void(0)"
-      className={`${getClassName()} ${className}`}
-      onClick={onClick}
-    >
+    <div className={`${getClassName()} ${className}`} onClick={onClick}>
       <span className="pr-2">
         {showIconsOnly && showSuccess && <FaCheckCircle className="mr-2" />}
         {showIconsOnly && showWarning && (
@@ -73,7 +70,7 @@ const Tab = ({
         )}
       </span>
       <span className="text-xs sm:text-base">{text}</span>
-    </a>
+    </div>
   );
 };
 
