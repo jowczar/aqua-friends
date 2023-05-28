@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { object, string, ref } from "yup";
+import { object, string as yupString, ref } from "yup";
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
@@ -24,13 +24,16 @@ import { UserData } from "@/common/types";
 import { useEffect, useState } from "react";
 
 const formSchema = object().shape({
-  displayName: string()
+  displayName: yupString()
     .min(3, "Name is too short")
     .max(30, "Name is too long")
     .required("Name is required"),
-  email: string().email("Invalid email").required("Email is required"),
-  password: string().min(6, "Password length should be at least 6 characters"),
-  passwordConfirm: string()
+  email: yupString().email("Invalid email").required("Email is required"),
+  password: yupString().min(
+    6,
+    "Password length should be at least 6 characters"
+  ),
+  passwordConfirm: yupString()
     .oneOf([ref("password")], "Passwords must match")
     .when("password", {
       is: (password: string) => password?.length > 0,
