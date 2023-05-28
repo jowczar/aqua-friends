@@ -126,7 +126,11 @@ export default function Settings() {
   });
 
   if (!user) {
-    return <Loader />;
+    return (
+      <div className="flex items-center justify-center mx-auto bg-white px-12 py-8 rounded shadow my-10 max-w-2xl">
+        <Loader />
+      </div>
+    );
   }
 
   return (
