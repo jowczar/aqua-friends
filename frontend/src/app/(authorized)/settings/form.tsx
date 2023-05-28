@@ -10,7 +10,11 @@ import {
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
 import {
+  EmailAuthProvider,
+  GoogleAuthProvider,
+  User,
   getAuth,
+  reauthenticateWithPopup,
   updateEmail,
   updatePassword,
   updateProfile,
@@ -33,6 +37,14 @@ const formSchema = object().shape({
     }),
 });
 
+const reauthenticate = (user: User) => {
+  const provider =
+    user.providerData[0].providerId === "password"
+      ? new EmailAuthProvider()
+      : new GoogleAuthProvider();
+  return reauthenticateWithPopup(user, provider);
+};
+
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const { control, handleSubmit } = useForm<UserData & { password: string }>({
     mode: "onTouched",
@@ -53,12 +65,18 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
     }
 
     try {
-      await updateEmail(user, data.email);
-      await updatePassword(user, data.password);
+      // Firebase requires reauthentication before updating email or password for security reasons
+      if (user.email !== data.email || data.password) {
+        await reauthenticate(user);
+        await updateEmail(user, data.email);
+        await updatePassword(user, data.password);
+      }
+
       await updateProfile(user, {
         displayName: data.displayName,
         photoURL: url || user.photoURL,
       });
+
       toast.success("Profile updated!");
     } catch (error) {
       if (error instanceof Error) {
