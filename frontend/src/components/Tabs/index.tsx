@@ -2,7 +2,20 @@ import { TabEnum } from "../../enums/Tab.enum";
 import React from "react";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 
-const SelectTab = ({
+type TabProps = {
+  text: string;
+  isLeft?: boolean;
+  isRight?: boolean;
+  isActive: boolean;
+  shouldShowSuccess?: boolean;
+  shouldShowWarning?: boolean;
+  numberOfElements?: number;
+  showIconsOnly?: boolean;
+  showNumbersOnly?: boolean;
+  onClick: () => void;
+};
+
+const Dropdown = ({
   currentTab,
   setCurrentTab,
 }: Omit<TabsProps, "className">) => {
@@ -36,17 +49,16 @@ const Tab = ({
   isLeft,
   isRight,
   isActive,
-  showSuccess,
-  showWarning,
+  shouldShowSuccess,
+  shouldShowWarning,
   numberOfElements,
   showIconsOnly,
   showNumbersOnly,
   onClick,
-  className,
-}: any) => {
+}: TabProps) => {
   const getClassName = () => {
     const mainClass =
-      "inline-flex items-center justify-center cursor-pointer border py-2 px-3 text-center text-sm sm:text-base font-semibold transition-all md:py-3 md:px-6";
+      "inline-flex items-center justify-center cursor-pointer border py-2 px-3 text-center text-sm lg:text-base font-semibold transition-all md:py-3 md:px-6";
 
     let baseClass = isActive
       ? "bg-primary text-white flex-grow flex-shrink"
@@ -59,17 +71,21 @@ const Tab = ({
     return `${mainClass} ${baseClass}`;
   };
   return (
-    <div className={`${getClassName()} ${className}`} onClick={onClick}>
-      <span className="pr-2">
-        {showIconsOnly && showSuccess && <FaCheckCircle className="mr-2" />}
-        {showIconsOnly && showWarning && (
-          <FaExclamationTriangle className="mr-2" />
+    <div className={`${getClassName()}`} onClick={onClick}>
+      <span className="text-xs lg:text-base">{text}</span>
+      <span className="pl-2">
+        {showIconsOnly && shouldShowSuccess && (
+          <FaCheckCircle className="text-stepsGreen" />
+        )}
+        {showIconsOnly && shouldShowWarning && (
+          <FaExclamationTriangle className="text-red-300" />
         )}
         {showNumbersOnly && numberOfElements !== 0 && (
-          <span className="mr-2">{numberOfElements}</span>
+          <span className="text-xs lg:text-base text-blue-400">
+            {numberOfElements}
+          </span>
         )}
       </span>
-      <span className="text-xs sm:text-base">{text}</span>
     </div>
   );
 };
@@ -84,16 +100,15 @@ export type CurrentTab = {
 export type TabsProps = {
   currentTab: CurrentTab;
   setCurrentTab: React.Dispatch<React.SetStateAction<CurrentTab>>;
-  className: string;
 };
 
-const Tabs = ({ currentTab, setCurrentTab, className }: TabsProps) => {
+const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
   return (
     <div
-      className={`inline-flex justify-center rounded-lg w-full mx-auto ${className}`}
+      className={`inline-flex justify-center rounded-lg w-full mx-auto mr-4`}
     >
       <div className="inline-flex w-full mb-1 sm:hidden">
-        <SelectTab currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        <Dropdown currentTab={currentTab} setCurrentTab={setCurrentTab} />
       </div>
       <div className="hidden sm:inline-flex sm:w-full">
         <Tab
@@ -102,7 +117,7 @@ const Tabs = ({ currentTab, setCurrentTab, className }: TabsProps) => {
           isActive={currentTab.tabName === TabEnum.PUMP}
           shouldShowSuccess={currentTab.shouldShowSuccess}
           shouldShowWarning={currentTab.shouldShowWarning}
-          showIconOnly
+          showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.PUMP }))
           }
@@ -113,7 +128,7 @@ const Tabs = ({ currentTab, setCurrentTab, className }: TabsProps) => {
           isActive={currentTab.tabName === TabEnum.HEATER}
           shouldShowSuccess={currentTab.shouldShowSuccess}
           shouldShowWarning={currentTab.shouldShowWarning}
-          showIconOnly
+          showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.HEATER }))
           }
@@ -124,7 +139,7 @@ const Tabs = ({ currentTab, setCurrentTab, className }: TabsProps) => {
           isActive={currentTab.tabName === TabEnum.LIGHT}
           shouldShowSuccess={currentTab.shouldShowSuccess}
           shouldShowWarning={currentTab.shouldShowWarning}
-          showIconOnly
+          showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.LIGHT }))
           }

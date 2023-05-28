@@ -17,9 +17,9 @@ type Story = StoryObj<typeof Tabs>;
 const ParentalComponentMock = (args: TabsProps) => {
   const [currentTab, setCurrentTab] = useState({
     tabName: TabEnum.PUMP,
-    numberOfElements: 0,
+    numberOfElements: 4,
     shouldShowSuccess: false,
-    shouldShowWarning: false,
+    shouldShowWarning: true,
   });
 
   return (
@@ -36,10 +36,9 @@ export const One: Story = {
     currentTab: {
       tabName: TabEnum.PUMP,
       numberOfElements: 2,
-      shouldShowSuccess: true,
+      shouldShowSuccess: false,
       shouldShowWarning: false,
     },
     setCurrentTab: () => {},
-    className: "w-full mr-4",
   },
 };
