@@ -22,6 +22,7 @@ import {
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
 import { useEffect, useState } from "react";
+import { FirebaseError } from "firebase/app";
 
 const formSchema = object().shape({
   displayName: yupString()
@@ -42,11 +43,30 @@ const formSchema = object().shape({
     }),
 });
 
+const handleFirebaseError = (error: FirebaseError) => {
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      return "Email already in use";
+    case "auth/invalid-email":
+      return "Invalid email";
+    case "auth/weak-password":
+      return "Password is too weak";
+    case "auth/wrong-password":
+      return "Wrong password";
+    case "auth/missing-password":
+      return "Please enter your current password";
+    case "auth/too-many-requests":
+      return "Too many requests. Try again later";
+    default:
+      return "Something went wrong";
+  }
+};
+
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
   const { uploadFile } = useFileUploader();
   const { control, watch, handleSubmit } = useForm<
-    UserData & { password: string }
+    UserData & { password: string; currentPassword: string }
   >({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
@@ -97,8 +117,11 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
 
       toast.success("Profile updated!");
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
+      if (error instanceof FirebaseError) {
+        toast.error(handleFirebaseError(error));
+        console.error(error);
+      } else {
+        toast.error("Something went wrong");
         console.error(error);
       }
     }
