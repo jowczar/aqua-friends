@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   User,
   getAuth,
+  reauthenticateWithCredential,
   reauthenticateWithPopup,
   updateEmail,
   updatePassword,
@@ -20,7 +21,7 @@ import {
 } from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = object().shape({
   displayName: string()
@@ -38,19 +39,6 @@ const formSchema = object().shape({
     }),
 });
 
-const reauthenticate = (user: User) => {
-  const provider =
-    user.providerData[0].providerId === "password"
-      ? new EmailAuthProvider()
-      : new GoogleAuthProvider();
-
-  if (user.providerData[0].providerId === "password") {
-    return Promise.resolve();
-  }
-
-  return reauthenticateWithPopup(user, provider);
-};
-
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
   const { uploadFile } = useFileUploader();
@@ -65,7 +53,22 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
     },
   });
   const watchPassword = watch("password");
+  const watchCurrentPassword = watch("currentPassword");
   const watchEmail = watch("email");
+
+  const reauthenticate = (user: User) => {
+    const provider = user.providerData[0].providerId;
+    if (!user.email) return Promise.reject("User has no email set");
+
+    if (provider === "password") {
+      return reauthenticateWithCredential(
+        user,
+        EmailAuthProvider.credential(user.email, watchCurrentPassword)
+      );
+    }
+
+    return reauthenticateWithPopup(user, new GoogleAuthProvider());
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     const user = getAuth().currentUser;
@@ -99,13 +102,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   });
 
   useEffect(() => {
-    if (watchPassword || watchEmail !== email) {
-      console.log("show", watchPassword, watchEmail, email);
-      setNeedsReauthentication(true);
-    } else {
-      console.log("hiding", watchPassword, watchEmail, email);
-      setNeedsReauthentication(false);
-    }
+    setNeedsReauthentication(watchPassword !== "" || watchEmail !== email);
   }, [watchPassword, watchEmail, email]);
 
   return (
