@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import * as Yup from "yup";
+import { object, string, ref } from "yup";
 
 import {
   FormInputImage,
@@ -10,19 +10,16 @@ import {
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
 
-const formSchema = Yup.object().shape({
-  displayName: Yup.string()
+const formSchema = object().shape({
+  displayName: string()
     .min(3, "Name is too short")
     .max(30, "Name is too long")
     .required("Name is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(
-    6,
-    "Password length should be at least 6 characters"
-  ),
-  passwordConfirm: Yup.string()
+  email: string().email("Invalid email").required("Email is required"),
+  password: string().min(6, "Password length should be at least 6 characters"),
+  passwordConfirm: string()
     .min(6, "Password length should be at least 6 characters")
-    .oneOf([Yup.ref("password")], "Passwords do not match"),
+    .oneOf([ref("password")], "Passwords must match"),
 });
 
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
