@@ -5,6 +5,7 @@ import cors from "cors";
 
 import users from "./users";
 import {Claims} from "./utils/types";
+import {logger} from "firebase-functions";
 
 admin.initializeApp();
 
@@ -18,5 +19,9 @@ export const addDefaultUserRole = functions.auth.user().onCreate((user) => {
   const claims: Claims = {
     role: "user",
   };
-  return admin.auth().setCustomUserClaims(user.uid, claims);
+  return admin.auth()
+    .setCustomUserClaims(user.uid, claims)
+    .then(() => {
+      logger.info(`Added default user role to ${user.uid}`);
+    });
 });
