@@ -20,6 +20,7 @@ import {
 } from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
+import { useEffect, useRef, useState } from "react";
 
 const formSchema = object().shape({
   displayName: string()
@@ -42,11 +43,20 @@ const reauthenticate = (user: User) => {
     user.providerData[0].providerId === "password"
       ? new EmailAuthProvider()
       : new GoogleAuthProvider();
+
+  if (user.providerData[0].providerId === "password") {
+    return Promise.resolve();
+  }
+
   return reauthenticateWithPopup(user, provider);
 };
 
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
-  const { control, handleSubmit } = useForm<UserData & { password: string }>({
+  const [needsReauthentication, setNeedsReauthentication] = useState(false);
+  const { uploadFile } = useFileUploader();
+  const { control, watch, handleSubmit } = useForm<
+    UserData & { password: string }
+  >({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -54,7 +64,9 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
       displayName,
     },
   });
-  const { uploadFile } = useFileUploader();
+  const watchPassword = watch("password");
+  const watchEmail = watch("email");
+
   const onSubmit = handleSubmit(async (data) => {
     const user = getAuth().currentUser;
     if (!user) return toast.error("User not logged in");
@@ -86,7 +98,15 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
     }
   });
 
-  // TODO: fix typescript control type warning
+  useEffect(() => {
+    if (watchPassword || watchEmail !== email) {
+      console.log("show", watchPassword, watchEmail, email);
+      setNeedsReauthentication(true);
+    } else {
+      console.log("hiding", watchPassword, watchEmail, email);
+      setNeedsReauthentication(false);
+    }
+  }, [watchPassword, watchEmail, email]);
 
   return (
     <form
@@ -112,7 +132,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
           type="password"
           autocomplete={false}
           control={control}
-          label="Password"
+          label="New password"
         />
         <FormInputText
           name="passwordConfirm"
@@ -121,6 +141,20 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
           autocomplete={false}
           label="Confirm password"
         />
+        {needsReauthentication && (
+          <div className="border-t pt-4 transition ease-out transform origin-top-right">
+            <FormInputText
+              name="currentPassword"
+              type="password"
+              autocomplete={false}
+              control={control}
+              label="Current password"
+            />
+            <div className="mt-3 text-xs text-gray-500 leading-tight">
+              Enter your current password to change your email or password
+            </div>
+          </div>
+        )}
         <FormInputSubmit name="submit" control={control} onClick={onSubmit}>
           Save profile
         </FormInputSubmit>
