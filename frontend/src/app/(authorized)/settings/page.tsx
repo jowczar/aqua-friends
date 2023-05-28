@@ -24,6 +24,11 @@ type UserData = {
 };
 
 const formSchema = Yup.object().shape({
+  displayName: Yup.string()
+    .min(3, "Name is too short")
+    .max(30, "Name is too long")
+    .required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
     .min(4, "Password length should be at least 4 characters")
     .max(12, "Password cannot exceed more than 12 characters"),
@@ -55,8 +60,6 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   });
 
   // TODO: implement changes in firebase (getAuth() has all the needed methods)
-  // TODO: add default values
-  // TODO: add validation (allow only one field change)
 
   return (
     <form
