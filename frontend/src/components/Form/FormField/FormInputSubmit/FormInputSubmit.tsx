@@ -6,21 +6,21 @@ import Loader from "@/components/Loader";
 
 type FormInputSubmitProps = FormInputProps & {
   children: React.ReactNode;
-  onSubmit: () => Promise<void>;
+  onClick: () => Promise<void>;
 };
 
 const FormInputSubmit = ({
   name,
   control,
   rules,
-  onSubmit,
+  onClick,
   children,
 }: FormInputSubmitProps) => {
   const [loading, setLoading] = useState(false);
 
-  const onClick = () => {
+  const internalOnClick = () => {
     setLoading(true);
-    onSubmit().finally(() => setLoading(false));
+    onClick().finally(() => setLoading(false));
   };
 
   return (
@@ -31,7 +31,7 @@ const FormInputSubmit = ({
       render={() => (
         <button
           id={name}
-          onClick={onClick}
+          onClick={internalOnClick}
           disabled={loading}
           type="submit"
           className={classNames(

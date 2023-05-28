@@ -17,6 +17,6 @@ export const Submit: Story = {
   args: {
     name: "submit",
     children: <>Submit</>,
-    onSubmit: () => new Promise((res) => setTimeout(() => res(), 2000)),
+    onClick: () => new Promise((res) => setTimeout(() => res(), 2000)),
   },
 };
