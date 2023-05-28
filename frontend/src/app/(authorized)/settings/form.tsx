@@ -18,8 +18,12 @@ const formSchema = object().shape({
   email: string().email("Invalid email").required("Email is required"),
   password: string().min(6, "Password length should be at least 6 characters"),
   passwordConfirm: string()
-    .min(6, "Password length should be at least 6 characters")
-    .oneOf([ref("password")], "Passwords must match"),
+    .oneOf([ref("password")], "Passwords must match")
+    .when("password", {
+      is: (password: string) => password?.length > 0,
+      then: (schema) => schema.required("Password confirmation is required"),
+      otherwise: (schema) => schema,
+    }),
 });
 
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
