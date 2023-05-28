@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 import * as admin from "firebase-admin";
 import {logger} from "firebase-functions/v1";
 import isFirebaseError from "./utils";
+import {Claims} from "./utils/types";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -12,9 +13,10 @@ router.get("/helloWorld", async (req, res) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const {displayName, password, email, role} = req.body;
+    const {displayName, password, email} = req.body;
 
-    if (!displayName || !password || !email || !role) {
+    // TODO: validate fields once we decide on architecture
+    if (!displayName || !password || !email) {
       return res.status(400).send({message: "Missing fields"});
     }
 
@@ -23,7 +25,10 @@ router.post("/", async (req: Request, res: Response) => {
       password,
       email,
     });
-    await admin.auth().setCustomUserClaims(uid, {role});
+    const claims: Claims = {
+      role: "admin",
+    };
+    await admin.auth().setCustomUserClaims(uid, claims);
 
     return res.status(201).send({uid});
   } catch (err) {
