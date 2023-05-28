@@ -89,7 +89,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   });
 
   useEffect(() => {
-    setNeedsReauthentication(watchPassword !== "" || watchEmail !== email);
+    setNeedsReauthentication(!!watchPassword || watchEmail !== email);
   }, [watchPassword, watchEmail, email]);
 
   return (
