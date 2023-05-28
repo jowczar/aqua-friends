@@ -1,14 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { object, string, ref } from "yup";
-
-import {
-  FormInputImage,
-  FormInputSubmit,
-  FormInputText,
-} from "@/components/Form/FormField";
-import useFileUploader from "@/hooks/useFileUploader";
-import { UserData } from "@/common/types";
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
@@ -20,6 +12,14 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { toast } from "react-toastify";
+
+import {
+  FormInputImage,
+  FormInputSubmit,
+  FormInputText,
+} from "@/components/Form/FormField";
+import useFileUploader from "@/hooks/useFileUploader";
+import { UserData } from "@/common/types";
 
 const formSchema = object().shape({
   displayName: string()
@@ -81,6 +81,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
+        console.error(error);
       }
     }
   });
