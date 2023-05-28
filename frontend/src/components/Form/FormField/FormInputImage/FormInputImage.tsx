@@ -4,7 +4,13 @@ import { FormInputProps } from "@/common/types";
 import useFileUploader from "@/hooks/useFileUploader";
 import Image from "next/image";
 
-const FormInputImage = ({ name, control, rules, label }: FormInputProps) => {
+const FormInputImage = ({
+  name,
+  control,
+  rules,
+  label,
+  className,
+}: FormInputProps) => {
   const { defaultImage, imageToUpload, setImageToUpload } = useFileUploader();
   const [internalImage, setInternalImage] = React.useState<string>(
     imageToUpload ? URL.createObjectURL(imageToUpload) : defaultImage
@@ -31,14 +37,14 @@ const FormInputImage = ({ name, control, rules, label }: FormInputProps) => {
               alt="avatar"
               width={16}
               height={16}
-              className="w-24 h-24 rounded-full transition group-hover:brightness-50 shadow duration-300"
+              className={`w-24 h-24 rounded-full transition group-hover:brightness-50 shadow duration-300 ${className}`}
             />
             <Image
               src="pencil.svg"
               alt="change avatar"
               height={24}
               width={24}
-              className="invert hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="invert w-1/4 hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             />
           </div>
           <input

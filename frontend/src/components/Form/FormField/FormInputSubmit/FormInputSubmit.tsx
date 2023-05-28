@@ -15,6 +15,7 @@ const FormInputSubmit = ({
   rules,
   onClick,
   children,
+  className,
 }: FormInputSubmitProps) => {
   const [loading, setLoading] = useState(false);
 
@@ -35,9 +36,10 @@ const FormInputSubmit = ({
           disabled={loading}
           type="submit"
           className={classNames(
-            "bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-full",
+            "bg-primary rounded px-4 py-2 text-white text-xs cursor-pointer transition w-full",
             "hover:bg-[#2644a8] active:bg-[#2644a8]",
-            loading && "opacity-75 disabled:cursor-not-allowed"
+            loading && "opacity-75 disabled:cursor-not-allowed",
+            className
           )}
         >
           {!loading && children}
