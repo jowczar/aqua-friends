@@ -35,7 +35,7 @@ const FormInputSubmit = ({
           disabled={loading}
           type="submit"
           className={classNames(
-            "bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-fit",
+            "bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-full",
             "hover:bg-[#2644a8] active:bg-[#2644a8]",
             loading && "opacity-75 disabled:cursor-not-allowed"
           )}
