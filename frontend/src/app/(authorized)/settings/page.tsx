@@ -16,12 +16,7 @@ import useFileUploader from "@/hooks/useFileUploader";
 import Loader from "@/components/Loader";
 
 import "react-toastify/dist/ReactToastify.css";
-
-type UserData = {
-  email: string;
-  displayName: string;
-  photoUrl: string;
-};
+import { UserData } from "@/common/types";
 
 const formSchema = Yup.object().shape({
   displayName: Yup.string()
