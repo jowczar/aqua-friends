@@ -9,7 +9,7 @@ const historyColumns = ["Service name", "Log data", "Date"];
 export default function History() {
   return (
     <div>
-      <div className="my-10 px-1 md:px-20 lg:px-40 xl:px-60 sm:px-0">
+      <div className="my-10 px-5 md:px-20">
         <DataTable
           columns={historyColumns}
           data={logsMock}
