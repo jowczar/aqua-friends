@@ -23,3 +23,27 @@ export const Text: Story = {
     },
   },
 };
+
+export const Email: Story = {
+  args: {
+    name: "email",
+    type: "email",
+    label: "Your e-mail",
+    rules: {
+      required: "Field e-mail is required!",
+      minLength: { value: 3, message: "Please enter at least 3 characters!" },
+    },
+  },
+};
+
+export const Password: Story = {
+  args: {
+    name: "password",
+    type: "password",
+    label: "Your password",
+    rules: {
+      required: "Field password is required!",
+      minLength: { value: 3, message: "Please enter at least 3 characters!" },
+    },
+  },
+};
