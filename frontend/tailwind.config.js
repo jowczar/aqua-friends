@@ -25,12 +25,6 @@ module.exports = {
         background: "#F4F7FF",
         stepsGreen: "#26C196",
       },
-      width: {
-        lastStep: "31.5%",
-      },
-      inset: {
-        firstStep: "5%",
-      },
     },
   },
   plugins: [],

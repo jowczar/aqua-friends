@@ -48,11 +48,11 @@ const AquaDecorPage = ({
   }, [currentTab]);
 
   return (
-    <div className="my-10 px-5 lg:px-20 flex flex-col 2xl:flex-row">
-      <div className="w-full 2xl:w-1/3 2xl:pr-4 mt-4 2xl:mt-0">
+    <div className="md:my-10 px-5 lg:px-20 flex flex-col xl:flex-row">
+      <div className="w-full xl:w-1/3 xl:pr-4 mt-4 xl:mt-0">
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>
-      <div className="w-full 2xl:w-2/3 2xl:pl-4">
+      <div className="w-full xl:w-2/3 xl:pl-4">
         <div className="xl:flex xl:justify-between w-full xl:-flex-col mb-2">
           <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
           <Search className="w-full" />

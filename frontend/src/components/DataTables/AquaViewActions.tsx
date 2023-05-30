@@ -3,7 +3,7 @@ import Image from "next/image";
 export type AquaViewActionsProps = {
   item: Record<string, any>;
   items: Record<string, any>[];
-  setItems: any;
+  setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   isMobileView?: boolean;
 };
 
