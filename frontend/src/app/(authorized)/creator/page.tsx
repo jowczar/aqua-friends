@@ -131,7 +131,7 @@ export default function Creator() {
       {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
         <button
           onClick={handlePrevious}
-          className="w-full md:w-auto bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
+          className="w-full md:w-auto bg-primary inline-flex items-center justify-center rounded-md py-3 px-5 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
         >
           Previous Step
         </button>
@@ -140,7 +140,7 @@ export default function Creator() {
         {currentStep < TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleNext}
-            className="w-full bg-primary inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
+            className="w-full bg-primary inline-flex items-center justify-center rounded-md py-3 px-5 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 mb-2 md:mb-0"
           >
             Next Step
           </button>
@@ -148,7 +148,7 @@ export default function Creator() {
         {stepsCompleted.length === TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleSave}
-            className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-3 px-5 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
             Create your new world
           </button>
@@ -159,11 +159,11 @@ export default function Creator() {
 
   return (
     <div>
-      <div className="hidden w-full mb-5 mt-5 xs:px-5 sm:px-20 md:flex md:justify-between">
+      <div className="hidden w-full mb-5 mt-5 px-5 md:px-20 md:flex md:justify-between">
         {buttons}
       </div>
 
-      <div className="mt-12 px-1 md:px-20">
+      <div className="mt-12 px-5 md:px-20">
         <CreatorSteps
           currentStep={currentStep}
           stepsCompleted={stepsCompleted}
@@ -230,7 +230,7 @@ export default function Creator() {
         }
       })()}
 
-      <div className="md:hidden w-full mb-5 mt-5 xs:px-5 sm:px-20 md:flex md:justify-between">
+      <div className="md:hidden w-full mb-5 mt-5 px-5 md:px-20 md:flex md:justify-between">
         {buttons}
       </div>
     </div>

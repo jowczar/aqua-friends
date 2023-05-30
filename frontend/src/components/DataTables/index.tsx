@@ -33,6 +33,16 @@ const excludedKeys = [
   "isLiked",
 ];
 
+const excludedKeysMobile = [
+  "id",
+  "image",
+  "avatar",
+  "isLiked",
+  "name",
+  "description",
+  "email",
+];
+
 const DataTable = ({
   data,
   columns,
@@ -53,9 +63,9 @@ const DataTable = ({
 
   const healthStatus = (item: Record<string, any>) => {
     return (
-      <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-center">
+      <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-center">
         <span
-          className={`px-8 py-2 inline-flex text-sm leading-5 font-semibold rounded-full ${
+          className={`px-4 xl:px-8 py-2 inline-flex text-xs xl:text-sm leading-5 font-semibold rounded-full ${
             item?.healthStatus === HealthStatus.GOOD
               ? "bg-green-500 bg-opacity-25 text-green-600"
               : " bg-red-500 bg-opacity-25 text-red-600"
@@ -69,9 +79,9 @@ const DataTable = ({
 
   const environment = (item: Record<string, any>) => {
     return (
-      <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-center">
+      <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-center">
         <span
-          className={` lg:px-4 xl:px-8 py-2 inline-flex  md:text-xs xl:text-sm leading-5 font-semibold rounded-full ${
+          className={` px-2 xl:px-8 py-2 inline-flex  text-xs xl:text-sm leading-5 font-semibold rounded-full ${
             item?.environment === Environment.COMPATIBLE
               ? "bg-green-500 bg-opacity-25 text-green-600"
               : "bg-red-500 bg-opacity-25 text-red-600"
@@ -90,10 +100,10 @@ const DataTable = ({
 
     return (
       <td className="px-6 py-4 whitespace-nowrap text-center">
-        <div className="hidden mdAquaView:block">
-          <div className="flex items-center">
+        <div className="">
+          <div className="cursor-pointer md:flex md:items-center md:cursor-default">
             {allowImages && (
-              <div className="flex-shrink-0 h-15 w-15 hidden lg:block">
+              <div className="flex-shrink-0 h-15 w-15 hidden xl:block">
                 <Image
                   className="h-15 w-15 rounded-full"
                   src={imageUrl ? imageUrl : "man.png"}
@@ -103,13 +113,39 @@ const DataTable = ({
                 />
               </div>
             )}
-            <div className="text-left ml-4">
-              <div className="text-sm font-medium text-gray-900">
+            <div className="text-center md:text-left ml-4">
+              <div className="text-xs lg:text-sm font-medium text-gray-900 md:break-all">
                 {item.name}
               </div>
               {secondText && (
-                <div className="text-sm text-gray-500 whitespace-normal break-all">
+                <div className="text-xs lg:text-sm text-gray-500 whitespace-normal md:break-all">
                   {secondText}
+                </div>
+              )}
+              {activeElementId === item.id && (
+                <div className="flex flex-col md:hidden">
+                  {Object.entries(item).map(([key, value]: ItemEntries) => {
+                    //TODO: Im nots sure if it is the best way to do this, but has no idea for now
+                    if (!excludedKeysMobile.includes(key)) {
+                      return (
+                        <>
+                          <td className="table-cell md:hidden px-4 py-2 whitespace-normal text-sm text-gray-500 text-center ">
+                            {value}
+                          </td>
+                        </>
+                      );
+                    }
+                  })}
+
+                  {allowAquaLifeActions && <AquaLifeActions isMobileView />}
+                  {allowAquaViewActions && (
+                    <AquaViewActions
+                      item={item}
+                      items={items}
+                      setItems={setItems}
+                      isMobileView={true}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -132,7 +168,9 @@ const DataTable = ({
                       key={index}
                       scope="col"
                       className={`px-6 py-6 ${
-                        index === 0 ? "text-left" : "text-center"
+                        index === 0
+                          ? "text-center text-xl md:text-left md:text-base"
+                          : "text-center hidden md:table-cell"
                       } text-base font-medium`}
                     >
                       {column}
@@ -142,7 +180,14 @@ const DataTable = ({
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {paginationData.currentItems.map((item) => (
-                  <tr key={item.id} onClick={() => setActiveElementId(item.id)}>
+                  <tr
+                    key={item.id}
+                    onClick={() =>
+                      setActiveElementId(
+                        activeElementId === item.id ? null : item.id
+                      )
+                    }
+                  >
                     {firstColumnData(item)}
 
                     {Object.entries(item).map(([key, value]: ItemEntries) => {
@@ -150,7 +195,7 @@ const DataTable = ({
                       if (!excludedKeys.includes(key)) {
                         return (
                           <>
-                            <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-normal text-sm text-gray-500 text-center break-all">
+                            <td className="hidden md:table-cell xl:px-6 py-4 whitespace-normal text-xs lg:text-sm text-gray-500 text-center md:break-all">
                               {value}
                             </td>
                           </>

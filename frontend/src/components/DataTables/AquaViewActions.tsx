@@ -4,9 +4,15 @@ export type AquaViewActionsProps = {
   item: Record<string, any>;
   items: Record<string, any>[];
   setItems: any;
+  isMobileView?: boolean;
 };
 
-const AquaViewActions = ({ item, items, setItems }: AquaViewActionsProps) => {
+const AquaViewActions = ({
+  item,
+  items,
+  setItems,
+  isMobileView,
+}: AquaViewActionsProps) => {
   const viewButtonHandler = () => {
     //TODO: implement AquaViewActions view button logic here
   };
@@ -27,9 +33,15 @@ const AquaViewActions = ({ item, items, setItems }: AquaViewActionsProps) => {
   };
 
   return (
-    <>
-      <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <div className="flex items-center">
+    <div onClick={(e) => e.stopPropagation()}>
+      <td
+        className={`${
+          isMobileView ? "flex justify-center" : "hidden"
+        } md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
+      >
+        <div
+          className={`flex items-center ${isMobileView && "justify-center"}`}
+        >
           <button
             className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
             onClick={() => viewButtonHandler()}
@@ -38,7 +50,7 @@ const AquaViewActions = ({ item, items, setItems }: AquaViewActionsProps) => {
           </button>
           <button
             type="button"
-            className="rounded-full hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none"
+            className="rounded-full flex w-8 h-8 group items-center justify-center focus:outline-none"
             onClick={() => messagesButtonHandler()}
           >
             <span className="sr-only">View messages</span>
@@ -53,7 +65,7 @@ const AquaViewActions = ({ item, items, setItems }: AquaViewActionsProps) => {
           </button>
           <button
             type="button"
-            className="rounded-full hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none"
+            className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
             onClick={() => likeButtonHandler(item.id)}
           >
             <span className="sr-only">View favorites</span>
@@ -68,7 +80,7 @@ const AquaViewActions = ({ item, items, setItems }: AquaViewActionsProps) => {
           </button>
         </div>
       </td>
-    </>
+    </div>
   );
 };
 

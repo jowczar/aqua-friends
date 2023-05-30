@@ -8,7 +8,7 @@ const aquaLifeColumns = ["Product", "Size", "Environment"];
 //TODO: for now its using data mock, should implement data from api
 const AquaLifePage = () => {
   return (
-    <div className="my-10 px-1 md:px-20">
+    <div className="my-10 px-5 md:px-20">
       <DataTable
         columns={aquaLifeColumns}
         data={aquaLifeItemsMock}

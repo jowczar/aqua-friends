@@ -14,7 +14,7 @@ const aquaViewColumns = [
 export default function View() {
   return (
     <div>
-      <div className="my-10 px-1 md:px-20 lg:px-40 xl:px-60 sm:px-40">
+      <div className="my-10 px-5 lg:px-20">
         <DataTable
           data={usersMock}
           columns={aquaViewColumns}

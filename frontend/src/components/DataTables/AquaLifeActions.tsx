@@ -1,6 +1,8 @@
-export type AquaLifeActionsProps = {};
+export type AquaLifeActionsProps = {
+  isMobileView?: boolean;
+};
 
-const AquaLifeActions = ({}: AquaLifeActionsProps) => {
+const AquaLifeActions = ({ isMobileView }: AquaLifeActionsProps) => {
   const addButtonHandler = () => {
     //TODO: implement AquaLifeActions add button logic here
   };
@@ -10,23 +12,29 @@ const AquaLifeActions = ({}: AquaLifeActionsProps) => {
   };
 
   return (
-    <td className="hidden mdAquaView:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-      <div className="flex items-center">
-        <button
-          className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
-          onClick={() => addButtonHandler()}
-        >
-          <span>Add</span>
-        </button>
+    <div onClick={(e) => e.stopPropagation()}>
+      <td
+        className={`${
+          isMobileView ? "flex justify-center" : "hidden"
+        } md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
+      >
+        <div className="flex items-center">
+          <button
+            className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
+            onClick={() => addButtonHandler()}
+          >
+            <span>Add</span>
+          </button>
 
-        <button
-          className="rounded-lg p-4 flex items-center gap-3 text-blue-500 hover:text-blue-300"
-          onClick={() => removeButtonHandler()}
-        >
-          <span>Remove</span>
-        </button>
-      </div>
-    </td>
+          <button
+            className="rounded-lg p-4 flex items-center gap-3 text-blue-500 hover:text-blue-300"
+            onClick={() => removeButtonHandler()}
+          >
+            <span>Remove</span>
+          </button>
+        </div>
+      </td>
+    </div>
   );
 };
 
