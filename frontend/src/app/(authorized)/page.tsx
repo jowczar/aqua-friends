@@ -13,7 +13,16 @@ export default function Home() {
   // rn it does not matter but once we start implementing logic
   // remember to make sure that the user is logged in
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth, {
+    onUserChanged: async (user) => {
+      if (!user) return;
+      const idTokenResult = await user.getIdTokenResult();
+      const role = idTokenResult.claims.role;
+      // TODO: this is how we retrieve the role of the user (admin, user, etc.)
+      // add a hook to retrieve this value from anywhere in the app
+      console.log({ role });
+    },
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +39,5 @@ export default function Home() {
     return;
   }
 
-  return (
-    <Dashboard />
-  )
+  return <Dashboard />;
 }
