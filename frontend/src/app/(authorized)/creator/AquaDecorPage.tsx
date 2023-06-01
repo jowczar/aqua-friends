@@ -1,96 +1,21 @@
 "use client";
 
 import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
-import AquaDecorDataTable from "@/components/DataTables/AquaDecorDataTable";
-import { TabsProps } from "@/components/DataTables/AquaDecorDataTable/Tabs";
+import CardDataTable from "@/components/DataTables/CardDataTable";
+import Tabs, { TabsProps } from "@/components/Tabs";
 import { TabEnum } from "@/enums/Tab.enum";
 import { useState, useEffect } from "react";
 import { AquariumData } from "./page";
+import {
+  pumpsMock,
+  heatersMock,
+  terrainsMock,
+} from "@/components/DataTables/CardDataTable/data-mock";
+import Search from "@/components/Search";
 
 type AquaDecorPageProps = Omit<TabsProps, "className"> & {
   aquariumData: AquariumData;
 };
-
-const terrainsMock = [
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Terrain 1",
-    description: "description of terrain",
-    value: "someValue",
-  },
-];
-
-const pumpsMock = [
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Pump 1",
-    description: "description of pumps",
-    value: "someValue",
-  },
-];
-
-const heatersMock = [
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-  {
-    image: "",
-    name: "Heater 1",
-    description: "description of heater",
-    value: "someValue",
-  },
-];
 
 const AquaDecorPage = ({
   currentTab,
@@ -123,16 +48,18 @@ const AquaDecorPage = ({
   }, [currentTab]);
 
   return (
-    <div className="my-10 xs:px-5 sm:px-20 flex flex-col 2xl:flex-row">
-      <div className="w-full 2xl:w-1/3 2xl:pr-4 mt-4 2xl:mt-0">
+    <div className="md:my-10 px-5 lg:px-20 flex flex-col xl:flex-row">
+      <div className="w-full xl:w-1/3 xl:pr-4 mt-4 xl:mt-0">
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>
-      <div className="w-full 2xl:w-2/3 2xl:pl-4">
-        <AquaDecorDataTable
+      <div className="w-full xl:w-2/3 xl:pl-4">
+        <div className="xl:flex xl:justify-between w-full xl:-flex-col mb-2">
+          <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
+          <Search className="w-full" />
+        </div>
+        <CardDataTable
           columnTitle={currentTab.tabName}
           isSingleAnswer={isSingleAnswer}
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
           items={items}
         />
       </div>
