@@ -40,7 +40,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
     return "bg-gray-300";
   };
 
-  if (windowWidth < 768) {
+  const MobileViewCreatorSteps = () => {
     return (
       <>
         <div className="py-2 w-full mx-auto">
@@ -73,7 +73,9 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
         <div className="border-t-2 mt-2 border-gray-200 border-opacity-50"></div>
       </>
     );
-  } else {
+  };
+
+  const FullScreenCreatorSteps = () => {
     return (
       <>
         <div className="py-5 w-2/3 mx-auto relative">
@@ -96,7 +98,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               </div>
             ))}
             <div
-              className={`absolute top-14 left-firstStep w-1/3 h-1 ${
+              className={`absolute top-14 left-[5%] w-1/3 h-1 ${
                 currentStep > AquaCreatorStep.AQUA_SIZE_PAGE
                   ? currentStep === AquaCreatorStep.AQUA_DECOR_PAGE
                     ? "bg-blue-500"
@@ -115,7 +117,7 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
               } z-0`}
             />
             <div
-              className={`absolute top-14 left-2/3 w-lastStep h-1 ${getLastStepClass()} z-0`}
+              className={`absolute top-14 left-2/3 w-[31.5%] h-1 ${getLastStepClass()} z-0`}
             />
           </div>
         </div>
@@ -123,7 +125,11 @@ const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
         <div className="border-t-2 border-gray-200 border-opacity-50"></div>
       </>
     );
-  }
+  };
+
+  if (windowWidth < 768) return <MobileViewCreatorSteps />;
+
+  return <FullScreenCreatorSteps />;
 };
 
 export default Steps;
