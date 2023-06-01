@@ -4,7 +4,10 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
+
 import NavbarContainer from "./Navbar.component";
+import "react-toastify/dist/ReactToastify.css";
 
 export const INITIAL_ROUTES = [
   { name: "Home", href: "/", current: true },
@@ -27,7 +30,7 @@ const Navbar = () => {
         return nav;
       })
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const signOut = () => {
@@ -37,7 +40,21 @@ const Navbar = () => {
   };
 
   return (
-    <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
+    <>
+      <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+    </>
   );
 };
 

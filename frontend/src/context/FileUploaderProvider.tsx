@@ -9,7 +9,6 @@ import {
 } from "firebase/storage";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
-import { v4 as uuid } from "uuid";
 
 type FileUploaderProviderProps = {
   children: React.ReactNode;
@@ -19,7 +18,7 @@ type FileUploaderProviderProps = {
 type FileUploader = {
   imageToUpload: File | null;
   setImageToUpload: (image: File) => void;
-  uploadFile: () => Promise<string | void>;
+  uploadFile: () => Promise<string | null>;
   uploadedUrl: string | null;
   defaultImage: string;
 };
@@ -36,27 +35,30 @@ export const FileUploaderProvider = ({
   const uploadFile = async () => {
     if (imageToUpload === null) {
       toast.error("Please select an image");
-      return;
+      return null;
     }
 
     const storage = getStorage();
     const userId = getAuth()?.currentUser?.uid;
     if (!userId) {
       toast.error("Please sign in to upload an image");
-      return;
+      return null;
     }
 
-    const imageRef = storageRef(storage, `avatars/${userId}/${uuid()}`);
+    const imageRef = storageRef(
+      storage,
+      `avatars/${userId}/${window.crypto.randomUUID()}`
+    );
 
     return uploadBytes(imageRef, imageToUpload)
       .then(async (snapshot) => {
         const url = await getDownloadURL(snapshot.ref);
-        toast(url);
         setUploadedUrl(url);
         return url;
       })
       .catch((error) => {
         toast.error(error.message);
+        return null;
       });
   };
 

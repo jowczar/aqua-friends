@@ -3,7 +3,19 @@ import { Controller } from "react-hook-form";
 import { FormInputProps } from "@/common/types";
 import classNames from "classnames";
 
-const FormInputText = ({ name, control, rules, label }: FormInputProps) => {
+type FormInputTextProps = FormInputProps & {
+  type: string;
+  autocomplete: boolean;
+};
+
+const FormInputText = ({
+  name,
+  control,
+  rules,
+  label,
+  autocomplete = true,
+  type = "text",
+}: FormInputTextProps) => {
   return (
     <Controller
       name={name}
@@ -16,12 +28,13 @@ const FormInputText = ({ name, control, rules, label }: FormInputProps) => {
             id={name}
             value={value}
             onChange={onChange}
-            type="text"
+            autoComplete={autocomplete ? "on" : "new-password"}
+            type={type}
             className={classNames(
               "border bg-gray-50 text-xs px-2 py-2 rounded transition-colors",
               error && "border-red-500"
             )}
-            placeholder={`Enter your ${label.toLowerCase()}`}
+            placeholder={label ? `Enter your ${label.toLowerCase()}` : ""}
           />
           {error && (
             <span className="text-red-500 text-xs">{error?.message}</span>
