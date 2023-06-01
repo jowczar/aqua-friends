@@ -59,6 +59,7 @@ export enum FIREBASE_AUTH_ERROR_CODES {
   MISSING_OR_INVALID_NONCE = "auth/missing-or-invalid-nonce",
   MISSING_MFA_INFO = "auth/missing-multi-factor-info",
   MISSING_MFA_SESSION = "auth/missing-multi-factor-session",
+  MISSING_PASSWORD = "auth/missing-password",
   MISSING_PHONE_NUMBER = "auth/missing-phone-number",
   MISSING_SESSION_INFO = "auth/missing-verification-id",
   MODULE_DESTROYED = "auth/app-deleted",

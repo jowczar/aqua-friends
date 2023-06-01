@@ -1,3 +1,4 @@
+import { FIREBASE_AUTH_ERROR_CODES } from "@/common/firebase";
 import { FirebaseError } from "firebase/app";
 import { object, string as yupString, ref } from "yup";
 
@@ -22,19 +23,20 @@ export const formSchema = object().shape({
 
 export const handleFirebaseError = (error: FirebaseError) => {
   switch (error.code) {
-    case "auth/email-already-in-use":
+    case FIREBASE_AUTH_ERROR_CODES.EMAIL_EXISTS:
       return "Email already in use";
-    case "auth/invalid-email":
+    case FIREBASE_AUTH_ERROR_CODES.INVALID_EMAIL:
       return "Invalid email";
-    case "auth/weak-password":
+    case FIREBASE_AUTH_ERROR_CODES.WEAK_PASSWORD:
       return "Password is too weak";
-    case "auth/wrong-password":
+    case FIREBASE_AUTH_ERROR_CODES.INVALID_PASSWORD:
       return "Wrong password";
-    case "auth/missing-password":
+    case FIREBASE_AUTH_ERROR_CODES.MISSING_PASSWORD:
       return "Please enter your current password";
-    case "auth/too-many-requests":
+    case FIREBASE_AUTH_ERROR_CODES.TOO_MANY_ATTEMPTS_TRY_LATER:
       return "Too many requests. Try again later";
     default:
+      console.error(error);
       return "Something went wrong";
   }
 };
