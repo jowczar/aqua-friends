@@ -25,20 +25,6 @@ module.exports = {
         background: "#F4F7FF",
         stepsGreen: "#26C196",
       },
-      transform: ["hover", "focus"],
-      scale: ["hover", "focus"],
-      width: {
-        lastStep: "31.5%",
-      },
-      inset: {
-        firstStep: "5%",
-      },
-    },
-  },
-  variants: {
-    extend: {
-      transform: ["hover", "focus"],
-      scale: ["hover", "focus"],
     },
   },
   plugins: [],

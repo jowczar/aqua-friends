@@ -1,47 +1,51 @@
+import { AquariumData, Equipment } from "@/app/(authorized)/creator/page";
+
 type AquaDecorSummaryCardProps = {
-  aquariumData: any;
+  aquariumData: AquariumData;
 };
 
 const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {
   const formatArrayToString = (array: string[]) => array.join(", ");
 
   return (
-    <div className="max-w-sm mx-auto bg-white rounded-xl  shadow-sm overflow-hidden md:max-w-lg m-4 py-4">
-      <div className="text-2xl font-light text-center mt-4">Your Aquarium</div>
+    <div className="w-full  mx-auto bg-white rounded-xl shadow-sm overflow-hidden  m-4 md:py-4">
+      <div className="text-lg md:text-2xl font-light text-center mt-4">
+        Your Aquarium
+      </div>
       <div className="md:flex">
-        <div className="p-8">
-          <div className="text-lg font-bold">
+        <div className="p-4 md:p-8">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Pumps: <span className="font-normal">{aquariumData.pump.name}</span>
           </div>
-          <div className="text-lg font-bold mt-2">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Heater:{" "}
             <span className="font-normal">{aquariumData.heater.name}</span>
           </div>
-          <div className="text-lg font-bold mt-2 mb-4">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Light:{" "}
             <span className="font-normal">{aquariumData.light.name}</span>
           </div>
-          <div className="text-lg font-bold mt-2">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Plants:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.plants.map((plant: any) => plant.name)
+                aquariumData.plants.map((plant: Equipment) => plant.name)
               )}
             </span>
           </div>
-          <div className="text-lg font-bold mt-2">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Decors:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.decors.map((decor: any) => decor.name)
+                aquariumData.decors.map((decor: Equipment) => decor.name)
               )}
             </span>
           </div>
-          <div className="text-lg font-bold mt-2">
+          <div className="flex text-sm md:text-lg font-bold gap-2">
             Terrains:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.terrains.map((terrain: any) => terrain.name)
+                aquariumData.terrains.map((terrain: Equipment) => terrain.name)
               )}
             </span>
           </div>

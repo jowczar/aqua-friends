@@ -17,7 +17,7 @@ const AquaSizePage = ({
 }: ProgressBarPageProps) => {
   return (
     <>
-      <div className="my-40 px-1 md:px-20">
+      <div className="my-20 px-1 md:px-20">
         <ProgressBar
           title={"Aquarium Length"}
           min={10}
@@ -30,7 +30,7 @@ const AquaSizePage = ({
         />
       </div>
 
-      <div className="my-60 px-1 md:px-20">
+      <div className="my-20 px-1 md:px-20">
         <ProgressBar
           title={"Aquarium Width"}
           min={10}
@@ -43,7 +43,7 @@ const AquaSizePage = ({
         />
       </div>
 
-      <div className="my-60 px-1 md:px-20">
+      <div className="my-20 px-1 md:px-20">
         <ProgressBar
           title={"Aquarium Height"}
           min={10}

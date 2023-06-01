@@ -2,7 +2,6 @@
 
 import ImagesSummaryCard from "@/components/ImagesSummaryCard";
 import { AquariumData, AquariumDimensions } from "./page";
-import { useState } from "react";
 
 type AquaSummaryPageProps = {
   aquariumName: string;
@@ -10,35 +9,35 @@ type AquaSummaryPageProps = {
   aquariumDimensions: AquariumDimensions;
   aquariumData: AquariumData;
 };
-
+//TODO: this page included mocks data, remove them once connected with backend
 const AquaSummaryPage = ({
   aquariumName,
   setAquariumName,
   aquariumDimensions,
   aquariumData,
 }: AquaSummaryPageProps) => {
-  console.log("aquariumName", aquariumName);
   return (
-    <div className="my-10 px-1 md:px-20 flex flex-col items-center">
+    <div className="my-10 px-5 md:px-20 flex flex-col items-center">
       <input
         value={aquariumName}
         onChange={(e) => setAquariumName(e.target.value)}
-        className="text-3xl font-bold bg-transparent border-none outline-none mb-2 w-1/5 text-center"
+        className="text-xl md:text-3xl font-bold bg-transparent border-none outline-none mb-2 w-full text-center"
         placeholder={aquariumName}
       />
-      <hr className="border-gray-300 w-1/5" />
-      <p className="my-2 text-lg w-1/5 text-center">
-        Length: {aquariumDimensions.length} cm, Width:{" "}
-        {aquariumDimensions.width} cm, Height: {aquariumDimensions.height} cm
-      </p>
-      <div className="flex mt-4 w-full">
-        <div className="w-1/3 pr-4">
+      <div className="my-2 text-sm md:text-lg w-full text-center md:flex md:justify-center">
+        <p className="md:mr-4">Length: {aquariumDimensions.length} cm</p>
+
+        <p className="md:mr-4">Width: {aquariumDimensions.width} cm</p>
+        <p>Height: {aquariumDimensions.height} cm</p>
+      </div>
+      <div className="flex flex-col xl:flex-row mt-4 w-full">
+        <div className="w-full px-4 mb-4 mt-4 xl:mt-0 md:mb-0">
           <ImagesSummaryCard
             title={"Equipment"}
             data={[aquariumData.pump, aquariumData.heater, aquariumData.light]}
           />
         </div>
-        <div className="w-1/3 pr-4">
+        <div className="w-full px-4 mb-4 md:mb-0">
           <ImagesSummaryCard
             title={"Environment"}
             data={[
@@ -49,7 +48,7 @@ const AquaSummaryPage = ({
             ]}
           />
         </div>
-        <div className="w-1/3 pr-4">
+        <div className="w-full  px-4">
           <ImagesSummaryCard title={"Fishes"} data={[aquariumData.pump]} />
         </div>
       </div>
