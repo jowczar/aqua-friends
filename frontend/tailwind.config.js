@@ -13,10 +13,6 @@ module.exports = {
 
       md: "768px",
 
-      mdAquaView: "840px",
-
-      mdAquaDecor: "940px",
-
       lg: "1024px",
 
       xl: "1280px",
@@ -29,18 +25,6 @@ module.exports = {
         background: "#F4F7FF",
         stepsGreen: "#26C196",
       },
-      width: {
-        lastStep: "31.5%",
-      },
-      inset: {
-        firstStep: "5%",
-      },
-    },
-  },
-  variants: {
-    extend: {
-      transform: ["hover", "focus"],
-      scale: ["hover", "focus"],
     },
   },
   plugins: [],

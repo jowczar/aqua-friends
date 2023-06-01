@@ -9,7 +9,6 @@ import {
 } from "firebase/storage";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
-import { v4 as uuid } from "uuid";
 
 type FileUploaderProviderProps = {
   children: React.ReactNode;
@@ -46,7 +45,10 @@ export const FileUploaderProvider = ({
       return null;
     }
 
-    const imageRef = storageRef(storage, `avatars/${userId}/${uuid()}`);
+    const imageRef = storageRef(
+      storage,
+      `avatars/${userId}/${window.crypto.randomUUID()}`
+    );
 
     return uploadBytes(imageRef, imageToUpload)
       .then(async (snapshot) => {
