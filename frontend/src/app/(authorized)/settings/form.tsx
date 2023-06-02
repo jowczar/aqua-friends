@@ -24,12 +24,17 @@ import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
 import { formSchema, handleFirebaseError } from "./schema";
 
+type SettingsFormValues = UserData & {
+  password: string;
+  passwordConfirm: string;
+  currentPassword: string;
+  submit: boolean;
+};
+
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
   const { uploadFile } = useFileUploader();
-  const { control, watch, handleSubmit } = useForm<
-    UserData & { password: string; currentPassword: string }
-  >({
+  const { control, watch, handleSubmit } = useForm<SettingsFormValues>({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -103,6 +108,7 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
           type="text"
           control={control}
           label="Display name"
+          autocomplete={false}
         />
         <FormInputText
           name="email"

@@ -1,21 +1,22 @@
 import React from "react";
-import { Controller } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { FormInputProps } from "@/common/types";
 import classNames from "classnames";
 
-type FormInputTextProps = FormInputProps & {
-  type: string;
-  autocomplete: boolean;
-};
+type FormInputTextProps<TFormValues extends FieldValues> =
+  FormInputProps<TFormValues> & {
+    type: string;
+    autocomplete: boolean;
+  };
 
-const FormInputText = ({
+const FormInputText = <TFormValues extends FieldValues>({
   name,
   control,
   rules,
   label,
   autocomplete = true,
   type = "text",
-}: FormInputTextProps) => {
+}: FormInputTextProps<TFormValues>) => {
   return (
     <Controller
       name={name}

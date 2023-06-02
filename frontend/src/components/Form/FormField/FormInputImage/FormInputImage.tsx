@@ -4,13 +4,13 @@ import { FormInputProps } from "@/common/types";
 import useFileUploader from "@/hooks/useFileUploader";
 import Image from "next/image";
 
-const FormInputImage = ({
+const FormInputImage = <TFormValues extends Record<string, unknown>>({
   name,
   control,
   rules,
   label,
   className,
-}: FormInputProps) => {
+}: FormInputProps<TFormValues>): JSX.Element => {
   const { defaultImage, imageToUpload, setImageToUpload } = useFileUploader();
   const [internalImage, setInternalImage] = React.useState<string>(
     imageToUpload ? URL.createObjectURL(imageToUpload) : defaultImage
@@ -50,7 +50,7 @@ const FormInputImage = ({
           <input
             id={name}
             type="file"
-            value={value}
+            value={value as string}
             className="hidden"
             accept="image/png,image/jpeg"
             onChange={(e) => {
