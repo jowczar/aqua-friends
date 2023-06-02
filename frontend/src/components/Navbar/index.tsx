@@ -1,11 +1,11 @@
 "use client";
 
 import { getAuth } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
+import useUserWithRole from "@/hooks/useUserWithRole";
 import NavbarContainer from "./Navbar.component";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,7 +21,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [navigation, setNavigation] = useState(INITIAL_ROUTES);
-  const [user] = useAuthState(getAuth());
+  const { userWithRole } = useUserWithRole();
 
   useEffect(() => {
     setNavigation(
@@ -41,7 +41,11 @@ const Navbar = () => {
 
   return (
     <>
-      <NavbarContainer user={user} signOut={signOut} navigation={navigation} />
+      <NavbarContainer
+        user={userWithRole}
+        signOut={signOut}
+        navigation={navigation}
+      />
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

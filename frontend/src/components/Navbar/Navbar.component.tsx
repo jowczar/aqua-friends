@@ -5,13 +5,9 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { Gothic_A1 } from "next/font/google";
 
-const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
+import { User } from "@/hooks/useUserWithRole";
 
-type User = {
-  displayName: string | null;
-  email: string | null;
-  photoURL: string | null;
-};
+const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 type NavbarProps = {
   navigation: {
@@ -53,7 +49,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
               <div className="flex flex-shrink-0 items-center">
                 <Link href="/" className="flex items-center">
                   <Image
-                    src="logo.svg"
+                    src={user?.role === "admin" ? "admin-logo.svg" : "logo.svg"}
                     alt="Aqua friends"
                     height={32}
                     width={166}
