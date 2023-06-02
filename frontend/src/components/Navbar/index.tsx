@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 
 import useUserWithRole from "@/hooks/useUserWithRole";
 import NavbarContainer from "./Navbar.component";
+import { ScreenLoader } from "@/components/Loader";
+
 import "react-toastify/dist/ReactToastify.css";
 
 export const INITIAL_ROUTES = [
@@ -21,7 +23,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [navigation, setNavigation] = useState(INITIAL_ROUTES);
-  const { userWithRole } = useUserWithRole();
+  const { userWithRole, loading } = useUserWithRole();
 
   useEffect(() => {
     setNavigation(
@@ -38,6 +40,10 @@ const Navbar = () => {
     auth.signOut();
     router.push("/login");
   };
+
+  if (loading) {
+    return <ScreenLoader />;
+  }
 
   return (
     <>
