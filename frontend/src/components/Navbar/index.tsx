@@ -24,6 +24,11 @@ const Navbar = () => {
   const router = useRouter();
   const [navigation, setNavigation] = useState(INITIAL_ROUTES);
   const { userWithRole, loading } = useUserWithRole();
+  useEffect(() => {
+    if (!userWithRole && !loading) {
+      router.push("/login");
+    }
+  }, [userWithRole, loading, router]);
 
   useEffect(() => {
     setNavigation(
@@ -41,7 +46,7 @@ const Navbar = () => {
     router.push("/login");
   };
 
-  if (loading) {
+  if (loading || !userWithRole) {
     return <ScreenLoader />;
   }
 
