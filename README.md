@@ -1,12 +1,12 @@
 # Aqua friends
-
+This project is a web app for aquarium hobbyists. It is a platform for sharing knowledge and experience about aquariums and fishkeeping. It is also a place where you can find inspiration for your next aquarium setup. It allows you to monitor your aquarium parameters and keep track of your aquarium inhabitants.
 
 ## Project Architecture
 ### Backend
 Firebase cloud functions written in Typescript – `functions` folder.
 
 ### Database
-TBD
+We are using Firestore as a database.
 
 ### Frontend
 NextJS app written in Typescript – `frontend` folder. We are using TailwindCSS for styling. 
