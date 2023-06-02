@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { FormInputProps } from "@/common/types";
 import classNames from "classnames";
 import Loader from "@/components/Loader";
 
-type FormInputSubmitProps = FormInputProps & {
-  children: React.ReactNode;
-  onClick: () => Promise<void>;
-};
+type FormInputSubmitProps<TFormValues extends FieldValues> =
+  FormInputProps<TFormValues> & {
+    children: React.ReactNode;
+    onClick: () => Promise<void>;
+  };
 
-const FormInputSubmit = ({
+const FormInputSubmit = <TFormValues extends Record<string, unknown>>({
   name,
   control,
   rules,
   onClick,
   children,
   className,
-}: FormInputSubmitProps) => {
+}: FormInputSubmitProps<TFormValues>) => {
   const [loading, setLoading] = useState(false);
 
   const internalOnClick = () => {

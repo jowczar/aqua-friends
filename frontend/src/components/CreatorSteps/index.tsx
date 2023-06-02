@@ -1,3 +1,4 @@
+"use client";
 import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
@@ -9,7 +10,9 @@ type StepsProps = {
 };
 
 const Steps = ({ currentStep, stepsCompleted }: StepsProps) => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
   const [selectedStep, setSelectedStep] = useState(currentStep);
 
   const handleResize = () => {

@@ -9,6 +9,7 @@ import {
 } from "firebase/storage";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
+import crypto from "crypto";
 
 type FileUploaderProviderProps = {
   children: React.ReactNode;
@@ -22,6 +23,11 @@ type FileUploader = {
   uploadedUrl: string | null;
   defaultImage: string;
 };
+
+const getRandomUUID = () =>
+  typeof window !== "undefined"
+    ? window.crypto.randomUUID()
+    : crypto.randomUUID();
 
 export const FileUploaderContext = createContext<FileUploader | null>(null);
 
@@ -47,7 +53,7 @@ export const FileUploaderProvider = ({
 
     const imageRef = storageRef(
       storage,
-      `avatars/${userId}/${window.crypto.randomUUID()}`
+      `avatars/${userId}/${getRandomUUID()}`
     );
 
     return uploadBytes(imageRef, imageToUpload)
