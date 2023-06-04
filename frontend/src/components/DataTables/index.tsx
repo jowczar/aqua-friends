@@ -56,10 +56,7 @@ const DataTable = ({
   const [activeElementId, setActiveElementId] = useState<number>(0);
 
   useEffect(() => {
-    if (!items.length && data) {
-      setItems(data);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setItems(data);
   }, [data]);
 
   const paginationData = paginationDataHandler(

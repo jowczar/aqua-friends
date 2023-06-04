@@ -3,7 +3,13 @@
 import { formatDate } from "@/common/helpers";
 import DataTable from "@/components/DataTables";
 import { FirestoreContext } from "@/context/FirebaseProvider";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  DocumentData,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 import {
   forwardRef,
@@ -57,9 +63,18 @@ export default function History() {
     if (!firestore) return;
 
     const logsRef = collection(firestore, "logs");
-    const snapshot = await getDocs(logsRef);
 
-    const logsData = snapshot.docs.map((doc: any) => {
+    const filterQuery = query(
+      logsRef,
+      where("date", ">=", startDate),
+      where("date", "<=", endDate)
+    );
+
+    const snapshot = await getDocs(
+      startDate && endDate ? filterQuery : logsRef
+    );
+
+    const logsData = snapshot.docs.map((doc: DocumentData) => {
       const data = doc.data();
       const id = doc.id;
       const formattedDate = formatDate(data.date);
@@ -73,11 +88,13 @@ export default function History() {
     });
 
     setLogs(logsData);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate]);
 
   useEffect(() => {
     getLogs();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate]);
 
   return (
     <div>
