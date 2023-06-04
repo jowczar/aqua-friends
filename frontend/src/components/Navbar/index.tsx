@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const INITIAL_ROUTES = [
   { name: "Home", href: "/", current: true },
-  { name: "Aqua monitor", href: "/monitor", current: false },
   { name: "Aqua view", href: "/view", current: false },
   { name: "Aqua creator", href: "/creator", current: false },
   { name: "Aqua history", href: "/history", current: false },

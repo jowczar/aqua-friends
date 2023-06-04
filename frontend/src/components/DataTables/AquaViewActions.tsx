@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export type AquaViewActionsProps = {
   item: Record<string, any>;
@@ -13,8 +14,10 @@ const AquaViewActions = ({
   setItems,
   isMobileView,
 }: AquaViewActionsProps) => {
+  const router = useRouter();
+
   const viewButtonHandler = () => {
-    //TODO: implement AquaViewActions view button logic here
+    router.push(`/view/${item.id}`);
   };
 
   const messagesButtonHandler = () => {
