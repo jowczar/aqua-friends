@@ -36,12 +36,14 @@ export default function History() {
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
 
+  console.log("startDate, endDate", startDate, endDate);
+
   return (
     <div>
       <div className="my-10 px-5 md:px-20">
         <div className="w-64">
           <DatePicker
-            dateFormat={"dd/MM/yyyy"}
+            dateFormat={"dd.MM.yyyy"}
             selectsRange={true}
             startDate={startDate}
             endDate={endDate}
