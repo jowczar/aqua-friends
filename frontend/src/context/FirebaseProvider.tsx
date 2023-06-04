@@ -2,6 +2,7 @@
 
 import { createContext } from "react";
 import { FirebaseApp, initializeApp } from "firebase/app";
+import { Firestore, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAH13HYYacBDxbdRvIk5m7_uxwqeePdkWg",
@@ -17,6 +18,9 @@ const app = initializeApp(firebaseConfig);
 console.log("🔥 Firebase app initialized");
 
 export const FirebaseContext = createContext<FirebaseApp | null>(null);
+export const FirestoreContext = createContext<Firestore | null>(null);
+
+export const firestore = getFirestore(app);
 
 type FirebaseProviderProps = {
   children: React.ReactNode;
@@ -24,7 +28,11 @@ type FirebaseProviderProps = {
 
 export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   return (
-    <FirebaseContext.Provider value={app}>{children}</FirebaseContext.Provider>
+    <FirebaseContext.Provider value={app}>
+      <FirestoreContext.Provider value={firestore}>
+        {children}
+      </FirestoreContext.Provider>
+    </FirebaseContext.Provider>
   );
 };
 

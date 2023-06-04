@@ -1,8 +1,17 @@
 "use client";
 
+import { formatDate } from "@/common/helpers";
 import DataTable from "@/components/DataTables";
-import { logsMock } from "@/components/DataTables/data-mock";
-import { forwardRef, useState } from "react";
+import { FirestoreContext } from "@/context/FirebaseProvider";
+import { collection, getDocs } from "firebase/firestore";
+
+import {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -18,6 +27,13 @@ interface CustomInputProps {
   onClick?: () => void;
 }
 
+type LogsData = {
+  id: string;
+  name: string;
+  message: string;
+  date: string | Date;
+};
+
 // eslint-disable-next-line react/display-name
 const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
   ({ value, onClick }, ref) => (
@@ -31,10 +47,37 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
   )
 );
 
-//TODO: for now its using data mock, should implement data from api
 export default function History() {
+  const firestore = useContext(FirestoreContext);
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
+  const [logs, setLogs] = useState<LogsData[]>([]);
+
+  const getLogs = useCallback(async () => {
+    if (!firestore) return;
+
+    const logsRef = collection(firestore, "logs");
+    const snapshot = await getDocs(logsRef);
+
+    const logsData = snapshot.docs.map((doc: any) => {
+      const data = doc.data();
+      const id = doc.id;
+      const formattedDate = formatDate(data.date);
+
+      return {
+        id,
+        name: data.service_name,
+        message: data.message,
+        date: formattedDate,
+      };
+    });
+
+    setLogs(logsData);
+  }, []);
+
+  useEffect(() => {
+    getLogs();
+  }, []);
 
   return (
     <div>
@@ -55,7 +98,7 @@ export default function History() {
 
         <DataTable
           columns={historyColumns}
-          data={logsMock}
+          data={logs}
           itemsPerPage={10}
           allowImages={false}
         />
