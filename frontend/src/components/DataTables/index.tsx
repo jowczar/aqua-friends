@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import Pagination from "../Pagination";
-import AquaViewActions from "./AquaViewActions";
+import AquaViewAquariumsActions from "./AquaViewAquariumsActions";
 import AquaLifeActions from "./AquaLifeActions";
 import { Environment } from "@/enums/Environment.enum";
 import { paginationDataHandler } from "./helpers";
+import AquaViewUsersActions from "./AquaViewUsersActions";
 
 type DataTableProps = {
   columns: string[];
   data: Record<string, any>[];
   itemsPerPage: number;
-  allowAquaViewActions?: boolean;
+  allowAquaViewUsersActions?: boolean;
+  allowAquaViewAquariumsActions?: boolean;
   allowAquaLifeActions?: boolean;
   allowImages: boolean;
 };
@@ -31,6 +33,7 @@ const excludedKeys = [
   "healthStatus",
   "environment",
   "isLiked",
+  "aquariumData",
 ];
 
 const excludedKeysMobile = [
@@ -41,14 +44,16 @@ const excludedKeysMobile = [
   "name",
   "description",
   "email",
+  "aquariumData",
 ];
 
 const DataTable = ({
   data,
   columns,
   itemsPerPage,
-  allowAquaViewActions,
+  allowAquaViewUsersActions,
   allowAquaLifeActions,
+  allowAquaViewAquariumsActions,
   allowImages,
 }: DataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,8 +147,16 @@ const DataTable = ({
                   })}
 
                   {allowAquaLifeActions && <AquaLifeActions isMobileView />}
-                  {allowAquaViewActions && (
-                    <AquaViewActions
+                  {allowAquaViewUsersActions && (
+                    <AquaViewUsersActions
+                      item={item}
+                      items={items}
+                      setItems={setItems}
+                      isMobileView={true}
+                    />
+                  )}
+                  {allowAquaViewAquariumsActions && (
+                    <AquaViewAquariumsActions
                       item={item}
                       items={items}
                       setItems={setItems}
@@ -211,8 +224,15 @@ const DataTable = ({
                     {item.hasOwnProperty("environment") && environment(item)}
 
                     {allowAquaLifeActions && <AquaLifeActions />}
-                    {allowAquaViewActions && (
-                      <AquaViewActions
+                    {allowAquaViewUsersActions && (
+                      <AquaViewUsersActions
+                        item={item}
+                        items={items}
+                        setItems={setItems}
+                      />
+                    )}
+                    {allowAquaViewAquariumsActions && (
+                      <AquaViewAquariumsActions
                         item={item}
                         items={items}
                         setItems={setItems}

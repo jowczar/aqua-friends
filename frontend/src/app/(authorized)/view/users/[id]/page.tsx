@@ -5,11 +5,11 @@ import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-interface ItemViewPageProps {
+interface UserAquaViewPageProps {
   params: { id: string };
 }
 
-export default function ItemViewPage({ params }: ItemViewPageProps) {
+export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const router = useRouter();
   //TODO: right now, im using mock function to get mock data by id, it will be
   // changed in the future, when api will be finished

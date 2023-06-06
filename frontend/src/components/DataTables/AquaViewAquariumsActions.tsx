@@ -1,27 +1,23 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export type AquaViewActionsProps = {
+export type AquaViewAquariumsActionsProps = {
   item: Record<string, any>;
   items: Record<string, any>[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   isMobileView?: boolean;
 };
 
-const AquaViewActions = ({
+const AquaViewAquariumsActions = ({
   item,
   items,
   setItems,
   isMobileView,
-}: AquaViewActionsProps) => {
+}: AquaViewAquariumsActionsProps) => {
   const router = useRouter();
 
   const viewButtonHandler = () => {
-    router.push(`/view/${item.id}`);
-  };
-
-  const messagesButtonHandler = () => {
-    //TODO: implement AquaViewActions messages button logic here
+    router.push(`/view/aquariums/${item.id}`);
   };
 
   const likeButtonHandler = (itemId: number) => {
@@ -53,21 +49,6 @@ const AquaViewActions = ({
           </button>
           <button
             type="button"
-            className="rounded-full flex w-8 h-8 group items-center justify-center focus:outline-none"
-            onClick={() => messagesButtonHandler()}
-          >
-            <span className="sr-only">View messages</span>
-            <Image
-              src="chat.svg"
-              alt="chat"
-              className="group-hover:scale-110 transition flex-none"
-              height={16}
-              width={18}
-              aria-hidden="true"
-            />
-          </button>
-          <button
-            type="button"
             className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
             onClick={() => likeButtonHandler(item.id)}
           >
@@ -87,4 +68,4 @@ const AquaViewActions = ({
   );
 };
 
-export default AquaViewActions;
+export default AquaViewAquariumsActions;
