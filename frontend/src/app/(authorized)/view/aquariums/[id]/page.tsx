@@ -1,19 +1,10 @@
 "use client";
 
-import { getUserDataMockById } from "@/components/DataTables/helpers";
 import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FirestoreContext } from "@/context/FirebaseProvider";
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import { AquariumDataProps } from "../../page";
@@ -21,6 +12,12 @@ import { AquariumDataProps } from "../../page";
 interface AquariumAquaViewPageProps {
   params: { id: string };
 }
+
+type CardData = {
+  column: string;
+  value: string;
+  iconUrl: string;
+};
 
 export default function AquariumAquaViewPage({
   params,
@@ -151,7 +148,109 @@ export default function AquariumAquaViewPage({
       </button>
     </>
   );
-  console.log("aquariumData", aquariumData);
+
+  const firstRowData = [
+    {
+      column: "Aquarium title",
+      value: aquariumData?.aquariumTitle,
+      iconUrl: "/title.svg",
+    },
+    {
+      column: "Aquarium size",
+      value: aquariumData?.aquariumSize,
+      iconUrl: "/size.svg",
+    },
+    {
+      column: "Health status",
+      value: aquariumData?.healthStatus,
+      iconUrl: "/health-status.svg",
+    },
+  ];
+  const secondRowData = [
+    {
+      column: "Pump",
+      value: aquariumData?.aquariumData?.pump?.name,
+      iconUrl: "/pump.svg",
+    },
+    {
+      column: "Heater",
+      value: aquariumData?.aquariumData?.heater?.name,
+      iconUrl: "/heater.svg",
+    },
+    {
+      column: "Light",
+      value: aquariumData?.aquariumData?.light?.name,
+      iconUrl: "/light.svg",
+    },
+  ];
+
+  const thirdRowData = [
+    {
+      column: "Plants",
+      value:
+        aquariumData?.aquariumData?.plants &&
+        aquariumData?.aquariumData?.plants
+          .map((plants: any) => plants.name)
+          .join(", "),
+      iconUrl: "/plants.svg",
+    },
+    {
+      column: "Decors",
+      value:
+        aquariumData?.aquariumData?.decors &&
+        aquariumData?.aquariumData?.decors
+          .map((decor: any) => decor.name)
+          .join(", "),
+      iconUrl: "/decors.svg",
+    },
+    {
+      column: "Terrains",
+      value:
+        aquariumData?.aquariumData?.terrains &&
+        aquariumData?.aquariumData?.terrains
+          .map((terrain: any) => terrain.name)
+          .join(", "),
+      iconUrl: "/terrain.svg",
+    },
+    {
+      column: "Fishes",
+      value:
+        aquariumData?.aquariumData?.fishes &&
+        aquariumData?.aquariumData?.fishes
+          .map((fish: any) => fish.name)
+          .join(", "),
+      iconUrl: "/fishes.svg",
+    },
+  ];
+
+  const Cards = ({ data }: { data: CardData[] }) => {
+    return (
+      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
+        {data.map((item, index) => (
+          <div
+            key={index}
+            className="flex w-full text-center items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5"
+          >
+            <div className="flex items-center justify-start text-left w-full">
+              <Image
+                src={item.iconUrl}
+                alt="icon"
+                className="flex"
+                height={30}
+                width={30}
+                aria-hidden="true"
+              />
+              <div className="flex flex-col justify-center ml-2 w-full text-center">
+                {item.column}:
+                <div className="font-bold px-1 text-center">{item.value}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="my-10 px-4 md:px-20">
       <div className={`w-full mb-5 mt-5  md:flex md:justify-between`}>
@@ -162,7 +261,7 @@ export default function AquariumAquaViewPage({
         <div className="flex-shrink-0 h-15 w-15 hidden xl:block mr-4">
           <Image
             className="h-15 w-15 rounded-full"
-            src={aquariumData?.avatar ? aquariumData?.avatar : "man.png"}
+            src={aquariumData?.avatar ? aquariumData?.avatar : "/man.png"}
             alt="Default avatar"
             height={100}
             width={100}
@@ -178,85 +277,9 @@ export default function AquariumAquaViewPage({
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Aquarium Title:
-          <div className="font-bold px-1">{aquariumData?.aquariumTitle}</div>
-        </div>
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Aquarium Size:
-          <div className="font-bold px-1">{aquariumData?.aquariumSize}</div>
-        </div>
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Health Status:
-          <div className="font-bold px-1">{aquariumData?.healthStatus}</div>
-        </div>
-      </div>
-
-      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Pump:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.pump?.name}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Heater:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.heater?.name}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Light:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.light?.name}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Plants:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.plants &&
-              aquariumData?.aquariumData?.plants
-                .map((plants: any) => plants.name)
-                .join(", ")}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Decors:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.decors &&
-              aquariumData?.aquariumData?.decors
-                .map((decor: any) => decor.name)
-                .join(", ")}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Terrains:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.terrains &&
-              aquariumData?.aquariumData?.terrains
-                .map((terrain: any) => terrain.name)
-                .join(", ")}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Fishes:
-          <div className="font-bold px-1 text-center">
-            {aquariumData?.aquariumData?.fishes &&
-              aquariumData?.aquariumData?.fishes
-                .map((fish: any) => fish.name)
-                .join(", ")}
-          </div>
-        </div>
-      </div>
+      <Cards data={firstRowData} />
+      <Cards data={secondRowData} />
+      <Cards data={thirdRowData} />
 
       <div className="grid md:grid-flow-col grid-rows-2 lg:grid-rows-1 auto-cols-fr gap-4 overflow-x-auto overflow-y-hidden">
         {sensors.map((sensor, index) => (
