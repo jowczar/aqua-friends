@@ -22,7 +22,7 @@ export const ADMIN_ROUTES = [
   { name: "Home", href: "/", current: true },
   { name: "Fishes", href: "/fishes", current: false },
   { name: "Equipment", href: "/equipment", current: false },
-  { name: "Admins", href: "/admin", current: false },
+  { name: "Admins", href: "/admins", current: false },
 ];
 
 const Navbar = () => {
