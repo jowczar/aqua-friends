@@ -31,7 +31,7 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
       className="fixed z-50 left-0 top-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
     >
       <div className="max-h-full">
-        <Dialog.Panel className="w-full max-w-sm rounded bg-white p-4">
+        <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
               Add new admin
@@ -45,17 +45,22 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
               <CloseIcon />
             </button>
           </div>
-          <Dialog.Description>
-            This will permanently deactivate your account
+          <Dialog.Description className="text-sm text-gray-500">
+            Administrators can manage all aspects of the app, including adding
+            and removing other administrators.
           </Dialog.Description>
 
-          <p>
-            Are you sure you want to deactivate your account? All of your data
-            will be permanently removed. This action cannot be undone.
-          </p>
+          <div className="p-4 space-y-6">Test</div>
 
-          <button onClick={() => setIsOpen(false)}>Deactivate</button>
-          <button onClick={() => setIsOpen(false)}>Cancel</button>
+          <div className="flex items-center pt-4 space-x-2">
+            <button
+              data-modal-hide="staticModal"
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Add new admin
+            </button>
+          </div>
         </Dialog.Panel>
       </div>
     </Dialog>
