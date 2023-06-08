@@ -54,7 +54,7 @@ const AquaViewAquariumsActions = ({
           >
             <span className="sr-only">View favorites</span>
             <Image
-              src={item.isLiked ? "heart-red.svg" : "heart.svg"}
+              src={item.isLiked ? "/heart-red.svg" : "/heart.svg"}
               alt="heart"
               className="group-hover:scale-110 transition flex-none"
               height={16}

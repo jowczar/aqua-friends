@@ -205,7 +205,7 @@ const DataTable = ({
                       )
                     }
                   >
-                    {firstColumnData(item)}
+                    {item.name && firstColumnData(item)}
 
                     {Object.entries(item).map(([key, value]: ItemEntries) => {
                       //TODO: Im nots sure if it is the best way to do this, but has no idea for now

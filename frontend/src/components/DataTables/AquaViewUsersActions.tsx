@@ -27,7 +27,7 @@ const AquaViewUsersActions = ({
   const addToFriendButtonHandler = (itemId: number) => {
     const newItems = items.map((item: Record<string, any>) => {
       if (item.id === itemId) {
-        return { ...item, isLiked: !item.isLiked };
+        return { ...item, isFriend: !item.isFriend };
       }
       return item;
     });
@@ -58,7 +58,7 @@ const AquaViewUsersActions = ({
           >
             <span className="sr-only">View messages</span>
             <Image
-              src="chat.svg"
+              src="/chat.svg"
               alt="chat"
               className="group-hover:scale-110 transition flex-none"
               height={16}
@@ -73,8 +73,8 @@ const AquaViewUsersActions = ({
           >
             <span className="sr-only">Add to friend</span>
             <Image
-              src={item.isLiked ? "heart-red.svg" : "heart.svg"}
-              alt="heart"
+              src={item.isFriend ? "/friend-green.svg" : "/friend-basic.svg"}
+              alt="friend"
               className="group-hover:scale-110 transition flex-none"
               height={16}
               width={18}

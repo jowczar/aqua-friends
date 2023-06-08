@@ -2,10 +2,11 @@
 
 import AquaViewSwitch from "@/components/AquaViewSwitch";
 import DataTable from "@/components/DataTables";
-import { usersMock } from "@/components/DataTables/data-mock";
 import FilterDropdown from "@/components/FilterDropdown";
 import { FirestoreContext } from "@/context/FirebaseProvider";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
+import useUserWithRole from "@/hooks/useUserWithRole";
+import { User } from "firebase/auth";
 import {
   DocumentData,
   collection,
@@ -57,6 +58,17 @@ const aquariumFilterOptions = ["Show all aquariums", "Show only liked"];
 
 export default function View() {
   const firestore = useContext(FirestoreContext);
+
+  const { user }: { user: User | null | undefined } = useUserWithRole();
+
+  const [loggedUserId, setLoggedUserId] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setLoggedUserId(user?.uid.toString());
+    }
+  }, [user]);
+
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
     userFilterOptions[0]
@@ -72,14 +84,6 @@ export default function View() {
     if (!firestore) return;
 
     const aquariumsRef = collection(firestore, "aquariums");
-
-    // const currentUserRef = collection(firestore, "users");
-    // const currentUserQuery = query(currentUserRef, where("session_id", "==", sessionId));
-    // const currentUserSnapshot = await getDocs(currentUserQuery);
-    // const currentUser = currentUserSnapshot.docs[0]?.data();
-    // const currentUserFavAquariums = currentUser?.fav_aquariums || [];
-
-    // const filterQuery = query(aquariumsRef, where("id", "in", currentUserFavAquariums));
 
     const snapshot = await getDocs(
       currentAquariumFilter === aquariumFilterOptions[0]
@@ -128,15 +132,74 @@ export default function View() {
       })
     );
 
-    setAquariums(aquariumsData);
+    const filteredAquariums = aquariumsData.filter((aquarium) => {
+      if (currentAquariumFilter === aquariumFilterOptions[1]) {
+        return aquarium.isLiked;
+      }
+      return true;
+    });
+
+    setAquariums(filteredAquariums);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAquariumFilter]);
+
+  const getUsers = useCallback(async () => {
+    if (!firestore) return;
+
+    const usersRef = collection(firestore, "users");
+
+    const snapshot = await getDocs(usersRef);
+
+    const usersData = await Promise.all(
+      snapshot.docs.map(async (document: DocumentData) => {
+        const data = document.data();
+        const userId = document.id;
+
+        const aquariumsRef = collection(firestore, "aquariums");
+        const q = query(aquariumsRef, where("user_id", "==", userId));
+        const aquariumsSnapshot = await getDocs(q);
+
+        const aquariumNames = aquariumsSnapshot.docs.map((doc) => {
+          const aquariumData = doc.data();
+          return aquariumData.name;
+        });
+
+        const aquariums = aquariumNames.join(", ");
+        const isFriend = data?.friends?.includes(loggedUserId) || false;
+
+        return {
+          id: userId,
+          name: data?.username || "",
+          avatar: "",
+          email: data?.email || "",
+          aquariums,
+          isFriend,
+        };
+      })
+    );
+
+    const filteredUsers = usersData.filter((user) => {
+      if (currentUserFilter === userFilterOptions[1]) {
+        return user.isFriend;
+      }
+      return true;
+    });
+
+    setUsers(filteredUsers);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserFilter, loggedUserId]);
 
   useEffect(() => {
     getAquariums();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAquariumFilter]);
+
+  useEffect(() => {
+    getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserFilter, loggedUserId]);
 
   return (
     <div>
@@ -163,7 +226,7 @@ export default function View() {
           </div>
         </div>
         <DataTable
-          data={isUsersView ? usersMock : aquariums}
+          data={isUsersView ? users : aquariums}
           columns={isUsersView ? usersColumns : aquariumsColumns}
           itemsPerPage={10}
           allowAquaViewUsersActions={isUsersView ? true : false}
