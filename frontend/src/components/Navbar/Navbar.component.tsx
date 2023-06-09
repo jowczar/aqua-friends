@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { Gothic_A1 } from "next/font/google";
 
 import { User } from "@/hooks/useUserWithRole";
+import { UserRole } from "@/enums/UserRole.enum";
 
 const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
@@ -49,7 +50,11 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
               <div className="flex flex-shrink-0 items-center">
                 <Link href="/" className="flex items-center">
                   <Image
-                    src={user?.role === "admin" ? "admin-logo.svg" : "logo.svg"}
+                    src={
+                      user?.role === UserRole.ADMIN
+                        ? "admin-logo.svg"
+                        : "logo.svg"
+                    }
                     alt="Aqua friends"
                     height={32}
                     width={166}
