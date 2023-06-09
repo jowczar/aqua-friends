@@ -22,7 +22,8 @@ import {
 } from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
 import { UserData } from "@/common/types";
-import { formSchema, handleFirebaseError } from "./schema";
+import { handleFirebaseError } from "@/common/firebase";
+import { formSchema } from "./schema";
 
 type SettingsFormValues = UserData & {
   password: string;
