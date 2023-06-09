@@ -1,30 +1,14 @@
 "use client";
 
-import { formatDate } from "@/common/helpers";
 import DataTable from "@/components/DataTables";
-import { FirestoreContext } from "@/context/FirebaseProvider";
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import useFirestore from "@/hooks/useFirestore";
 
-import {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import getLogs, { EndDate, LogsData, StartDate } from "./data.logic";
 
 const historyColumns = ["Service name", "Log data", "Date"];
-
-type StartDate = Date | null;
-type EndDate = Date | null;
 
 type DateRange = [StartDate, EndDate];
 
@@ -32,13 +16,6 @@ interface CustomInputProps {
   value?: string;
   onClick?: () => void;
 }
-
-type LogsData = {
-  id: string;
-  name: string;
-  message: string;
-  date: string | Date;
-};
 
 // eslint-disable-next-line react/display-name
 const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
@@ -54,45 +31,20 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
 );
 
 export default function History() {
-  const firestore = useContext(FirestoreContext);
+  const firestore = useFirestore();
+
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
   const [logs, setLogs] = useState<LogsData[]>([]);
 
-  const getLogs = useCallback(async () => {
-    if (!firestore) return;
-
-    const logsRef = collection(firestore, "logs");
-
-    const filterQuery = query(
-      logsRef,
-      where("date", ">=", startDate),
-      where("date", "<=", endDate)
-    );
-
-    const snapshot = await getDocs(
-      startDate && endDate ? filterQuery : logsRef
-    );
-
-    const logsData = snapshot.docs.map((doc: DocumentData) => {
-      const data = doc.data();
-      const id = doc.id;
-      const formattedDate = formatDate(data.date);
-
-      return {
-        id,
-        name: data.service_name,
-        message: data.message,
-        date: formattedDate,
-      };
-    });
-
+  const handleLogs = useCallback(async () => {
+    const logsData = await getLogs(firestore, startDate, endDate);
     setLogs(logsData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
   useEffect(() => {
-    getLogs();
+    handleLogs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
