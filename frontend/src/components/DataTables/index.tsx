@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import Pagination from "../Pagination";
@@ -52,8 +52,12 @@ const DataTable = ({
   allowImages,
 }: DataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState(data);
+  const [items, setItems] = useState<Record<string, any>[]>([]);
   const [activeElementId, setActiveElementId] = useState<number>(0);
+
+  useEffect(() => {
+    setItems(data);
+  }, [data]);
 
   const paginationData = paginationDataHandler(
     items,

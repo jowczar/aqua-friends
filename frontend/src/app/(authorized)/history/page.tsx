@@ -1,15 +1,14 @@
 "use client";
 
 import DataTable from "@/components/DataTables";
-import { logsMock } from "@/components/DataTables/data-mock";
-import { forwardRef, useState } from "react";
+import useFirestore from "@/hooks/useFirestore";
+
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import getLogs, { EndDate, LogsData, StartDate } from "./data.logic";
 
 const historyColumns = ["Service name", "Log data", "Date"];
-
-type StartDate = Date | null;
-type EndDate = Date | null;
 
 type DateRange = [StartDate, EndDate];
 
@@ -31,12 +30,23 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
   )
 );
 
-//TODO: for now its using data mock, should implement data from api
 export default function History() {
+  const firestore = useFirestore();
+
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
+  const [logs, setLogs] = useState<LogsData[]>([]);
 
-  console.log("startDate, endDate", startDate, endDate);
+  const handleLogs = useCallback(async () => {
+    const logsData = await getLogs(firestore, startDate, endDate);
+    setLogs(logsData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    handleLogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate]);
 
   return (
     <div>
@@ -57,7 +67,7 @@ export default function History() {
 
         <DataTable
           columns={historyColumns}
-          data={logsMock}
+          data={logs}
           itemsPerPage={10}
           allowImages={false}
         />
