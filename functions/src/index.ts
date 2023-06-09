@@ -28,24 +28,27 @@ export const addDefaultUserRole = functions.auth.user().onCreate((user) => {
     });
 });
 
-export const createUserRecord = functions.auth.user().onCreate((user) => {
+export const createUserRecord = functions.auth.user().onCreate(async (user) => {
   const db = admin.firestore();
-  logger.info(`w tym user ${user}`);
+
+  // INFO: there was a problem with getting displayName, so i tried this way
+  const freshUser = await admin.auth().getUser(user.uid);
+
   return db
     .collection("users")
-    .doc(user.uid)
+    .doc(freshUser.uid)
     .set({
-      id: user.uid,
-      email: user.email,
-      username: user.displayName,
+      id: freshUser.uid,
+      email: freshUser.email,
+      username: freshUser.displayName,
       admin: false,
       fav_aquariums: [],
       friends: [],
     })
     .then(() => {
-      logger.info(`User record created for ${user.uid}`);
+      logger.info(`User record created for ${freshUser.uid}`);
     })
     .catch((error) => {
-      logger.error(`Error creating user record for ${user.uid}`, error);
+      logger.error(`Error creating user record for ${freshUser.uid}`, error);
     });
 });
