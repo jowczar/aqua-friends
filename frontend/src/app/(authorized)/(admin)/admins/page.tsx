@@ -1,8 +1,10 @@
 "use client";
 
 import DataTable from "@/components/DataTables";
+import useFirestore from "@/hooks/useFirestore";
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 type AddAdminModalProps = {
   isOpen: boolean;
@@ -67,21 +69,31 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
   );
 };
 
+type Admin = {
+  username: string;
+  email: string;
+  admin: boolean;
+};
+
 // TODO: this route is not protected from non-admins users
 export default function Admins() {
   const [isOpen, setIsOpen] = useState(false);
-  const columns = ["Name", "Email"];
+  const [admins, setAdmins] = useState<Admin[]>([]);
+  const columns = ["Username", "Email"];
+  const firestore = useFirestore();
 
-  const adminsMock = [
-    {
-      name: "John Doe",
-      email: "john@doe.pl",
-    },
-    {
-      name: "John Doe",
-      email: "john@doe.pl",
-    },
-  ];
+  const fetchAdmins = async () => {
+    const q = query(collection(firestore, "users"), where("admin", "==", true));
+    await getDocs(q).then((snapshot) => {
+      const data = snapshot.docs.map((doc) => doc.data());
+      console.log({ data });
+      setAdmins(data);
+    });
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
 
   return (
     <div className="my-10 px-5 lg:px-20">
@@ -93,7 +105,7 @@ export default function Admins() {
         Add new admin
       </button>
       <DataTable
-        data={adminsMock}
+        data={admins}
         columns={columns}
         itemsPerPage={10}
         allowImages={true}
