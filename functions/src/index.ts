@@ -16,23 +16,38 @@ app.use(cors({ origin: true }));
 app.use("/users", users);
 
 export const api = functions.https.onRequest(app);
-export const addDefaultUserRole = functions.auth.user().onCreate((user) => {
-  const claims: Claims = {
-    role: "user",
-  };
-  return admin
-    .auth()
-    .setCustomUserClaims(user.uid, claims)
-    .then(() => {
-      logger.info(`Added default user role to ${user.uid}`);
-    });
-});
+export const addDefaultUserRole = functions.auth
+  .user()
+  .onCreate(async (user) => {
+    const freshUser = await admin.auth().getUser(user.uid);
+
+    if (freshUser.customClaims && freshUser.customClaims.role) {
+      logger.info(
+        `User ${user.uid} already has role ${freshUser.customClaims.role}`
+      );
+      return;
+    }
+
+    const claims: Claims = {
+      role: "user",
+    };
+    return admin
+      .auth()
+      .setCustomUserClaims(user.uid, claims)
+      .then(() => {
+        logger.info(`Added default user role to ${user.uid}`);
+      });
+  });
 
 export const createUserRecord = functions.auth.user().onCreate(async (user) => {
   const db = admin.firestore();
 
   // INFO: there was a problem with getting displayName, so i tried this way
   const freshUser = await admin.auth().getUser(user.uid);
+
+  const isAdmin =
+    (freshUser?.customClaims && freshUser?.customClaims?.role === "admin") ||
+    false;
 
   return db
     .collection("users")
@@ -41,7 +56,7 @@ export const createUserRecord = functions.auth.user().onCreate(async (user) => {
       id: freshUser.uid,
       email: freshUser.email,
       username: freshUser.displayName,
-      admin: false,
+      admin: isAdmin,
       fav_aquariums: [],
       friends: [],
     })
