@@ -5,6 +5,7 @@ import useFirestore from "@/hooks/useFirestore";
 import { Dialog } from "@headlessui/react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import Form from "./form";
 
 type AddAdminModalProps = {
   isOpen: boolean;
@@ -51,18 +52,7 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
             Administrators can manage all aspects of the app, including adding
             and removing other administrators.
           </Dialog.Description>
-
-          <div className="p-4 space-y-6">Test</div>
-
-          <div className="flex items-center pt-4 space-x-2">
-            <button
-              data-modal-hide="staticModal"
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Add new admin
-            </button>
-          </div>
+          <Form />
         </Dialog.Panel>
       </div>
     </Dialog>
