@@ -62,6 +62,10 @@
     "frontend/src/**/*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "functions/src/**/*.{ts}": [
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "husky": {
