@@ -1,59 +1,16 @@
-const RuleGrid = () => {
-  const rules = [
-    {
-      key: "Bass",
-      rules: {
-        Salmon: "Y",
-        Trout: "N",
-        Bass: "Y",
-        Catkey: "N",
-        Walleye: "N",
-      },
-    },
-    {
-      key: "Salmon",
-      rules: {
-        Salmon: "Y",
-        Trout: "N",
-        Bass: "N",
-        Catkey: "N",
-        Walleye: "N",
-      },
-    },
-    {
-      key: "Trout",
-      rules: {
-        Salmon: "N",
-        Trout: "Y",
-        Bass: "N",
-        Catkey: "N",
-        Walleye: "N",
-      },
-    },
-    {
-      key: "Catkey",
-      rules: {
-        Salmon: "N",
-        Trout: "N",
-        Bass: "N",
-        Catkey: "Y",
-        Walleye: "N",
-      },
-    },
-    {
-      key: "Walleye",
-      rules: {
-        Salmon: "N",
-        Trout: "N",
-        Bass: "N",
-        Catkey: "N",
-        Walleye: "Y",
-      },
-    },
-  ];
+type Option = string;
 
-  const options = ["Y", "N", "C"];
+type Rule = {
+  key: string;
+  rules: Record<string, Option>;
+};
 
+type RuleGridProps = {
+  options: Option[];
+  rules: Rule[];
+};
+
+const RuleGrid = ({ rules, options }: RuleGridProps) => {
   return (
     <table className="border-collapse border border-slate-300">
       <thead>
