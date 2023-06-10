@@ -11,6 +11,7 @@ router.get("/helloWorld", async (req, res) => {
   res.send("Hello World!");
 });
 
+// TODO: add auth middleware
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { displayName, password, email } = req.body;
@@ -34,7 +35,29 @@ router.post("/", async (req: Request, res: Response) => {
   } catch (err) {
     logger.error(err);
     if (isFirebaseError(err)) {
-      return res.status(500).send({ message: `${err.code} - ${err.message}` });
+      return res.status(400).send({ message: `${err.code} - ${err.message}` });
+    } else if (err instanceof Error) {
+      return res.status(500).send({ message: err.message });
+    } else {
+      return res.status(500).send({ message: "Something went wrong" });
+    }
+  }
+});
+
+router.delete("/:uid", async (req: Request, res: Response) => {
+  try {
+    // TODO: add validation middleware
+    const { uid } = req.params;
+    const db = admin.firestore();
+
+    await admin.auth().deleteUser(uid);
+    await db.collection("users").doc(uid).delete();
+
+    return res.status(200).send({ message: "User deleted" });
+  } catch (err) {
+    logger.error(err);
+    if (isFirebaseError(err)) {
+      return res.status(400).send({ message: `${err.code} - ${err.message}` });
     } else if (err instanceof Error) {
       return res.status(500).send({ message: err.message });
     } else {
