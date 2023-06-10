@@ -165,6 +165,7 @@ const DataTable = ({
                       items={items}
                       setItems={setItems}
                       isMobileView={true}
+                      loggedUser={loggedUser}
                     />
                   )}
                 </div>
@@ -241,6 +242,7 @@ const DataTable = ({
                         item={item}
                         items={items}
                         setItems={setItems}
+                        loggedUser={loggedUser}
                       />
                     )}
                   </tr>

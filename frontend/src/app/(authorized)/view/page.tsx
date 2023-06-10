@@ -12,6 +12,8 @@ import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useAquariumData, useUserData } from "./data.logic";
 import { useLoggedUser } from "@/hooks/useLoggedUser";
+import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
+import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 
 //TODO: types here needs to be changed
 type AquariumData = {
@@ -36,6 +38,16 @@ export type AquariumDataProps = {
   aquariumData: AquariumData;
 };
 
+export type UserFilter = {
+  label: string;
+  value: UserFilterOptions;
+};
+
+export type AquariumFilter = {
+  label: string;
+  value: AquariumFilterOptions;
+};
+
 const aquariumsColumns = [
   "Owner",
   "Aquarium Title",
@@ -45,8 +57,26 @@ const aquariumsColumns = [
 
 const usersColumns = ["User", "Aquariums"];
 
-const userFilterOptions = ["Show all users", "Show only friends"];
-const aquariumFilterOptions = ["Show all aquariums", "Show only liked"];
+const userFilterOptions = [
+  {
+    label: "Show all users",
+    value: UserFilterOptions.ALL,
+  },
+  {
+    label: "Show only friends",
+    value: UserFilterOptions.ONLY_FRIENDS,
+  },
+];
+const aquariumFilterOptions = [
+  {
+    label: "Show all aquariums",
+    value: AquariumFilterOptions.ALL,
+  },
+  {
+    label: "Show only liked",
+    value: AquariumFilterOptions.ONLY_LIKED,
+  },
+];
 
 export default function View() {
   const firestore = useFirestore();
@@ -66,16 +96,10 @@ export default function View() {
   const { aquariums } = useAquariumData(
     firestore,
     currentAquariumFilter,
-    aquariumFilterOptions,
     loggedUser
   );
 
-  const { users } = useUserData(
-    firestore,
-    currentUserFilter,
-    userFilterOptions,
-    loggedUser
-  );
+  const { users } = useUserData(firestore, currentUserFilter, loggedUser);
 
   return (
     <div>

@@ -11,8 +11,10 @@ import {
 } from "firebase/firestore";
 
 import { useCallback, useEffect, useState } from "react";
-import { AquariumDataProps } from "./page";
+import { AquariumDataProps, AquariumFilter, UserFilter } from "./page";
 import { LoggedUser } from "@/hooks/useLoggedUser";
+import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
+import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 
 type UserData = {
   id: string;
@@ -25,8 +27,7 @@ type UserData = {
 
 export const useAquariumData = (
   firestore: Firestore,
-  currentAquariumFilter: string,
-  aquariumFilterOptions: string[],
+  currentAquariumFilter: AquariumFilter,
   loggedUser: LoggedUser | null
 ) => {
   const [aquariums, setAquariums] = useState<AquariumDataProps[]>([]);
@@ -36,11 +37,7 @@ export const useAquariumData = (
 
     const aquariumsRef = collection(firestore, "aquariums");
 
-    const snapshot = await getDocs(
-      currentAquariumFilter === aquariumFilterOptions[0]
-        ? aquariumsRef
-        : aquariumsRef
-    );
+    const snapshot = await getDocs(aquariumsRef);
 
     const aquariumsData = await Promise.all(
       snapshot.docs.map(async (document: DocumentData) => {
@@ -84,7 +81,7 @@ export const useAquariumData = (
     );
 
     const filteredAquariums = aquariumsData.filter((aquarium) => {
-      if (currentAquariumFilter === aquariumFilterOptions[1]) {
+      if (currentAquariumFilter.value === AquariumFilterOptions.ONLY_LIKED) {
         return aquarium.isLiked;
       }
       return true;
@@ -104,8 +101,7 @@ export const useAquariumData = (
 
 export const useUserData = (
   firestore: Firestore,
-  currentUserFilter: string,
-  userFilterOptions: string[],
+  currentUserFilter: UserFilter,
   loggedUser: LoggedUser | null
 ) => {
   const [users, setUsers] = useState<UserData[]>([]);
@@ -146,7 +142,7 @@ export const useUserData = (
     );
 
     const filteredUsers = usersData.filter((user) => {
-      if (currentUserFilter === userFilterOptions[1]) {
+      if (currentUserFilter.value === UserFilterOptions.ONLY_FRIENDS) {
         return user.isFriend;
       }
       return true;
