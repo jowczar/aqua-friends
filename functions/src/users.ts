@@ -11,10 +11,6 @@ import isAuthorized from "./middleware/is-authorized.middleware";
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get("/helloWorld", async (req, res) => {
-  res.send("Hello World!");
-});
-
 router.post("/",
   isAuthenticated,
   isAuthorized({ hasRole: [UserRole.ADMIN] }),
