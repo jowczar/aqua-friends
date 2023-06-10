@@ -20,15 +20,28 @@ const Form = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    // TODO: POST /users
-
-    const user = getAuth().currentUser;
-    if (!user) return toast.error("User not logged in");
-
     try {
-      toast.success("Profile updated!");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      toast.success("Administrator added!");
     } catch (error) {
-      toast.error("Something went wrong");
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+
       console.error(error);
     }
   });
