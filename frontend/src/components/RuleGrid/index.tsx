@@ -53,7 +53,7 @@ const RuleGrid = ({ rules, options, onChange }: RuleGridProps) => {
             </td>
             {rules.map((r) => (
               <td
-                className="transition border border-slate-300 text-center cursor-pointer hover:bg-slate-300"
+                className="transition border border-slate-300 text-center cursor-pointer hover:bg-slate-300 select-none"
                 key={r.key}
                 onClick={() => changeOption(rule, r.key)}
               >
