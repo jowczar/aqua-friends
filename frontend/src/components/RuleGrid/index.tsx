@@ -1,8 +1,9 @@
 type Option = string;
+type RuleKey = string;
 
 type Rule = {
-  key: string;
-  rules: Record<string, Option>;
+  key: RuleKey;
+  rules: Record<RuleKey, Option>;
 };
 
 type RuleGridProps = {
