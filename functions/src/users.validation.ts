@@ -2,9 +2,14 @@ import { object, string } from "yup";
 
 export const addAdminSchema = object({
   body: object({
-    url: string().url().required(),
-    title: string().min(8).max(32).required(),
-    content: string().min(8).max(255).required(),
-    contact: string().email().required(),
+    displayName: string().min(3).max(30).required(),
+    password: string().min(6).required(),
+    email: string().email().required(),
+  }),
+});
+
+export const deleteAdminSchema = object({
+  params: object({
+    uid: string().required(),
   }),
 });

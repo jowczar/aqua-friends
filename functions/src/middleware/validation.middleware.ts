@@ -12,12 +12,12 @@ const validate = (schema: Schema) =>
       return next();
     } catch (err) {
       if (err instanceof ValidationError) {
-        // TODO: customize message
-        console.log({ err });
-        return res.status(400).json({ message: err.message });
+        return res
+          .status(400)
+          .json({ message: err.message, errors: err.errors });
       }
 
-      return res.status(400).json({ message: "Something went wrong" });
+      return res.status(500).json({ message: "Something went wrong" });
     }
   };
 
