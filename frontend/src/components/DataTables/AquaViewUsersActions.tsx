@@ -1,11 +1,9 @@
 import useFirestore from "@/hooks/useFirestore";
-import { LoggedUser, useLoggedUser } from "@/hooks/useLoggedUser";
-
+import { LoggedUser } from "@/hooks/useLoggedUser";
 import { updateDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Modal from "../Modal";
+import { useEffect } from "react";
 
 export type AquaViewUsersActionsProps = {
   item: Record<string, any>;
@@ -24,14 +22,6 @@ const AquaViewUsersActions = ({
 }: AquaViewUsersActionsProps) => {
   const router = useRouter();
   const firestore = useFirestore();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState({
-    title: "",
-    message: "",
-    confirmHandler: async () => {},
-  });
 
   const viewButtonHandler = () => {
     router.push(`/view/users/${item.id}`);
@@ -41,88 +31,48 @@ const AquaViewUsersActions = ({
     //TODO: implement AquaViewActions messages button logic here
   };
 
-  const addToFriendButtonHandler = async (itemId: string) => {
-    setIsLoading(true);
-    const prevItems = [...items]; // kopia poprzedniego stanu
-    const newItems = items.map((item: Record<string, any>) => {
-      if (item.id === itemId) {
-        return { ...item, isFriend: true };
-      }
-      return item;
-    });
-    setItems(newItems);
-
+  const handleFriendChange = async (itemId: string) => {
     if (loggedUser && loggedUser.id) {
-      let newFriendsList: string[] = [...loggedUser.friends, itemId];
-
       const usersRef = doc(firestore, "users", loggedUser.id);
-      try {
-        await updateDoc(usersRef, {
-          friends: newFriendsList,
-        });
-      } catch (error) {
-        console.error(error);
-        setItems(prevItems); // Przywrócenie poprzedniego stanu w razie błędu
-      }
-    }
 
-    setIsLoading(false);
-  };
+      let newFriendsList: string[];
+      let isFriend: boolean;
 
-  const removeFriendButtonHandler = async (itemId: string) => {
-    setIsLoading(true);
-    const prevItems = [...items]; // kopia poprzedniego stanu
-    const newItems = items.map((item: Record<string, any>) => {
-      if (item.id === itemId) {
-        return { ...item, isFriend: false };
-      }
-      return item;
-    });
-    setItems(newItems);
-
-    if (loggedUser && loggedUser.id) {
-      let newFriendsList: string[] = loggedUser.friends.filter(
-        (friendId) => friendId !== itemId
-      );
-
-      const usersRef = doc(firestore, "users", loggedUser.id);
-      try {
-        await updateDoc(usersRef, {
-          friends: newFriendsList,
-        });
-      } catch (error) {
-        console.error(error);
-        setItems(prevItems); // Przywrócenie poprzedniego stanu w razie błędu
-      }
-    }
-
-    setIsLoading(false);
-  };
-
-  const friendButtonHandler = () => {
-    if (!isLoading) {
       if (item.isFriend) {
-        setModalContent({
-          title: "Usuń znajomego",
-          message: "Czy na pewno chcesz usunąć tego użytkownika ze znajomych?",
-          confirmHandler: async () => {
-            await removeFriendButtonHandler(item.id);
-            setShowModal(false);
-          },
-        });
+        newFriendsList = loggedUser.friends.filter(
+          (friendId) => friendId !== itemId
+        );
+        isFriend = false;
       } else {
-        setModalContent({
-          title: "Dodaj znajomego",
-          message: "Czy na pewno chcesz dodać tego użytkownika do znajomych?",
-          confirmHandler: async () => {
-            await addToFriendButtonHandler(item.id);
-            setShowModal(false);
-          },
-        });
+        newFriendsList = [...loggedUser.friends, itemId];
+        isFriend = true;
       }
-      setShowModal(true);
+
+      await updateDoc(usersRef, {
+        friends: newFriendsList,
+      });
+
+      const newItems = items.map((item: Record<string, any>) => {
+        if (item.id === itemId) {
+          return { ...item, isFriend: isFriend };
+        }
+        return item;
+      });
+      setItems(newItems);
     }
   };
+
+  useEffect(() => {
+    if (loggedUser) {
+      const newItems = items.map((item: Record<string, any>) => {
+        if (item.id === loggedUser.id) {
+          return { ...item, isFriend: loggedUser.friends.includes(item.id) };
+        }
+        return item;
+      });
+      setItems(newItems);
+    }
+  }, [loggedUser]);
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
@@ -158,7 +108,7 @@ const AquaViewUsersActions = ({
           <button
             type="button"
             className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
-            onClick={friendButtonHandler}
+            onClick={() => handleFriendChange(item.id)}
           >
             <span className="sr-only">Add to friend</span>
             <Image
@@ -170,17 +120,6 @@ const AquaViewUsersActions = ({
               aria-hidden="true"
             />
           </button>
-
-          {showModal && (
-            <Modal
-              title={modalContent.title}
-              message={modalContent.message}
-              cancelButtonText="Nie"
-              detailsButtonText="Tak"
-              onCancelClick={() => setShowModal(false)}
-              onDetailsClick={modalContent.confirmHandler}
-            />
-          )}
         </div>
       </td>
     </div>

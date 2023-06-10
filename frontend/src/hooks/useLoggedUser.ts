@@ -1,4 +1,4 @@
-import { Firestore, getDoc, doc } from "firebase/firestore";
+import { Firestore, getDoc, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export type LoggedUser = {
@@ -16,20 +16,23 @@ export const useLoggedUser = (
   const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
 
   useEffect(() => {
-    if (!firestore || !userId) return;
+    if (userId) {
+      const docRef = doc(firestore, "users", userId);
 
-    const fetchUser = async () => {
-      const usersRef = doc(firestore, "users", userId);
-      const userSnapshot = await getDoc(usersRef);
+      const unsubscribe = onSnapshot(docRef, (doc) => {
+        const data = doc.data();
+        setLoggedUser({
+          id: doc.id,
+          email: data?.email,
+          fav_aquariums: data?.fav_aquariums,
+          friends: data?.friends,
+          username: data?.username,
+        });
+      });
 
-      if (userSnapshot.exists()) {
-        setLoggedUser(userSnapshot.data() as LoggedUser);
-      }
-    };
-
-    fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+      return () => unsubscribe();
+    }
+  }, [firestore, userId]);
 
   return loggedUser;
 };
