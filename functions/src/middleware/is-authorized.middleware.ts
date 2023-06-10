@@ -12,7 +12,7 @@ const isAuthorized =
           functions.logger.error("User not attached to request");
           return res
             .status(500)
-            .send("Something went wrong, we are looking into it");
+            .send({ message: "Something went wrong, we are looking into it" });
         }
 
         const { role, uid } = req.user;
@@ -25,7 +25,7 @@ const isAuthorized =
         if (!role) {
           return res
             .status(403)
-            .send("You are not authorized to make this request");
+            .send({ message: "You are not authorized to make this request" });
         }
 
         if (opts.hasRole.includes(role)) {
@@ -34,7 +34,7 @@ const isAuthorized =
 
         return res
           .status(403)
-          .send("You are not authorized to make this request");
+          .send({ message: "You are not authorized to make this request" });
       };
     };
 
