@@ -8,7 +8,7 @@ const validate = (schema: Schema) =>
         body: req.body,
         query: req.query,
         params: req.params,
-      });
+      }, { abortEarly: false });
       return next();
     } catch (err) {
       if (err instanceof ValidationError) {
