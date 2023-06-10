@@ -61,7 +61,7 @@ const RuleGrid = () => {
           <th></th>
           {rules.map((rule) => (
             <th
-              className="border border-slate-300 [writing-mode:vertical-lr] rotate-180"
+              className="border border-slate-300 [writing-mode:vertical-lr] rotate-180 p-2"
               key={rule.key}
             >
               {rule.key}
@@ -72,7 +72,9 @@ const RuleGrid = () => {
       <tbody>
         {rules.map((rule) => (
           <tr key={rule.key}>
-            <td className="border border-slate-300 font-bold">{rule.key}</td>
+            <td className="border border-slate-300 font-bold p-2">
+              {rule.key}
+            </td>
             {rules.map((r) => (
               <td
                 className="transition border border-slate-300 text-center cursor-pointer hover:bg-slate-300"
