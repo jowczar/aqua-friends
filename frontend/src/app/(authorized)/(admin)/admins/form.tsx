@@ -36,7 +36,7 @@ const Form = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col md:flex-row gap-10 items-center mx-auto bg-white rounded mt-8 max-w-2xl"
+      className="flex flex-col md:flex-row gap-10 items-center mx-auto bg-white rounded mt-8 mb-2 max-w-2xl"
     >
       <div className="grow flex gap-4 flex-col order-2 md:order-1 w-full">
         <FormInputText
