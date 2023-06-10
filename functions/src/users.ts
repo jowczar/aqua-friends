@@ -14,37 +14,39 @@ router.get("/helloWorld", async (req, res) => {
 });
 
 // TODO: add auth middleware
-router.post("/", validate(addAdminSchema), async (req: Request, res: Response) => {
-  try {
-    const { displayName, password, email } = req.body;
+router.post("/",
+  validate(addAdminSchema),
+  async (req: Request, res: Response) => {
+    try {
+      const { displayName, password, email } = req.body;
 
-    // TODO: validate fields once we decide on architecture
-    if (!displayName || !password || !email) {
-      return res.status(400).send({ message: "Missing fields" });
+      // TODO: validate fields once we decide on architecture
+      if (!displayName || !password || !email) {
+        return res.status(400).send({ message: "Missing fields" });
+      }
+
+      const { uid } = await admin.auth().createUser({
+        displayName,
+        password,
+        email,
+      });
+      const claims: Claims = {
+        role: "admin",
+      };
+      await admin.auth().setCustomUserClaims(uid, claims);
+
+      return res.status(201).send({ uid });
+    } catch (err) {
+      logger.error(err);
+      if (isFirebaseError(err)) {
+        return res.status(400).send({ message: `${err.code} - ${err.message}` });
+      } else if (err instanceof Error) {
+        return res.status(500).send({ message: err.message });
+      } else {
+        return res.status(500).send({ message: "Something went wrong" });
+      }
     }
-
-    const { uid } = await admin.auth().createUser({
-      displayName,
-      password,
-      email,
-    });
-    const claims: Claims = {
-      role: "admin",
-    };
-    await admin.auth().setCustomUserClaims(uid, claims);
-
-    return res.status(201).send({ uid });
-  } catch (err) {
-    logger.error(err);
-    if (isFirebaseError(err)) {
-      return res.status(400).send({ message: `${err.code} - ${err.message}` });
-    } else if (err instanceof Error) {
-      return res.status(500).send({ message: err.message });
-    } else {
-      return res.status(500).send({ message: "Something went wrong" });
-    }
-  }
-});
+  });
 
 router.delete("/:uid", async (req: Request, res: Response) => {
   try {
