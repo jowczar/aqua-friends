@@ -11,6 +11,7 @@ type AddAdminModalProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
+
 const CloseIcon = () => (
   <svg
     className="w-5 h-5"
@@ -25,6 +26,7 @@ const CloseIcon = () => (
     ></path>
   </svg>
 );
+
 const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
   return (
     <Dialog
