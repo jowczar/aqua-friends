@@ -1,6 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 
 import { FormInputSubmit, FormInputText } from "@/components/Form/FormField";
@@ -13,13 +12,17 @@ type AdminFormValues = UserData & {
   submit: boolean;
 };
 
-const Form = () => {
+type AdminModalForm = {
+  onSubmit: (data: AdminFormValues) => void;
+};
+
+const Form = ({ onSubmit }: AdminModalForm) => {
   const { control, handleSubmit } = useForm<AdminFormValues>({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
   });
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onInternalSubmit = handleSubmit(async (data) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
@@ -35,6 +38,7 @@ const Form = () => {
       }
 
       toast.success("Administrator added!");
+      onSubmit(data);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -48,7 +52,7 @@ const Form = () => {
 
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={onInternalSubmit}
       className="flex flex-col md:flex-row gap-10 items-center mx-auto bg-white rounded mt-8 mb-2 max-w-2xl"
     >
       <div className="grow flex gap-4 flex-col order-2 md:order-1 w-full">
@@ -84,7 +88,7 @@ const Form = () => {
           <FormInputSubmit
             name="submit"
             control={control}
-            onClick={onSubmit}
+            onClick={onInternalSubmit}
             data-modal-hide="staticModal"
           >
             Save new admin

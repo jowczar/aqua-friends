@@ -52,7 +52,7 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
             Administrators can manage all aspects of the app, including adding
             and removing other administrators.
           </Dialog.Description>
-          <Form />
+          <Form onSubmit={() => setIsOpen(false)} />
         </Dialog.Panel>
       </div>
     </Dialog>
