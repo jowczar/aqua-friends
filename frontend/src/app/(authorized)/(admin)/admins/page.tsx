@@ -74,6 +74,7 @@ export default function Admins() {
 
   const fetchAdmins = async () => {
     const q = query(collection(firestore, "users"), where("admin", "==", true));
+    // TODO: fix fetching after datatables are made for generic use
     await getDocs(q).then((snapshot) => {
       const data = snapshot.docs.map((doc) => doc.data());
       console.log({ data });
