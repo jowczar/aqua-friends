@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import RuleGrid from ".";
+import type { Meta } from "@storybook/react";
+import RuleGrid, { Rule } from ".";
+import { useState } from "react";
 
 const meta: Meta<typeof RuleGrid> = {
   title: "RuleGrid",
@@ -7,8 +8,6 @@ const meta: Meta<typeof RuleGrid> = {
 };
 
 export default meta;
-
-type Story = StoryObj<typeof RuleGrid>;
 
 const rules = [
   {
@@ -65,7 +64,24 @@ const rules = [
 
 const options = ["Y", "N", "C"];
 
-export const Primary: Story = {
+type RuleGridStoryProps = {
+  initialRules: Rule[];
+  options: typeof options;
+};
+
+const RuleGridStory = ({ initialRules, options }: RuleGridStoryProps) => {
+  const [rules, setRules] = useState(initialRules);
+
+  return (
+    <RuleGrid
+      options={options}
+      onChange={(rules) => setRules(rules)}
+      rules={rules}
+    />
+  );
+};
+
+export const Primary = {
   name: "RuleGrid",
-  render: () => <RuleGrid options={options} rules={rules} />,
+  render: () => <RuleGridStory initialRules={rules} options={options} />,
 };

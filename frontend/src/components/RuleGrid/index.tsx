@@ -1,17 +1,35 @@
 type Option = string;
 type RuleKey = string;
 
-type Rule = {
+export type Rule = {
   key: RuleKey;
   rules: Record<RuleKey, Option>;
 };
 
-type RuleGridProps = {
+export type RuleGridProps = {
   options: Option[];
   rules: Rule[];
+  onChange: (rules: Rule[]) => void;
 };
 
-const RuleGrid = ({ rules, options }: RuleGridProps) => {
+const RuleGrid = ({ rules, options, onChange }: RuleGridProps) => {
+  const changeOption = (rule: Rule, key: RuleKey) => {
+    const newRules = rules.map((r) => {
+      if (r.key === rule.key) {
+        return {
+          ...r,
+          rules: {
+            ...r.rules,
+            [key]:
+              options[(options.indexOf(r.rules[key]) + 1) % options.length],
+          },
+        };
+      }
+      return r;
+    });
+    onChange(newRules);
+  };
+
   return (
     <table className="border-collapse border border-slate-300">
       <thead>
@@ -37,6 +55,7 @@ const RuleGrid = ({ rules, options }: RuleGridProps) => {
               <td
                 className="transition border border-slate-300 text-center cursor-pointer hover:bg-slate-300"
                 key={r.key}
+                onClick={() => changeOption(rule, r.key)}
               >
                 {rule.rules[r.key]}
               </td>
