@@ -3,6 +3,8 @@ import * as admin from "firebase-admin";
 import { logger } from "firebase-functions/v1";
 import isFirebaseError from "./utils";
 import { Claims } from "./utils/types";
+import validate from "./middleware/validation.middleware";
+import { addAdminSchema } from "./users.validation";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -12,7 +14,7 @@ router.get("/helloWorld", async (req, res) => {
 });
 
 // TODO: add auth middleware
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", validate(addAdminSchema), async (req: Request, res: Response) => {
   try {
     const { displayName, password, email } = req.body;
 
