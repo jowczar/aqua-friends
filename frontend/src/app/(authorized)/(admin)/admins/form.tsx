@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { FormInputSubmit, FormInputText } from "@/components/Form/FormField";
 import { UserData } from "@/common/types";
 import { formSchema } from "./schema";
+import useUserWithRole from "@/hooks/useUserWithRole";
 
 type AdminFormValues = UserData & {
   password: string;
@@ -21,6 +22,7 @@ const Form = ({ onSubmit }: AdminModalForm) => {
     mode: "onTouched",
     resolver: yupResolver(formSchema),
   });
+  const { idToken } = useUserWithRole();
 
   const onInternalSubmit = handleSubmit(async (data) => {
     try {
@@ -28,6 +30,7 @@ const Form = ({ onSubmit }: AdminModalForm) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify(data),
       });

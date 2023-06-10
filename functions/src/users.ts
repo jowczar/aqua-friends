@@ -1,20 +1,19 @@
 import express, { Request, Response } from "express";
 import * as admin from "firebase-admin";
 import { logger } from "firebase-functions/v1";
-import isFirebaseError from "./utils";
+import isFirebaseError, { UserRole } from "./utils";
 import { Claims } from "./utils/types";
 import validate from "./middleware/validation.middleware";
 import { addAdminSchema, deleteAdminSchema } from "./users.validation";
+import isAuthenticated from "./middleware/is-authenticated.middleware";
+import isAuthorized from "./middleware/is-authorized.middleware";
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get("/helloWorld", async (req, res) => {
-  res.send("Hello World!");
-});
-
-// TODO: add auth middleware
 router.post("/",
+  isAuthenticated,
+  isAuthorized({ hasRole: [UserRole.ADMIN] }),
   validate(addAdminSchema),
   async (req: Request, res: Response) => {
     try {
@@ -46,6 +45,8 @@ router.post("/",
   });
 
 router.delete("/:uid",
+  isAuthenticated,
+  isAuthorized({ hasRole: [UserRole.ADMIN] }),
   validate(deleteAdminSchema),
   async (req: Request, res: Response) => {
     try {
