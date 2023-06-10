@@ -39,6 +39,7 @@ export const addDefaultUserRole = functions.auth
   });
 
 export const createUserRecord = functions.auth.user().onCreate(async (user) => {
+  console.log("test");
   const db = admin.firestore();
 
   // INFO: there was a problem with getting displayName, so i tried this way
