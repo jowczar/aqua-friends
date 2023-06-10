@@ -1,4 +1,4 @@
-import { Firestore, getDoc, doc, onSnapshot } from "firebase/firestore";
+import { Firestore, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export type LoggedUser = {
@@ -9,11 +9,19 @@ export type LoggedUser = {
   username: string;
 };
 
-export const useLoggedUser = (
+const defaultLoggedUser: LoggedUser = {
+  email: "",
+  fav_aquariums: [],
+  friends: [],
+  id: "",
+  username: "",
+};
+
+export const useUserWithDetails = (
   firestore: Firestore,
   userId: string | undefined
 ) => {
-  const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
+  const [loggedUser, setLoggedUser] = useState<LoggedUser>(defaultLoggedUser);
 
   useEffect(() => {
     if (userId) {

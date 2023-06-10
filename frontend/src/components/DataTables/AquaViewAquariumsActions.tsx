@@ -2,14 +2,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 import useFirestore from "@/hooks/useFirestore";
-import { LoggedUser } from "@/hooks/useLoggedUser";
+import { LoggedUser } from "@/hooks/useUserWithDetails";
 
 export type AquaViewAquariumsActionsProps = {
   item: Record<string, any>;
   items: Record<string, any>[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   isMobileView?: boolean;
-  loggedUser: LoggedUser | null | undefined;
+  loggedUser: LoggedUser;
 };
 
 const AquaViewAquariumsActions = ({
@@ -27,34 +27,32 @@ const AquaViewAquariumsActions = ({
   };
 
   const handleFavoriteChange = async (itemId: string) => {
-    if (loggedUser && loggedUser.id) {
-      const usersRef = doc(firestore, "users", loggedUser.id);
+    const usersRef = doc(firestore, "users", loggedUser.id);
 
-      let newFavAquariumsList: string[];
-      let isFav: boolean;
+    let newFavAquariumsList: string[];
+    let isFav: boolean;
 
-      if (item.isLiked) {
-        newFavAquariumsList = loggedUser.fav_aquariums.filter(
-          (aquariumId) => aquariumId !== itemId
-        );
-        isFav = false;
-      } else {
-        newFavAquariumsList = [...loggedUser.fav_aquariums, itemId];
-        isFav = true;
-      }
-
-      await updateDoc(usersRef, {
-        fav_aquariums: newFavAquariumsList,
-      });
-
-      const newItems = items.map((item: Record<string, any>) => {
-        if (item.id === itemId) {
-          return { ...item, isLiked: isFav };
-        }
-        return item;
-      });
-      setItems(newItems);
+    if (item.isLiked) {
+      newFavAquariumsList = loggedUser.fav_aquariums.filter(
+        (aquariumId) => aquariumId !== itemId
+      );
+      isFav = false;
+    } else {
+      newFavAquariumsList = [...loggedUser.fav_aquariums, itemId];
+      isFav = true;
     }
+
+    await updateDoc(usersRef, {
+      fav_aquariums: newFavAquariumsList,
+    });
+
+    const newItems = items.map((item: Record<string, any>) => {
+      if (item.id === itemId) {
+        return { ...item, isLiked: isFav };
+      }
+      return item;
+    });
+    setItems(newItems);
   };
 
   return (

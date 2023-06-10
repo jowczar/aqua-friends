@@ -5,8 +5,11 @@ import {
   collection,
   query,
   where,
+  Firestore,
 } from "firebase/firestore";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
+import { LoggedUser } from "@/hooks/useUserWithDetails";
+import { getUserAvatar } from "@/common/helpers";
 
 export type UserAquariumDataProps = {
   id: string;
@@ -24,22 +27,24 @@ type UserData = {
 };
 
 export const getUserData = async (
-  firestore: any,
-  paramsId: string,
-  loggedUserId: string
+  firestore: Firestore,
+  userIdFromParams: string,
+  loggedUserWithDetails: LoggedUser
 ): Promise<{ userData: UserData; aquariums: UserAquariumDataProps[] }> => {
-  const userId = paramsId;
+  const userId = userIdFromParams;
   const userRef = doc(firestore, "users", userId);
 
   const userSnapshot = await getDoc(userRef);
   const user = userSnapshot.data();
 
-  const isFriend = user?.friends?.includes(loggedUserId) || false;
+  const isFriend = loggedUserWithDetails?.friends?.includes(userId) || false;
+
+  const avatarUrl = await getUserAvatar(userId);
 
   const userDataObj = {
     id: userId,
     name: user?.username || "",
-    avatar: "",
+    avatar: avatarUrl,
     email: user?.email || "",
     isFriend,
   };

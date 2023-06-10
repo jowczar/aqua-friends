@@ -40,13 +40,11 @@ export default function History() {
   const handleLogs = useCallback(async () => {
     const logsData = await getLogs(firestore, startDate, endDate);
     setLogs(logsData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate]);
+  }, [firestore, startDate, endDate]);
 
   useEffect(() => {
     handleLogs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, endDate]);
+  }, [startDate, endDate, handleLogs]);
 
   return (
     <div>

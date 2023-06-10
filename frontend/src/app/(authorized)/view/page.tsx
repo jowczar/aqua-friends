@@ -11,7 +11,7 @@ import { User } from "firebase/auth";
 
 import { useEffect, useState } from "react";
 import { useAquariumData, useUserData } from "./data.logic";
-import { useLoggedUser } from "@/hooks/useLoggedUser";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 
@@ -81,9 +81,9 @@ const aquariumFilterOptions = [
 export default function View() {
   const firestore = useFirestore();
 
-  const { user }: { user: User | null | undefined } = useUserWithRole();
+  const { user } = useUserWithRole();
 
-  const loggedUser = useLoggedUser(firestore, user?.uid);
+  const loggedUser = useUserWithDetails(firestore, user?.uid)!;
 
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
@@ -106,10 +106,7 @@ export default function View() {
       <div className="my-10 px-5 lg:px-20">
         <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-2">
           <div className="grid-rows-1 md:grid-cols-1 flex justify-center">
-            <AquaViewSwitch
-              isUsersView={isUsersView}
-              setIsUsersView={setIsUserView}
-            />
+            <AquaViewSwitch setIsUsersView={setIsUserView} />
           </div>
           <div className="grid-rows-1 md:grid-cols-2 w-full">
             <FilterDropdown
