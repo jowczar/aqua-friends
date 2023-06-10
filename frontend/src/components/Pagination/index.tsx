@@ -26,7 +26,7 @@ const Pagination = ({
             >
               <span>
                 <Image
-                  src={"/left-arrow.svg"}
+                  src="/left-arrow.svg"
                   alt="Left arrow"
                   height={18}
                   width={18}
@@ -62,7 +62,7 @@ const Pagination = ({
             >
               <span>
                 <Image
-                  src={"/right-arrow.svg"}
+                  src="/right-arrow.svg"
                   alt="Right arrow"
                   height={18}
                   width={18}

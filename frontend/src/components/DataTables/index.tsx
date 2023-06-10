@@ -7,7 +7,7 @@ import AquaLifeActions from "./AquaLifeActions";
 import { Environment } from "@/enums/Environment.enum";
 import { paginationDataHandler } from "./helpers";
 import AquaViewUsersActions from "./AquaViewUsersActions";
-import { LoggedUser } from "@/hooks/useLoggedUser";
+import { LoggedUser } from "@/hooks/useUserWithDetails";
 
 type DataTableProps = {
   columns: string[];
@@ -17,7 +17,7 @@ type DataTableProps = {
   allowAquaViewAquariumsActions?: boolean;
   allowAquaLifeActions?: boolean;
   allowImages: boolean;
-  loggedUser?: LoggedUser | null | undefined;
+  loggedUser?: LoggedUser;
 };
 
 type ItemEntries = [
@@ -156,7 +156,7 @@ const DataTable = ({
                       items={items}
                       setItems={setItems}
                       isMobileView={true}
-                      loggedUser={loggedUser}
+                      loggedUser={loggedUser as LoggedUser}
                     />
                   )}
                   {allowAquaViewAquariumsActions && (
@@ -165,7 +165,7 @@ const DataTable = ({
                       items={items}
                       setItems={setItems}
                       isMobileView={true}
-                      loggedUser={loggedUser}
+                      loggedUser={loggedUser as LoggedUser}
                     />
                   )}
                 </div>
@@ -234,7 +234,7 @@ const DataTable = ({
                         item={item}
                         items={items}
                         setItems={setItems}
-                        loggedUser={loggedUser}
+                        loggedUser={loggedUser as LoggedUser}
                       />
                     )}
                     {allowAquaViewAquariumsActions && (
@@ -242,7 +242,7 @@ const DataTable = ({
                         item={item}
                         items={items}
                         setItems={setItems}
-                        loggedUser={loggedUser}
+                        loggedUser={loggedUser as LoggedUser}
                       />
                     )}
                   </tr>

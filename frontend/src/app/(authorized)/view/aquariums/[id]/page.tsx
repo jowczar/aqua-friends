@@ -32,8 +32,7 @@ export default function AquariumAquaViewPage({
 
   useEffect(() => {
     getAquariumData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getAquariumData]);
 
   const firstRowData = generateFirstRowData(aquariumData);
   const secondRowData = generateSecondRowData(aquariumData);

@@ -1,5 +1,5 @@
 import useFirestore from "@/hooks/useFirestore";
-import { LoggedUser } from "@/hooks/useLoggedUser";
+import { LoggedUser } from "@/hooks/useUserWithDetails";
 import { updateDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ export type AquaViewUsersActionsProps = {
   items: Record<string, any>[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   isMobileView?: boolean;
-  loggedUser: LoggedUser | null | undefined;
+  loggedUser: LoggedUser;
 };
 
 const AquaViewUsersActions = ({

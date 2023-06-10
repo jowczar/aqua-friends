@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { HealthStatus } from "@/enums/HealthStatus.enum";
+import { DocumentData, doc, getDoc } from "firebase/firestore";
 import { AquariumDataProps } from "../../page";
 import useFirestore from "@/hooks/useFirestore";
 import { CardData } from "./page";
+import { getAndMapAquariumData } from "../../data.logic";
 
 export const useAquariumData = (params: any) => {
   const firestore = useFirestore();
@@ -12,55 +12,22 @@ export const useAquariumData = (params: any) => {
   );
 
   const getAquariumData = useCallback(async () => {
-    if (!firestore) return;
-
     const aquariumId = params.id;
     const aquariumRef = doc(firestore, "aquariums", aquariumId);
 
     const aquariumSnapshot = await getDoc(aquariumRef);
-
     const aquariumData = aquariumSnapshot.data();
-
     const userId = aquariumData?.user_id;
 
-    const usersRef = doc(firestore, "users", userId);
-
-    const userSnapshot = await getDoc(usersRef);
-
-    const user = userSnapshot.data();
-
-    const aquariumSize =
-      (aquariumData?.width / 100) *
-        (aquariumData?.height / 100) *
-        (aquariumData?.length / 100) +
-      "m^3";
-
-    //TODO: how is healthStatus prepared?
-    const healthStatus = HealthStatus.GOOD;
-    const mappedAquariumData = {
-      id: aquariumId,
-      name: user?.username || "",
-      avatar: "",
-      email: user?.email || "",
-      aquariumTitle: aquariumData?.name,
-      healthStatus,
-      aquariumSize,
-      isLiked: user?.fav_aquariums?.includes(aquariumId) || false,
-      aquariumData: {
-        fishes: aquariumData?.fishes,
-        pump: aquariumData?.pump,
-        heater: aquariumData?.heater,
-        light: aquariumData?.light,
-        plants: aquariumData?.plants,
-        decors: aquariumData?.decors,
-        terrains: aquariumData?.terrains,
-      },
-    };
+    const mappedAquariumData = await getAndMapAquariumData(
+      firestore,
+      aquariumData as DocumentData,
+      userId,
+      aquariumId
+    );
 
     setAquariumData(mappedAquariumData);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [firestore, params.id]);
 
   return { aquariumData, getAquariumData };
 };

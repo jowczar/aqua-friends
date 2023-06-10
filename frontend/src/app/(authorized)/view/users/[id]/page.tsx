@@ -2,15 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FirestoreContext } from "@/context/FirebaseProvider";
-
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
-
 import DataTable from "@/components/DataTables";
-import { User } from "firebase/auth";
-import useUserWithRole from "@/hooks/useUserWithRole";
 import { getUserData } from "./data.logic";
+import { Firestore, updateDoc, doc } from "firebase/firestore";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
+import useFirestore from "@/hooks/useFirestore";
+import useUserWithRole from "@/hooks/useUserWithRole";
 
 interface UserAquaViewPageProps {
   params: { id: string };
@@ -35,45 +34,65 @@ const aquariumsColumns = ["Aquarium Title", "Aquarium Size", "Health Status"];
 
 export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const router = useRouter();
-  const firestore = useContext(FirestoreContext);
-  const { user }: { user: User | null | undefined } = useUserWithRole();
+  const firestore = useFirestore();
 
-  const [loggedUserId, setLoggedUserId] = useState("");
+  const { user } = useUserWithRole();
 
-  useEffect(() => {
-    if (user) {
-      setLoggedUserId(user?.uid.toString());
-    }
-  }, [user]);
+  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
-  const [aquariumsData, setAquariumsData] = useState<
-    UserAquariumDataProps[] | []
-  >([]);
+  const [aquariumsData, setAquariumsData] = useState<UserAquariumDataProps[]>(
+    []
+  );
   const [userData, setUserData] = useState<UserData | null>(null);
 
   const handleUserData = useCallback(async () => {
     const { userData, aquariums } = await getUserData(
-      firestore,
+      firestore as Firestore,
       params.id,
-      loggedUserId
+      loggedUserWithDetails
     );
 
     setUserData(userData);
     setAquariumsData(aquariums);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedUserId]);
+  }, [firestore, loggedUserWithDetails, params.id]);
 
   useEffect(() => {
     handleUserData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedUserId]);
+  }, [handleUserData, loggedUserWithDetails]);
 
   const handlePreviousButton = () => {
     router.push("/view");
   };
 
-  const handleFriendButton = () => {};
+  const handleFriendButton = async () => {
+    if (!loggedUserWithDetails) return;
 
+    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+
+    let newFriendsList: string[];
+    let isFriend: boolean;
+
+    if (userData?.isFriend) {
+      newFriendsList = loggedUserWithDetails.friends.filter(
+        (friendId: string) => friendId !== userData.id
+      );
+      isFriend = false;
+    } else {
+      newFriendsList = [...loggedUserWithDetails.friends, userData?.id || ""];
+      isFriend = true;
+    }
+
+    await updateDoc(usersRef, {
+      friends: newFriendsList,
+    });
+
+    setUserData((prevUserData) => {
+      if (!prevUserData) return prevUserData;
+      return { ...prevUserData, isFriend };
+    });
+  };
+
+  //TODO: add logic here when chats will be applied
   const handleChatButton = () => {};
 
   const previousButton = (
@@ -90,7 +109,7 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const friendButton = (
     <>
       <button
-        onClick={handleFriendButton}
+        onClick={async () => await handleFriendButton()}
         className={`w-full md:w-auto ${
           userData?.isFriend
             ? "bg-transparent border-blue-500 text-blue-500"
