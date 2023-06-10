@@ -7,6 +7,7 @@ import AquaLifeActions from "./AquaLifeActions";
 import { Environment } from "@/enums/Environment.enum";
 import { paginationDataHandler } from "./helpers";
 import AquaViewUsersActions from "./AquaViewUsersActions";
+import { LoggedUser } from "@/hooks/useLoggedUser";
 
 type DataTableProps = {
   columns: string[];
@@ -16,6 +17,7 @@ type DataTableProps = {
   allowAquaViewAquariumsActions?: boolean;
   allowAquaLifeActions?: boolean;
   allowImages: boolean;
+  loggedUser?: LoggedUser | null | undefined;
 };
 
 type ItemEntries = [
@@ -55,6 +57,7 @@ const DataTable = ({
   allowAquaLifeActions,
   allowAquaViewAquariumsActions,
   allowImages,
+  loggedUser,
 }: DataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<Record<string, any>[]>([]);
@@ -153,6 +156,7 @@ const DataTable = ({
                       items={items}
                       setItems={setItems}
                       isMobileView={true}
+                      loggedUser={loggedUser}
                     />
                   )}
                   {allowAquaViewAquariumsActions && (
@@ -229,6 +233,7 @@ const DataTable = ({
                         item={item}
                         items={items}
                         setItems={setItems}
+                        loggedUser={loggedUser}
                       />
                     )}
                     {allowAquaViewAquariumsActions && (

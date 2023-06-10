@@ -3,21 +3,15 @@
 import AquaViewSwitch from "@/components/AquaViewSwitch";
 import DataTable from "@/components/DataTables";
 import FilterDropdown from "@/components/FilterDropdown";
-import { FirestoreContext } from "@/context/FirebaseProvider";
+
 import { HealthStatus } from "@/enums/HealthStatus.enum";
+import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
 import { User } from "firebase/auth";
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc,
-} from "firebase/firestore";
 
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useAquariumData, useUserData } from "./data.logic";
+import { useLoggedUser } from "@/hooks/useLoggedUser";
 
 //TODO: types here needs to be changed
 type AquariumData = {
@@ -42,8 +36,6 @@ export type AquariumDataProps = {
   aquariumData: AquariumData;
 };
 
-type UserData = {};
-
 const aquariumsColumns = [
   "Owner",
   "Aquarium Title",
@@ -57,17 +49,11 @@ const userFilterOptions = ["Show all users", "Show only friends"];
 const aquariumFilterOptions = ["Show all aquariums", "Show only liked"];
 
 export default function View() {
-  const firestore = useContext(FirestoreContext);
+  const firestore = useFirestore();
 
   const { user }: { user: User | null | undefined } = useUserWithRole();
 
-  const [loggedUserId, setLoggedUserId] = useState("");
-
-  useEffect(() => {
-    if (user) {
-      setLoggedUserId(user?.uid.toString());
-    }
-  }, [user]);
+  const loggedUser = useLoggedUser(firestore, user?.uid);
 
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
@@ -77,129 +63,19 @@ export default function View() {
     aquariumFilterOptions[0]
   );
 
-  const [aquariums, setAquariums] = useState<AquariumDataProps[]>([]);
-  const [users, setUsers] = useState<UserData[]>([]);
+  const { aquariums } = useAquariumData(
+    firestore,
+    currentAquariumFilter,
+    aquariumFilterOptions,
+    loggedUser
+  );
 
-  const getAquariums = useCallback(async () => {
-    if (!firestore) return;
-
-    const aquariumsRef = collection(firestore, "aquariums");
-
-    const snapshot = await getDocs(
-      currentAquariumFilter === aquariumFilterOptions[0]
-        ? aquariumsRef
-        : aquariumsRef
-    );
-
-    const aquariumsData = await Promise.all(
-      snapshot.docs.map(async (document: DocumentData) => {
-        const data = document.data();
-        const aquariumId = document.id;
-
-        const aquariumSize =
-          (data.width / 100) * (data.height / 100) * (data.length / 100) +
-          "m^3";
-
-        const userId = data.user_id;
-
-        const usersRef = doc(firestore, "users", userId);
-
-        const userSnapshot = await getDoc(usersRef);
-
-        const user = userSnapshot.data();
-
-        //TODO: how is healthStatus prepared?
-        const healthStatus = HealthStatus.GOOD;
-        return {
-          id: aquariumId,
-          name: user?.username || "",
-          avatar: "",
-          email: user?.email || "",
-          aquariumTitle: data.name,
-          healthStatus,
-          aquariumSize,
-          isLiked: user?.fav_aquariums?.includes(aquariumId) || false,
-          aquariumData: {
-            fishes: data.fishes,
-            pump: data.pump,
-            heater: data.heater,
-            light: data.light,
-            plants: data.plants,
-            decors: data.decors,
-            terrains: data.terrains,
-          },
-        };
-      })
-    );
-
-    const filteredAquariums = aquariumsData.filter((aquarium) => {
-      if (currentAquariumFilter === aquariumFilterOptions[1]) {
-        return aquarium.isLiked;
-      }
-      return true;
-    });
-
-    setAquariums(filteredAquariums);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAquariumFilter]);
-
-  const getUsers = useCallback(async () => {
-    if (!firestore) return;
-
-    const usersRef = collection(firestore, "users");
-
-    const snapshot = await getDocs(usersRef);
-
-    const usersData = await Promise.all(
-      snapshot.docs.map(async (document: DocumentData) => {
-        const data = document.data();
-        const userId = document.id;
-
-        const aquariumsRef = collection(firestore, "aquariums");
-        const q = query(aquariumsRef, where("user_id", "==", userId));
-        const aquariumsSnapshot = await getDocs(q);
-
-        const aquariumNames = aquariumsSnapshot.docs.map((doc) => {
-          const aquariumData = doc.data();
-          return aquariumData.name;
-        });
-
-        const aquariums = aquariumNames.join(", ");
-        const isFriend = data?.friends?.includes(loggedUserId) || false;
-
-        return {
-          id: userId,
-          name: data?.username || "",
-          avatar: "",
-          email: data?.email || "",
-          aquariums,
-          isFriend,
-        };
-      })
-    );
-
-    const filteredUsers = usersData.filter((user) => {
-      if (currentUserFilter === userFilterOptions[1]) {
-        return user.isFriend;
-      }
-      return true;
-    });
-
-    setUsers(filteredUsers);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserFilter, loggedUserId]);
-
-  useEffect(() => {
-    getAquariums();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAquariumFilter]);
-
-  useEffect(() => {
-    getUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserFilter, loggedUserId]);
+  const { users } = useUserData(
+    firestore,
+    currentUserFilter,
+    userFilterOptions,
+    loggedUser
+  );
 
   return (
     <div>
@@ -232,6 +108,7 @@ export default function View() {
           allowAquaViewUsersActions={isUsersView ? true : false}
           allowAquaViewAquariumsActions={isUsersView ? false : true}
           allowImages={true}
+          loggedUser={loggedUser}
         />
       </div>
     </div>
