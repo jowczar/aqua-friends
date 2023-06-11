@@ -9,7 +9,7 @@ import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
 
 import { useEffect, useState } from "react";
-import { useAquariumData, useUserData } from "./data.logic";
+import { AquaViewUserData, useAquariumData, useUserData } from "./data.logic";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
@@ -77,7 +77,7 @@ export default function View() {
 
   const { user } = useUserWithRole();
 
-  const loggedUser = useUserWithDetails(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
@@ -90,13 +90,13 @@ export default function View() {
   const { aquariums, setAquariums } = useAquariumData(
     firestore,
     currentAquariumFilter,
-    loggedUser
+    loggedInUserWithDetails
   );
 
   const { users, setUsers } = useUserData(
     firestore,
     currentUserFilter,
-    loggedUser
+    loggedInUserWithDetails
   );
 
   const usersColumns = getUsersColumns(users, setUsers);
@@ -124,11 +124,19 @@ export default function View() {
             />
           </div>
         </div>
-        <DataTable
-          rowsData={isUsersView ? users : aquariums}
-          columnsData={isUsersView ? usersColumns : aquariumsColumns}
-          itemsPerPage={10}
-        />
+        {isUsersView ? (
+          <DataTable<AquaViewUserData>
+            rowsData={users}
+            columnsData={usersColumns}
+            itemsPerPage={10}
+          />
+        ) : (
+          <DataTable<AquaViewAquariumDataProps>
+            rowsData={aquariums}
+            columnsData={aquariumsColumns}
+            itemsPerPage={10}
+          />
+        )}
       </div>
     </div>
   );
