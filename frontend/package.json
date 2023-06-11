@@ -33,6 +33,8 @@
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-toastify": "^9.1.3",
+    "stream-chat": "^8.9.0",
+    "stream-chat-react": "^10.8.2",
     "typescript": "5.0.4",
     "uuid": "^9.0.0",
     "yup": "^1.2.0"
