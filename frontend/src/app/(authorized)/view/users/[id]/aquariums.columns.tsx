@@ -1,45 +1,13 @@
 import AquaViewAquariumsActions from "@/components/DataTables/AquaViewAquariumsActions";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
-import Image from "next/image";
-import { AquaViewAquariumDataProps } from "./page";
+
+import { UserAquariumDataProps } from "./page";
 
 export const getAquariumsColumns = (
-  aquariums: AquaViewAquariumDataProps[],
-  setAquariums: React.Dispatch<
-    React.SetStateAction<AquaViewAquariumDataProps[]>
-  >
+  aquariums: UserAquariumDataProps[],
+  setAquariums: React.Dispatch<React.SetStateAction<UserAquariumDataProps[]>>
 ) => {
   return [
-    {
-      Header: "Owner",
-      accessor: "name",
-      centerHeader: false,
-      Cell: ({ row }: any) => {
-        const item = row.original;
-        return (
-          <div className="flex items-center">
-            <div className="flex-shrink-0 h-15 w-15 hidden xl:block">
-              <Image
-                className="h-15 w-15 rounded-full"
-                src={item.avatar ? item.avatar : "man.png"}
-                alt="Default avatar"
-                height={62}
-                width={62}
-              />
-            </div>
-            <div className="text-left ml-4">
-              <div className="text-xs lg:text-sm font-medium text-gray-900 md:break-all">
-                {item.name}
-              </div>
-              <div className="text-xs lg:text-sm text-gray-500 whitespace-normal md:break-all">
-                {item.email}
-              </div>
-            </div>
-          </div>
-        );
-      },
-    },
-
     {
       Header: "Aquarium Title",
       accessor: "aquariumTitle",
@@ -72,7 +40,7 @@ export const getAquariumsColumns = (
       centerHeader: false,
       Cell: ({ row }: any) => (
         <div className="flex justify-center">
-          <AquaViewAquariumsActions<AquaViewAquariumDataProps>
+          <AquaViewAquariumsActions<UserAquariumDataProps>
             singleAquarium={row.original}
             aquariums={aquariums}
             setAquariums={setAquariums}

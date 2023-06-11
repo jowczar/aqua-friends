@@ -3,24 +3,23 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { HealthStatus } from "@/enums/HealthStatus.enum";
 import DataTable from "@/components/DataTables";
 import { getUserData } from "./data.logic";
 import { Firestore, updateDoc, doc } from "firebase/firestore";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
+import { getAquariumsColumns } from "./aquariums.columns";
+import { AquaViewAquariumDataProps } from "../../page";
 
 interface UserAquaViewPageProps {
   params: { id: string };
 }
 
-export type UserAquariumDataProps = {
-  id: string;
-  aquariumTitle: string;
-  healthStatus: HealthStatus;
-  aquariumSize: string;
-};
+export type UserAquariumDataProps = Omit<
+  AquaViewAquariumDataProps,
+  "name" | "email" | "avatar"
+>;
 
 type UserData = {
   id: string;
@@ -59,6 +58,8 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   useEffect(() => {
     handleUserData();
   }, [handleUserData, loggedUserWithDetails]);
+
+  const aquariumColumns = getAquariumsColumns(aquariumsData, setAquariumsData);
 
   const handlePreviousButton = () => {
     router.push("/view");
@@ -161,11 +162,9 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
       </div>
 
       <DataTable
-        data={aquariumsData}
-        columns={aquariumsColumns}
+        rowsData={aquariumsData}
+        columnsData={aquariumsColumns}
         itemsPerPage={10}
-        allowAquaViewAquariumsActions={true}
-        allowImages={false}
       />
     </div>
   );

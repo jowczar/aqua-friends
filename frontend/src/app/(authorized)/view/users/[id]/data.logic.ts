@@ -10,13 +10,7 @@ import {
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import { LoggedUser } from "@/hooks/useUserWithDetails";
 import { getUserAvatar } from "@/common/helpers";
-
-export type UserAquariumDataProps = {
-  id: string;
-  aquariumTitle: string;
-  healthStatus: HealthStatus;
-  aquariumSize: string;
-};
+import { UserAquariumDataProps } from "./page";
 
 type UserData = {
   id: string;
@@ -66,6 +60,7 @@ export const getUserData = async (
       aquariumTitle: data.name,
       healthStatus,
       aquariumSize,
+      isLiked: loggedUserWithDetails?.fav_aquariums?.includes(doc.id) || false,
     };
   });
 
