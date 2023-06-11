@@ -77,7 +77,7 @@ router.post(
 
       const server = StreamChat.getInstance(apiKey, apiSecret);
       await server.upsertUsers([me, otherUser]);
-      const channel = await server.channel("messaging", {
+      const channel = server.channel("messaging", {
         members: [me.id, otherUser.id],
       });
       await channel.create(); // Stream ensures that only one channel exists
