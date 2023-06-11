@@ -59,7 +59,7 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
     handleUserData();
   }, [handleUserData, loggedUserWithDetails]);
 
-  const aquariumColumns = getAquariumsColumns(aquariumsData, setAquariumsData);
+  const aquariumsColumns = getAquariumsColumns(aquariumsData, setAquariumsData);
 
   const handlePreviousButton = () => {
     router.push("/view");
