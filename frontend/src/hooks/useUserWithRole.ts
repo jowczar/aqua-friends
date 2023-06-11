@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export type User = {
+  uid: string;
   displayName: string | null;
   email: string | null;
   photoURL: string | null;
@@ -21,6 +22,7 @@ const useUserWithRole = () => {
 
       setIdToken(idToken);
       setUserWithRole({
+        uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
