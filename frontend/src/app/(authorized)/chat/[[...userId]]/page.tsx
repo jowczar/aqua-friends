@@ -24,9 +24,10 @@ import Loader from "@/components/Loader";
 
 import "./chat.styles.css";
 
-const App = () => {
+const App = ({ params: { userId } }: { params: { userId: string } }) => {
   const [client, setClient] = useState<StreamChat | null>(null);
   const { chatToken, userId: chatUserId, username } = useChat();
+  console.log({ userId });
 
   const filters = {
     type: "messaging",
