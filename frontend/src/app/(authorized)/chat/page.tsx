@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { StreamChat } from "stream-chat";
+import {
+  StreamChat,
+  ChannelSort,
+  ChannelFilters,
+  ChannelOptions,
+} from "stream-chat";
 import {
   Chat,
   Channel,
@@ -20,11 +25,14 @@ import Loader from "@/components/Loader";
 
 const App = () => {
   const [client, setClient] = useState<StreamChat | null>(null);
-  const [channel, setChannel] = useState<Channel | null>(null);
   const { chatToken, userId: chatUserId, username } = useChat();
-  const filters = { type: "messaging", members: { $in: [chatUserId] } };
-  const options = { state: true, presence: true, limit: 10 };
-  const sort = { last_message_at: -1 };
+
+  const filters = {
+    type: "messaging",
+    members: { $in: [chatUserId] },
+  } as ChannelFilters;
+  const options = { state: true, presence: true, limit: 10 } as ChannelOptions;
+  const sort = { last_message_at: -1 } as ChannelSort;
 
   useEffect(() => {
     if (!chatToken || !chatUserId) return;
@@ -39,9 +47,6 @@ const App = () => {
     };
 
     newClient.on("connection.changed", handleConnectionChange);
-
-    console.log("chatToken", chatToken, "chatUserId", chatUserId);
-
     newClient.connectUser(
       {
         id: chatUserId,
@@ -93,7 +98,8 @@ const App = () => {
     <div className="flex flex-col md:flex-row w-full md:h-[calc(100vh-4rem)]">
       <Chat client={client}>
         <ChannelList filters={filters} sort={sort} options={options} />
-        <Channel channel={channel}>
+        {/* TODO: channel={channel} can be used to set a specific channel e.g. when we are redirected here from the list of users */}
+        <Channel>
           <Window>
             <ChannelHeader />
             <MessageList />
