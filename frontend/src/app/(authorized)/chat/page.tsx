@@ -17,11 +17,12 @@ import {
   Thread,
   Window,
 } from "stream-chat-react";
-
-import "./chat.styles.css";
 import { toast } from "react-toastify";
+
 import useChat from "@/hooks/useChat";
 import Loader from "@/components/Loader";
+
+import "./chat.styles.css";
 
 const App = () => {
   const [client, setClient] = useState<StreamChat | null>(null);
@@ -56,16 +57,6 @@ const App = () => {
     );
 
     //
-    // const newClient2 = new StreamChat(
-    //   process.env.NEXT_PUBLIC_STREAM_API_KEY || ""
-    // );
-    // newClient2.connectUser(
-    //   {
-    //     id: "trey-anastasio",
-    //     name: "Trey Anastasio",
-    //   },
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidHJleS1hbmFzdGFzaW8ifQ.y5iiUhhjxNYqpIRVKLCJu_pM0TSLZp02ThLhk4ZGg90"
-    // );
     // const channel = newClient.channel("messaging", {
     //   image: "man.png",
     //   name: "Trey Anastasio",
@@ -82,7 +73,7 @@ const App = () => {
 
     return () => {
       newClient.off("connection.changed", handleConnectionChange);
-      newClient.disconnectUser().then(() => console.log("connection closed"));
+      newClient.disconnectUser();
     };
   }, [chatToken, chatUserId, username]);
 
