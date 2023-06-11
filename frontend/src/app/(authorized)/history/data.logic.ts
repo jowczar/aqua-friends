@@ -8,7 +8,7 @@ import {
 import { DocumentData } from "firebase/firestore";
 import { formatDate } from "@/common/helpers";
 
-export type LogsData = {
+export type HistoryLogsData = {
   id: string;
   name: string;
   message: string;
@@ -18,11 +18,11 @@ export type LogsData = {
 export type StartDate = Date | null;
 export type EndDate = Date | null;
 
-const getLogs = async (
+const getHistoryLogs = async (
   firestore: Firestore,
   startDate: StartDate,
   endDate: EndDate
-): Promise<LogsData[]> => {
+): Promise<HistoryLogsData[]> => {
   const logsRef = collection(firestore, "logs");
 
   const filterQuery = query(
@@ -33,20 +33,20 @@ const getLogs = async (
 
   const snapshot = await getDocs(startDate && endDate ? filterQuery : logsRef);
 
-  const logsData = snapshot.docs.map((doc: DocumentData) => {
+  const historyLogsData = snapshot.docs.map((doc: DocumentData) => {
     const data = doc.data();
-    const id = doc.id;
+    const historyLogId = doc.id;
     const formattedDate = formatDate(data.date);
 
     return {
-      id,
+      id: historyLogId,
       name: data.service_name,
       message: data.message,
       date: formattedDate,
     };
   });
 
-  return logsData;
+  return historyLogsData;
 };
 
-export default getLogs;
+export default getHistoryLogs;

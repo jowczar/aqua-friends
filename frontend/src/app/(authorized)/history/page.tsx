@@ -6,8 +6,12 @@ import useFirestore from "@/hooks/useFirestore";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import getLogs, { EndDate, LogsData, StartDate } from "./data.logic";
-import { getHistoryColumns } from "./history.columns";
+import getHistoryLogs, {
+  EndDate,
+  HistoryLogsData,
+  StartDate,
+} from "./data.logic";
+import { getHistoryLogsColumns } from "./history.columns";
 
 type DateRange = [StartDate, EndDate];
 
@@ -34,18 +38,20 @@ export default function History() {
 
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
-  const [logs, setLogs] = useState<LogsData[]>([]);
 
-  const handleLogs = useCallback(async () => {
-    const logsData = await getLogs(firestore, startDate, endDate);
-    setLogs(logsData);
+  const [historyLogs, setHistoryLogs] = useState<HistoryLogsData[]>([]);
+
+  const handleHistoryLogs = useCallback(async () => {
+    const historyLogsData = await getHistoryLogs(firestore, startDate, endDate);
+
+    setHistoryLogs(historyLogsData);
   }, [firestore, startDate, endDate]);
 
   useEffect(() => {
-    handleLogs();
-  }, [startDate, endDate, handleLogs]);
+    handleHistoryLogs();
+  }, [startDate, endDate, handleHistoryLogs]);
 
-  const historyColumns = getHistoryColumns();
+  const historyLogsColumns = getHistoryLogsColumns();
 
   return (
     <div>
@@ -65,8 +71,8 @@ export default function History() {
         </div>
 
         <DataTable
-          columnsData={historyColumns}
-          rowsData={logs}
+          columnsData={historyLogsColumns}
+          rowsData={historyLogs}
           itemsPerPage={10}
         />
       </div>
