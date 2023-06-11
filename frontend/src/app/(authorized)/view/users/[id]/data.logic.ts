@@ -8,7 +8,7 @@ import {
   Firestore,
 } from "firebase/firestore";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
-import { LoggedUser } from "@/hooks/useUserWithDetails";
+import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
 import { getUserAvatar } from "@/common/helpers";
 import { UserAquariumDataProps } from "./page";
 
@@ -23,7 +23,7 @@ type UserData = {
 export const getUserData = async (
   firestore: Firestore,
   userIdFromParams: string,
-  loggedUserWithDetails: LoggedUser
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ): Promise<{ userData: UserData; aquariums: UserAquariumDataProps[] }> => {
   const userId = userIdFromParams;
   const userRef = doc(firestore, "users", userId);
@@ -31,7 +31,7 @@ export const getUserData = async (
   const userSnapshot = await getDoc(userRef);
   const user = userSnapshot.data();
 
-  const isFriend = loggedUserWithDetails?.friends?.includes(userId) || false;
+  const isFriend = loggedInUserWithDetails?.friends?.includes(userId) || false;
 
   const avatarUrl = await getUserAvatar(userId);
 
@@ -60,7 +60,8 @@ export const getUserData = async (
       aquariumTitle: data.name,
       healthStatus,
       aquariumSize,
-      isLiked: loggedUserWithDetails?.fav_aquariums?.includes(doc.id) || false,
+      isLiked:
+        loggedInUserWithDetails?.fav_aquariums?.includes(doc.id) || false,
     };
   });
 

@@ -3,7 +3,7 @@
 import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import {
   generateFirstRowData,
@@ -34,11 +34,11 @@ export default function AquariumAquaViewPage({
 
   const { user } = useUserWithRole();
 
-  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const { aquariumData, getAquariumData, setAquariumData } = useAquariumData(
     params.id,
-    loggedUserWithDetails
+    loggedInUserWithDetails
   );
 
   useEffect(() => {
@@ -114,21 +114,21 @@ export default function AquariumAquaViewPage({
   );
 
   const handleLikeButton = async () => {
-    if (!loggedUserWithDetails) return;
+    if (!loggedInUserWithDetails) return;
 
-    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+    const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
     let newFavAquariumList: string[];
     let isLiked: boolean;
 
     if (aquariumData?.isLiked) {
-      newFavAquariumList = loggedUserWithDetails.fav_aquariums.filter(
+      newFavAquariumList = loggedInUserWithDetails.fav_aquariums.filter(
         (friendId: string) => friendId !== aquariumData.id
       );
       isLiked = false;
     } else {
       newFavAquariumList = [
-        ...loggedUserWithDetails.fav_aquariums,
+        ...loggedInUserWithDetails.fav_aquariums,
         aquariumData?.id || "",
       ];
       isLiked = true;
