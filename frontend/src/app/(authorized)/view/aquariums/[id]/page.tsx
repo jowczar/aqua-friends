@@ -11,7 +11,7 @@ import {
   generateThirdRowData,
   useAquariumData,
 } from "./data.logic";
-import { AquariumDataProps } from "../../page";
+import { AquaViewAquariumDataProps } from "../../page";
 
 interface AquariumAquaViewPageProps {
   params: { id: string };

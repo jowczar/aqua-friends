@@ -7,13 +7,14 @@ import FilterDropdown from "@/components/FilterDropdown";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
-import { User } from "firebase/auth";
 
 import { useEffect, useState } from "react";
 import { useAquariumData, useUserData } from "./data.logic";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
+import { useUsersColumns } from "./users.columns";
+import { getAquariumsColumns } from "./aquariums.columns";
 
 //TODO: types here needs to be changed
 type AquariumData = {
@@ -48,15 +49,6 @@ export type AquariumFilter = {
   value: AquariumFilterOptions;
 };
 
-const aquariumsColumns = [
-  "Owner",
-  "Aquarium Title",
-  "Aquarium Size",
-  "Health Status",
-];
-
-const usersColumns = ["User", "Aquariums"];
-
 const userFilterOptions = [
   {
     label: "Show all users",
@@ -83,7 +75,7 @@ export default function View() {
 
   const { user } = useUserWithRole();
 
-  const loggedUser = useUserWithDetails(firestore, user?.uid)!;
+  const loggedUser = useUserWithDetails(firestore, user?.uid);
 
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
@@ -93,13 +85,21 @@ export default function View() {
     aquariumFilterOptions[0]
   );
 
-  const { aquariums } = useAquariumData(
+  const { aquariums, setAquariums } = useAquariumData(
     firestore,
     currentAquariumFilter,
     loggedUser
   );
 
-  const { users } = useUserData(firestore, currentUserFilter, loggedUser);
+  const { users, setUsers } = useUserData(
+    firestore,
+    currentUserFilter,
+    loggedUser
+  );
+
+  const usersColumns = useUsersColumns(users, setUsers);
+
+  const aquariumsColumns = getAquariumsColumns(aquariums, setAquariums);
 
   return (
     <div>
@@ -123,13 +123,9 @@ export default function View() {
           </div>
         </div>
         <DataTable
-          data={isUsersView ? users : aquariums}
-          columns={isUsersView ? usersColumns : aquariumsColumns}
+          rowsData={isUsersView ? users : aquariums}
+          columnsData={isUsersView ? usersColumns : aquariumsColumns}
           itemsPerPage={10}
-          allowAquaViewUsersActions={isUsersView ? true : false}
-          allowAquaViewAquariumsActions={isUsersView ? false : true}
-          allowImages={true}
-          loggedUser={loggedUser}
         />
       </div>
     </div>
