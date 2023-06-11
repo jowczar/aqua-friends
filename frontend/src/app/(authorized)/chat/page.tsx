@@ -12,7 +12,8 @@ import {
   Thread,
   Window,
 } from "stream-chat-react";
-import "@stream-io/stream-chat-css/dist/css/index.css";
+
+import "./chat.styles.css";
 
 const filters = { type: "messaging" };
 const options = { state: true, presence: true, limit: 10 };
@@ -59,6 +60,12 @@ const App = () => {
       members: ["devuser", "trey-anastasio"],
       // option to add custom fields
     });
+    newClient.channel("messaging", {
+      image: "man.png",
+      name: "Another channel",
+      members: ["devuser", "trey-anastasio"],
+      // option to add custom fields
+    });
     setChannel(channel);
     //
 
@@ -71,17 +78,19 @@ const App = () => {
   if (!client) return null;
 
   return (
-    <Chat client={client}>
-      <ChannelList filters={filters} sort={sort} options={options} />
-      <Channel channel={channel}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+    <div className="flex flex-row w-full h-[calc(100vh-4rem)]">
+      <Chat client={client}>
+        <ChannelList filters={filters} sort={sort} options={options} />
+        <Channel channel={channel}>
+          <Window>
+            <ChannelHeader />
+            <MessageList />
+            <MessageInput />
+          </Window>
+          <Thread />
+        </Channel>
+      </Chat>
+    </div>
   );
 };
 
