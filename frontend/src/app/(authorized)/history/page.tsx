@@ -7,8 +7,7 @@ import { forwardRef, useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import getLogs, { EndDate, LogsData, StartDate } from "./data.logic";
-
-const historyColumns = ["Service name", "Log data", "Date"];
+import { getHistoryColumns } from "./history.columns";
 
 type DateRange = [StartDate, EndDate];
 
@@ -46,10 +45,12 @@ export default function History() {
     handleLogs();
   }, [startDate, endDate, handleLogs]);
 
+  const historyColumns = getHistoryColumns();
+
   return (
     <div>
       <div className="my-10 px-5 md:px-20">
-        <div className="w-64">
+        <div className="w-64 mb-4">
           <DatePicker
             dateFormat={"dd.MM.yyyy"}
             selectsRange={true}
@@ -64,10 +65,9 @@ export default function History() {
         </div>
 
         <DataTable
-          columns={historyColumns}
-          data={logs}
+          columnsData={historyColumns}
+          rowsData={logs}
           itemsPerPage={10}
-          allowImages={false}
         />
       </div>
     </div>
