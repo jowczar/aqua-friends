@@ -6,9 +6,11 @@
 
 .str-chat-channel {
   flex-grow: 1;
+  padding: 1rem;
+  padding-top: 0.5rem;
 }
 
 .str-chat__channel-preview-messenger {
-  padding-left: 1rem;
+  padding: 1rem;
   padding-right: 1.5rem;
 }
