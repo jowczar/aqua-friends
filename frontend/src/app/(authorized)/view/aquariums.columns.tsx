@@ -2,6 +2,7 @@ import AquaViewAquariumsActions from "@/components/DataTables/AquaViewAquariumsA
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import Image from "next/image";
 import { AquaViewAquariumDataProps } from "./page";
+import { Row } from "react-table";
 
 export const getAquariumsColumns = (
   aquariums: AquaViewAquariumDataProps[],
@@ -14,14 +15,13 @@ export const getAquariumsColumns = (
       Header: "Owner",
       accessor: "name",
       centerHeader: false,
-      Cell: ({ row }: any) => {
-        const item = row.original;
+      Cell: ({ row }: { row: Row<AquaViewAquariumDataProps> }) => {
         return (
           <div className="flex items-center">
             <div className="flex-shrink-0 h-15 w-15 hidden xl:block">
               <Image
                 className="h-15 w-15 rounded-full"
-                src={item.avatar ? item.avatar : "man.png"}
+                src={row.original.avatar ? row.original.avatar : "man.png"}
                 alt="Default avatar"
                 height={62}
                 width={62}
@@ -29,10 +29,10 @@ export const getAquariumsColumns = (
             </div>
             <div className="text-left ml-4">
               <div className="text-xs lg:text-sm font-medium text-gray-900 md:break-all">
-                {item.name}
+                {row.original.name}
               </div>
               <div className="text-xs lg:text-sm text-gray-500 whitespace-normal md:break-all">
-                {item.email}
+                {row.original.email}
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const getAquariumsColumns = (
       Header: "Health Status",
       accessor: "healthStatus",
       centerHeader: true,
-      Cell: ({ row }: any) => (
+      Cell: ({ row }: { row: Row<AquaViewAquariumDataProps> }) => (
         <span
           className={`px-4 xl:px-8 py-2 inline-flex text-xs xl:text-sm leading-5 font-semibold rounded-full ${
             row.original?.healthStatus === HealthStatus.GOOD
@@ -70,7 +70,7 @@ export const getAquariumsColumns = (
       Header: "",
       accessor: "actions",
       centerHeader: false,
-      Cell: ({ row }: any) => (
+      Cell: ({ row }: { row: Row<AquaViewAquariumDataProps> }) => (
         <div className="flex justify-center">
           <AquaViewAquariumsActions<AquaViewAquariumDataProps>
             singleAquarium={row.original}

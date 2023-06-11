@@ -17,7 +17,7 @@ import {
   AquariumFilter,
   UserFilter,
 } from "./page";
-import { LoggedUser } from "@/hooks/useUserWithDetails";
+import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { getUserAvatar } from "@/common/helpers";
@@ -36,7 +36,7 @@ export const getAndMapAquariumData = async (
   data: DocumentData,
   userId: string,
   aquariumId: string,
-  loggedUser: LoggedUser
+  loggeInUserWithDetails: LoggedInUserWithDetails
 ) => {
   const aquariumSize =
     (data.width / 100) * (data.height / 100) * (data.length / 100) + "m^3";
@@ -60,7 +60,8 @@ export const getAndMapAquariumData = async (
     aquariumTitle: data.name,
     healthStatus,
     aquariumSize,
-    isLiked: loggedUser?.fav_aquariums?.includes(aquariumId) || false,
+    isLiked:
+      loggeInUserWithDetails?.fav_aquariums?.includes(aquariumId) || false,
     aquariumData: {
       fishes: data?.fishes,
       pump: data?.pump,
@@ -76,7 +77,7 @@ export const getAndMapAquariumData = async (
 export const useAquariumData = (
   firestore: Firestore,
   currentAquariumFilter: AquariumFilter,
-  loggedUser: LoggedUser
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ) => {
   const [aquariums, setAquariums] = useState<AquaViewAquariumDataProps[]>([]);
 
@@ -96,7 +97,7 @@ export const useAquariumData = (
           data,
           userId,
           aquariumId,
-          loggedUser
+          loggedInUserWithDetails
         );
       })
     );
@@ -109,11 +110,11 @@ export const useAquariumData = (
     });
 
     setAquariums(filteredAquariums);
-  }, [firestore, loggedUser, currentAquariumFilter.value]);
+  }, [firestore, loggedInUserWithDetails, currentAquariumFilter.value]);
 
   useEffect(() => {
     getAquariums();
-  }, [getAquariums, loggedUser]);
+  }, [getAquariums, loggedInUserWithDetails]);
 
   return { aquariums, setAquariums };
 };
@@ -121,7 +122,7 @@ export const useAquariumData = (
 export const useUserData = (
   firestore: Firestore,
   currentUserFilter: UserFilter,
-  loggedUser: LoggedUser | null
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ) => {
   const [users, setUsers] = useState<AquaViewUserData[]>([]);
 
@@ -145,7 +146,8 @@ export const useUserData = (
         });
 
         const aquariums = aquariumNames.join(", ");
-        const isFriend = loggedUser?.friends?.includes(userId) || false;
+        const isFriend =
+          loggedInUserWithDetails?.friends?.includes(userId) || false;
 
         const avatarUrl = await getUserAvatar(userId);
 
@@ -168,11 +170,11 @@ export const useUserData = (
     });
 
     setUsers(filteredUsers);
-  }, [currentUserFilter.value, firestore, loggedUser?.friends]);
+  }, [currentUserFilter.value, firestore, loggedInUserWithDetails?.friends]);
 
   useEffect(() => {
     getUsers();
-  }, [currentUserFilter, getUsers, loggedUser]);
+  }, [currentUserFilter, getUsers, loggedInUserWithDetails]);
 
   return { users, setUsers };
 };

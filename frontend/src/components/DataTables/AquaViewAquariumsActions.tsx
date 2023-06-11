@@ -27,25 +27,25 @@ const AquaViewAquariumsActions = <T extends BasicAquariumProps>({
 
   const { user } = useUserWithRole();
 
-  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const viewButtonHandler = () => {
     router.push(`/view/aquariums/${singleAquarium.id}`);
   };
 
   const handleFavoriteChange = async (aquariumId: string) => {
-    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+    const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
     let newFavoriteList: string[];
     let isFavorite: boolean;
 
     if (singleAquarium.isLiked) {
-      newFavoriteList = loggedUserWithDetails.fav_aquariums.filter(
+      newFavoriteList = loggedInUserWithDetails.fav_aquariums.filter(
         (favId) => favId !== aquariumId
       );
       isFavorite = false;
     } else {
-      newFavoriteList = [...loggedUserWithDetails.fav_aquariums, aquariumId];
+      newFavoriteList = [...loggedInUserWithDetails.fav_aquariums, aquariumId];
       isFavorite = true;
     }
 

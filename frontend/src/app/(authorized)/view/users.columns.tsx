@@ -1,8 +1,9 @@
 import AquaViewUsersActions from "@/components/DataTables/AquaViewUsersActions";
 import Image from "next/image";
 import { AquaViewUserData } from "./data.logic";
+import { Row } from "react-table";
 
-export const useUsersColumns = (
+export const getUsersColumns = (
   users: AquaViewUserData[],
   setUsers: React.Dispatch<React.SetStateAction<AquaViewUserData[]>>
 ) => {
@@ -11,14 +12,13 @@ export const useUsersColumns = (
       Header: "User",
       accessor: "name",
       centerHeader: false,
-      Cell: ({ row }: any) => {
-        const item = row.original;
+      Cell: ({ row }: { row: Row<AquaViewUserData> }) => {
         return (
           <div className="flex items-center">
             <div className="flex-shrink-0 h-15 w-15 hidden xl:block">
               <Image
                 className="h-15 w-15 rounded-full"
-                src={item.avatar ? item.avatar : "man.png"}
+                src={row.original.avatar ? row.original.avatar : "man.png"}
                 alt="Default avatar"
                 height={62}
                 width={62}
@@ -26,10 +26,10 @@ export const useUsersColumns = (
             </div>
             <div className="text-left ml-4">
               <div className="text-xs lg:text-sm font-medium text-gray-900 md:break-all">
-                {item.name}
+                {row.original.name}
               </div>
               <div className="text-xs lg:text-sm text-gray-500 whitespace-normal md:break-all">
-                {item.email}
+                {row.original.email}
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@ export const useUsersColumns = (
       Header: "",
       accessor: "actions",
       centerHeader: true,
-      Cell: ({ row }: any) => (
+      Cell: ({ row }: { row: Row<AquaViewUserData> }) => (
         <div className="flex justify-center">
           <AquaViewUsersActions
             singleUser={row.original}

@@ -43,7 +43,7 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
 
   const { user } = useUserWithRole();
 
-  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const [aquariumsData, setAquariumsData] = useState<UserAquariumDataProps[]>(
     []
@@ -54,16 +54,16 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
     const { userData, aquariums } = await getUserData(
       firestore as Firestore,
       params.id,
-      loggedUserWithDetails
+      loggedInUserWithDetails
     );
 
     setUserData(userData);
     setAquariumsData(aquariums);
-  }, [firestore, loggedUserWithDetails, params.id]);
+  }, [firestore, loggedInUserWithDetails, params.id]);
 
   useEffect(() => {
     handleUserData();
-  }, [handleUserData, loggedUserWithDetails]);
+  }, [handleUserData, loggedInUserWithDetails]);
 
   const aquariumsColumns = getAquariumsColumns(aquariumsData, setAquariumsData);
 
@@ -72,20 +72,20 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   };
 
   const handleFriendButton = async () => {
-    if (!loggedUserWithDetails) return;
+    if (!loggedInUserWithDetails) return;
 
-    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+    const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
     let newFriendsList: string[];
     let isFriend: boolean;
 
     if (userData?.isFriend) {
-      newFriendsList = loggedUserWithDetails.friends.filter(
+      newFriendsList = loggedInUserWithDetails.friends.filter(
         (friendId: string) => friendId !== userData.id
       );
       isFriend = false;
     } else {
-      newFriendsList = [...loggedUserWithDetails.friends, userData?.id || ""];
+      newFriendsList = [...loggedInUserWithDetails.friends, userData?.id || ""];
       isFriend = true;
     }
 

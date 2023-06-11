@@ -1,7 +1,7 @@
 import { Firestore, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export type LoggedUser = {
+export type LoggedInUserWithDetails = {
   email: string;
   fav_aquariums: string[];
   friends: string[];
@@ -9,7 +9,7 @@ export type LoggedUser = {
   username: string;
 };
 
-const defaultLoggedUser: LoggedUser = {
+const defaultLoggedUser: LoggedInUserWithDetails = {
   email: "",
   fav_aquariums: [],
   friends: [],
@@ -21,7 +21,8 @@ export const useUserWithDetails = (
   firestore: Firestore,
   userId: string | undefined
 ) => {
-  const [loggedUser, setLoggedUser] = useState<LoggedUser>(defaultLoggedUser);
+  const [userWithDetails, setUserWithDetails] =
+    useState<LoggedInUserWithDetails>(defaultLoggedUser);
 
   useEffect(() => {
     if (userId) {
@@ -29,7 +30,7 @@ export const useUserWithDetails = (
 
       const unsubscribe = onSnapshot(docRef, (doc) => {
         const data = doc.data();
-        setLoggedUser({
+        setUserWithDetails({
           id: doc.id,
           email: data?.email,
           fav_aquariums: data?.fav_aquariums,
@@ -42,5 +43,5 @@ export const useUserWithDetails = (
     }
   }, [firestore, userId]);
 
-  return loggedUser;
+  return userWithDetails;
 };

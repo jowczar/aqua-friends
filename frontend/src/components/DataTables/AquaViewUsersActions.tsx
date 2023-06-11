@@ -22,7 +22,7 @@ const AquaViewUsersActions = ({
 
   const { user } = useUserWithRole();
 
-  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const viewButtonHandler = () => {
     router.push(`/view/users/${singleUser.id}`);
@@ -33,18 +33,18 @@ const AquaViewUsersActions = ({
   };
 
   const handleFriendChange = async (itemId: string) => {
-    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+    const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
     let newFriendsList: string[];
     let isFriend: boolean;
 
     if (singleUser.isFriend) {
-      newFriendsList = loggedUserWithDetails.friends.filter(
+      newFriendsList = loggedInUserWithDetails.friends.filter(
         (friendId) => friendId !== itemId
       );
       isFriend = false;
     } else {
-      newFriendsList = [...loggedUserWithDetails.friends, itemId];
+      newFriendsList = [...loggedInUserWithDetails.friends, itemId];
       isFriend = true;
     }
 

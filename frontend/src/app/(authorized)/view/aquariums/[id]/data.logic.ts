@@ -4,7 +4,7 @@ import { DocumentData, doc, getDoc } from "firebase/firestore";
 import useFirestore from "@/hooks/useFirestore";
 import { CardData } from "./page";
 import { getAndMapAquariumData } from "../../data.logic";
-import { LoggedUser } from "@/hooks/useUserWithDetails";
+import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumDataProps } from "../../page";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 
@@ -30,7 +30,7 @@ const initialAquariumData: AquariumDataProps = {
 
 export const useAquariumData = (
   aquariumIdFromParams: string,
-  loggedUserWithDetails: LoggedUser
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ) => {
   const firestore = useFirestore();
 
@@ -50,11 +50,11 @@ export const useAquariumData = (
       aquariumData as DocumentData,
       userId,
       aquariumId,
-      loggedUserWithDetails
+      loggedInUserWithDetails
     );
 
     setAquariumData(mappedAquariumData);
-  }, [firestore, aquariumIdFromParams, loggedUserWithDetails]);
+  }, [firestore, aquariumIdFromParams, loggedInUserWithDetails]);
 
   return { aquariumData, getAquariumData, setAquariumData };
 };

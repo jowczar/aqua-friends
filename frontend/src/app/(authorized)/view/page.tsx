@@ -13,7 +13,7 @@ import { useAquariumData, useUserData } from "./data.logic";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
-import { useUsersColumns } from "./users.columns";
+import { getUsersColumns } from "./users.columns";
 import { getAquariumsColumns } from "./aquariums.columns";
 
 //TODO: types here needs to be changed
@@ -99,7 +99,7 @@ export default function View() {
     loggedUser
   );
 
-  const usersColumns = useUsersColumns(users, setUsers);
+  const usersColumns = getUsersColumns(users, setUsers);
 
   const aquariumsColumns = getAquariumsColumns(aquariums, setAquariums);
 
