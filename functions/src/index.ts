@@ -1,11 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import { logger } from "firebase-functions";
 import express from "express";
 import cors from "cors";
 
 import users from "./users";
+import chat from "./chat";
 import { Claims } from "./utils/types";
-import { logger } from "firebase-functions";
 
 admin.initializeApp();
 
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors({ origin: true }));
 
 app.use("/users", users);
+app.use("/chat", chat);
 
 export const api = functions.https.onRequest(app);
 export const addDefaultUserRole = functions.auth
