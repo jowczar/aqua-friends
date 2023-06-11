@@ -1,16 +1,31 @@
 /* eslint-disable react/jsx-key */
-import { useMemo, useState } from "react";
-import { useTable } from "react-table";
+import { useState } from "react";
+import { Row, useTable } from "react-table";
 import Pagination from "../Pagination";
 import { paginationDataHandler } from "./helpers";
 
-type DataTableProps = {
-  rowsData: Record<string, any>[];
-  columnsData: any[];
+type CellProps<T extends Record<string, any>> = {
+  row: Row<T>;
+};
+
+type ColumnsData<T extends Record<string, any>> = {
+  Header: string;
+  accessor: string;
+  centerHeader: boolean;
+  Cell?: (props: CellProps<T>) => JSX.Element;
+};
+
+type DataTableProps<T extends Record<string, any>> = {
+  rowsData: T[];
+  columnsData: ColumnsData<T>[];
   itemsPerPage: number;
 };
 
-const DataTable = ({ rowsData, columnsData, itemsPerPage }: DataTableProps) => {
+const DataTable = <T extends Record<string, any> = Record<string, any>>({
+  rowsData,
+  columnsData,
+  itemsPerPage,
+}: DataTableProps<T>) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const paginationData = paginationDataHandler(

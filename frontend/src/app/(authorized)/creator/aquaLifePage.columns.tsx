@@ -50,7 +50,6 @@ export const getAquaLifeColumns = () => {
       accessor: "healthStatus",
       centerHeader: true,
       Cell: ({ row }: { row: Row<AquaLifeProps> }) => {
-        console.log("co w tym row jest", row);
         return (
           <span
             className={` px-2 xl:px-8 py-2 inline-flex  text-xs xl:text-sm leading-5 font-semibold rounded-full ${
