@@ -2,6 +2,7 @@ import AquaViewAquariumsActions from "@/components/DataTables/AquaViewAquariumsA
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 
 import { UserAquariumDataProps } from "./page";
+import { Row } from "react-table";
 
 export const getAquariumsColumns = (
   aquariums: UserAquariumDataProps[],
@@ -22,7 +23,7 @@ export const getAquariumsColumns = (
       Header: "Health Status",
       accessor: "healthStatus",
       centerHeader: true,
-      Cell: ({ row }: any) => (
+      Cell: ({ row }: { row: Row<UserAquariumDataProps> }) => (
         <span
           className={`px-4 xl:px-8 py-2 inline-flex text-xs xl:text-sm leading-5 font-semibold rounded-full ${
             row.original?.healthStatus === HealthStatus.GOOD
@@ -38,7 +39,7 @@ export const getAquariumsColumns = (
       Header: "",
       accessor: "actions",
       centerHeader: false,
-      Cell: ({ row }: any) => (
+      Cell: ({ row }: { row: Row<UserAquariumDataProps> }) => (
         <div className="flex justify-center">
           <AquaViewAquariumsActions<UserAquariumDataProps>
             singleAquarium={row.original}

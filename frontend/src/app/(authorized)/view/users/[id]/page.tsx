@@ -29,7 +29,13 @@ type UserData = {
   isFriend: boolean;
 };
 
-const aquariumsColumns = ["Aquarium Title", "Aquarium Size", "Health Status"];
+const initialUserData: UserData = {
+  id: "",
+  name: "",
+  avatar: "",
+  email: "",
+  isFriend: false,
+};
 
 export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const router = useRouter();
@@ -42,7 +48,7 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const [aquariumsData, setAquariumsData] = useState<UserAquariumDataProps[]>(
     []
   );
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData>(initialUserData);
 
   const handleUserData = useCallback(async () => {
     const { userData, aquariums } = await getUserData(
