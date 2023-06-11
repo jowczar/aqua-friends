@@ -1,17 +1,24 @@
 import { useCallback, useState } from "react";
 import { DocumentData, doc, getDoc } from "firebase/firestore";
-import { AquaViewAquariumDataProps } from "../../page";
+
 import useFirestore from "@/hooks/useFirestore";
 import { CardData } from "./page";
 import { getAndMapAquariumData } from "../../data.logic";
+import { LoggedUser } from "@/hooks/useUserWithDetails";
+import { AquariumDataProps } from "../../page";
 
-export const useAquariumData = (params: any) => {
+export const useAquariumData = (
+  aquariumIdFromParams: string,
+  loggedUserWithDetails: LoggedUser
+) => {
   const firestore = useFirestore();
-  const [aquariumData, setAquariumData] =
-    useState<AquaViewAquariumDataProps | null>(null);
+
+  const [aquariumData, setAquariumData] = useState<AquariumDataProps | null>(
+    null
+  );
 
   const getAquariumData = useCallback(async () => {
-    const aquariumId = params.id;
+    const aquariumId = aquariumIdFromParams;
     const aquariumRef = doc(firestore, "aquariums", aquariumId);
 
     const aquariumSnapshot = await getDoc(aquariumRef);
@@ -22,17 +29,18 @@ export const useAquariumData = (params: any) => {
       firestore,
       aquariumData as DocumentData,
       userId,
-      aquariumId
+      aquariumId,
+      loggedUserWithDetails
     );
 
     setAquariumData(mappedAquariumData);
-  }, [firestore, params.id]);
+  }, [firestore, aquariumIdFromParams, loggedUserWithDetails]);
 
-  return { aquariumData, getAquariumData };
+  return { aquariumData, getAquariumData, setAquariumData };
 };
 
 export const generateFirstRowData = (
-  aquariumData: AquaViewAquariumDataProps | null
+  aquariumData: AquariumDataProps | null
 ): CardData[] => [
   {
     column: "Aquarium title",
@@ -52,7 +60,7 @@ export const generateFirstRowData = (
 ];
 
 export const generateSecondRowData = (
-  aquariumData: AquaViewAquariumDataProps | null
+  aquariumData: AquariumDataProps | null
 ): CardData[] => [
   {
     column: "Pump",
@@ -72,7 +80,7 @@ export const generateSecondRowData = (
 ];
 
 export const generateThirdRowData = (
-  aquariumData: AquaViewAquariumDataProps | null
+  aquariumData: AquariumDataProps | null
 ): CardData[] => [
   {
     column: "Plants",

@@ -3,20 +3,25 @@ import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 import useFirestore from "@/hooks/useFirestore";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
-import { AquariumDataProps } from "@/app/(authorized)/view/page";
+
 import useUserWithRole from "@/hooks/useUserWithRole";
 
-export type AquaViewAquariumsActionsProps = {
-  singleAquarium: AquariumDataProps;
-  aquariums: AquariumDataProps[];
-  setAquariums: React.Dispatch<React.SetStateAction<AquariumDataProps[]>>;
+interface BasicAquariumProps {
+  id: string;
+  isLiked: boolean;
+}
+
+export type AquariumActionsProps<T extends BasicAquariumProps> = {
+  singleAquarium: T;
+  aquariums: T[];
+  setAquariums: React.Dispatch<React.SetStateAction<T[]>>;
 };
 
-const AquaViewAquariumsActions = ({
+const AquaViewAquariumsActions = <T extends BasicAquariumProps>({
   singleAquarium,
   aquariums,
   setAquariums,
-}: AquaViewAquariumsActionsProps) => {
+}: AquariumActionsProps<T>) => {
   const router = useRouter();
   const firestore = useFirestore();
 

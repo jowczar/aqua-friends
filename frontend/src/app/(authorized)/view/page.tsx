@@ -39,6 +39,8 @@ export type AquariumDataProps = {
   aquariumData: AquariumData;
 };
 
+export type AquaViewAquariumDataProps = Omit<AquariumDataProps, "aquariumData">;
+
 export type UserFilter = {
   label: string;
   value: UserFilterOptions;

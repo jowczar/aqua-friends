@@ -11,7 +11,12 @@ import {
 } from "firebase/firestore";
 
 import { useCallback, useEffect, useState } from "react";
-import { AquariumDataProps, AquariumFilter, UserFilter } from "./page";
+import {
+  AquaViewAquariumDataProps,
+  AquariumDataProps,
+  AquariumFilter,
+  UserFilter,
+} from "./page";
 import { LoggedUser } from "@/hooks/useUserWithDetails";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
@@ -73,7 +78,7 @@ export const useAquariumData = (
   currentAquariumFilter: AquariumFilter,
   loggedUser: LoggedUser
 ) => {
-  const [aquariums, setAquariums] = useState<AquariumDataProps[]>([]);
+  const [aquariums, setAquariums] = useState<AquaViewAquariumDataProps[]>([]);
 
   const getAquariums = useCallback(async () => {
     const aquariumsRef = collection(firestore, "aquariums");

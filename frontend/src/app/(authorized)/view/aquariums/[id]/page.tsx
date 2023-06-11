@@ -3,7 +3,7 @@
 import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   generateFirstRowData,
@@ -11,7 +11,10 @@ import {
   generateThirdRowData,
   useAquariumData,
 } from "./data.logic";
-import { AquaViewAquariumDataProps } from "../../page";
+import useFirestore from "@/hooks/useFirestore";
+import useUserWithRole from "@/hooks/useUserWithRole";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
+import { doc, updateDoc } from "firebase/firestore";
 
 interface AquariumAquaViewPageProps {
   params: { id: string };
@@ -27,12 +30,20 @@ export default function AquariumAquaViewPage({
   params,
 }: AquariumAquaViewPageProps) {
   const router = useRouter();
+  const firestore = useFirestore();
 
-  const { aquariumData, getAquariumData } = useAquariumData(params);
+  const { user } = useUserWithRole();
+
+  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
+  const { aquariumData, getAquariumData, setAquariumData } = useAquariumData(
+    params.id,
+    loggedUserWithDetails
+  );
 
   useEffect(() => {
     getAquariumData();
-  }, [getAquariumData]);
+  }, [getAquariumData, aquariumData]);
 
   const firstRowData = generateFirstRowData(aquariumData);
   const secondRowData = generateSecondRowData(aquariumData);
@@ -102,6 +113,52 @@ export default function AquariumAquaViewPage({
     </>
   );
 
+  const handleLikeButton = async () => {
+    if (!loggedUserWithDetails) return;
+
+    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
+
+    let newFavAquariumList: string[];
+    let isLiked: boolean;
+
+    if (aquariumData?.isLiked) {
+      newFavAquariumList = loggedUserWithDetails.fav_aquariums.filter(
+        (friendId: string) => friendId !== aquariumData.id
+      );
+      isLiked = false;
+    } else {
+      newFavAquariumList = [
+        ...loggedUserWithDetails.fav_aquariums,
+        aquariumData?.id || "",
+      ];
+      isLiked = true;
+    }
+
+    await updateDoc(usersRef, {
+      fav_aquariums: newFavAquariumList,
+    });
+
+    setAquariumData((prevAquariumData) => {
+      if (!prevAquariumData) return prevAquariumData;
+      return { ...prevAquariumData, isLiked };
+    });
+  };
+
+  const likeButton = (
+    <>
+      <button
+        onClick={async () => await handleLikeButton()}
+        className={`w-full md:w-auto ${
+          aquariumData?.isLiked
+            ? "bg-transparent border-blue-500 text-blue-500"
+            : "bg-stepsGreen border-green-500 text-gray-100"
+        } border-solid border-2" inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal  hover:bg-opacity-90 mb-2 md:mb-0`}
+      >
+        {aquariumData?.isLiked ? "Remove from favorites" : "Add to favorites"}
+      </button>
+    </>
+  );
+
   const Cards = ({ data }: { data: CardData[] }) => {
     return (
       <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
@@ -132,8 +189,9 @@ export default function AquariumAquaViewPage({
 
   return (
     <div className="my-10 px-4 md:px-20">
-      <div className={`w-full mb-5 mt-5  md:flex md:justify-between`}>
+      <div className={`w-full mb-5 mt-5  md:flex gap-4`}>
         {previousButton}
+        {likeButton}
       </div>
 
       <div className="flex py-8">
