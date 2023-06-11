@@ -8,10 +8,10 @@ import { addAdminSchema, deleteAdminSchema } from "./users.validation";
 import isAuthenticated from "./middleware/is-authenticated.middleware";
 import isAuthorized from "./middleware/is-authorized.middleware";
 
-// eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.post("/",
+router.post(
+  "/",
   isAuthenticated,
   isAuthorized({ hasRole: [UserRole.ADMIN] }),
   validate(addAdminSchema),
@@ -42,9 +42,11 @@ router.post("/",
         return res.status(500).send({ message: "Something went wrong" });
       }
     }
-  });
+  }
+);
 
-router.delete("/:uid",
+router.delete(
+  "/:uid",
   isAuthenticated,
   isAuthorized({ hasRole: [UserRole.ADMIN] }),
   validate(deleteAdminSchema),
@@ -69,6 +71,7 @@ router.delete("/:uid",
         return res.status(500).send({ message: "Something went wrong" });
       }
     }
-  });
+  }
+);
 
 export default router;
