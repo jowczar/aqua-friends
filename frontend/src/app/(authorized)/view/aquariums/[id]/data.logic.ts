@@ -6,6 +6,27 @@ import { CardData } from "./page";
 import { getAndMapAquariumData } from "../../data.logic";
 import { LoggedUser } from "@/hooks/useUserWithDetails";
 import { AquariumDataProps } from "../../page";
+import { HealthStatus } from "@/enums/HealthStatus.enum";
+
+const initialAquariumData: AquariumDataProps = {
+  id: "",
+  name: "",
+  avatar: "",
+  email: "",
+  aquariumTitle: "",
+  healthStatus: HealthStatus.GOOD,
+  aquariumSize: "",
+  isLiked: false,
+  aquariumData: {
+    fishes: [],
+    pump: null,
+    heater: null,
+    light: null,
+    plants: [],
+    decors: [],
+    terrains: [],
+  },
+};
 
 export const useAquariumData = (
   aquariumIdFromParams: string,
@@ -13,9 +34,8 @@ export const useAquariumData = (
 ) => {
   const firestore = useFirestore();
 
-  const [aquariumData, setAquariumData] = useState<AquariumDataProps | null>(
-    null
-  );
+  const [aquariumData, setAquariumData] =
+    useState<AquariumDataProps>(initialAquariumData);
 
   const getAquariumData = useCallback(async () => {
     const aquariumId = aquariumIdFromParams;
@@ -40,7 +60,7 @@ export const useAquariumData = (
 };
 
 export const generateFirstRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Aquarium title",
@@ -60,7 +80,7 @@ export const generateFirstRowData = (
 ];
 
 export const generateSecondRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Pump",
@@ -79,8 +99,9 @@ export const generateSecondRowData = (
   },
 ];
 
+//TODO: this any typeing will be changeing when i will know full proper structure of plants, decors etc.
 export const generateThirdRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Plants",
