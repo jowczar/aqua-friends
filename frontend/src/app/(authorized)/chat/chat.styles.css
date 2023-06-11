@@ -1,0 +1,14 @@
+@import '~stream-chat-react/dist/css/v2/index.css';
+
+.str-chat {
+    --str-chat__channel-preview-active-background-color: #f5f5f5;
+}
+
+  .str-chat-channel {
+    flex-grow: 1;
+  }
+
+  .str-chat__channel-preview-messenger { 
+    padding-left: 1rem;
+    padding-right: 1.5rem;
+  }
