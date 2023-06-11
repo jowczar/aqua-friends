@@ -56,21 +56,6 @@ const App = () => {
       chatToken
     );
 
-    //
-    // const channel = newClient.channel("messaging", {
-    //   image: "man.png",
-    //   name: "Trey Anastasio",
-    //   members: ["devuser"],
-    //   // option to add custom fields
-    // });
-    // const newchannel = newClient.channel("messaging", {
-    //   image: "man.png",
-    //   name: "Another channel 3",
-    //   members: [chatUserId],
-    // });
-    // setChannel(newchannel);
-    //
-
     return () => {
       newClient.off("connection.changed", handleConnectionChange);
       newClient.disconnectUser();
