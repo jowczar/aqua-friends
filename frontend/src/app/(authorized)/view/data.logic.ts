@@ -17,7 +17,7 @@ import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { getUserAvatar } from "@/common/helpers";
 
-type UserData = {
+export type AquaViewUserData = {
   id: string;
   name: string;
   avatar: string;
@@ -30,7 +30,8 @@ export const getAndMapAquariumData = async (
   firestore: Firestore,
   data: DocumentData,
   userId: string,
-  aquariumId: string
+  aquariumId: string,
+  loggedUser: LoggedUser
 ) => {
   const aquariumSize =
     (data.width / 100) * (data.height / 100) * (data.length / 100) + "m^3";
@@ -45,6 +46,7 @@ export const getAndMapAquariumData = async (
 
   //TODO: how is healthStatus prepared?
   const healthStatus = HealthStatus.GOOD;
+
   return {
     id: aquariumId,
     name: user?.username || "",
@@ -53,7 +55,7 @@ export const getAndMapAquariumData = async (
     aquariumTitle: data.name,
     healthStatus,
     aquariumSize,
-    isLiked: user?.fav_aquariums?.includes(aquariumId) || false,
+    isLiked: loggedUser?.fav_aquariums?.includes(aquariumId) || false,
     aquariumData: {
       fishes: data?.fishes,
       pump: data?.pump,
@@ -84,7 +86,13 @@ export const useAquariumData = (
         const aquariumId = document.id;
         const userId = data.user_id;
 
-        return getAndMapAquariumData(firestore, data, userId, aquariumId);
+        return getAndMapAquariumData(
+          firestore,
+          data,
+          userId,
+          aquariumId,
+          loggedUser
+        );
       })
     );
 
@@ -96,13 +104,13 @@ export const useAquariumData = (
     });
 
     setAquariums(filteredAquariums);
-  }, [firestore, currentAquariumFilter, loggedUser]);
+  }, [firestore, loggedUser, currentAquariumFilter.value]);
 
   useEffect(() => {
     getAquariums();
-  }, [getAquariums]);
+  }, [getAquariums, loggedUser]);
 
-  return { aquariums };
+  return { aquariums, setAquariums };
 };
 
 export const useUserData = (
@@ -110,7 +118,7 @@ export const useUserData = (
   currentUserFilter: UserFilter,
   loggedUser: LoggedUser | null
 ) => {
-  const [users, setUsers] = useState<UserData[]>([]);
+  const [users, setUsers] = useState<AquaViewUserData[]>([]);
 
   const getUsers = useCallback(async () => {
     const usersRef = collection(firestore, "users");
@@ -155,11 +163,11 @@ export const useUserData = (
     });
 
     setUsers(filteredUsers);
-  }, [currentUserFilter, loggedUser]);
+  }, [currentUserFilter.value, firestore, loggedUser?.friends]);
 
   useEffect(() => {
     getUsers();
-  }, [currentUserFilter, loggedUser]);
+  }, [currentUserFilter, getUsers, loggedUser]);
 
-  return { users };
+  return { users, setUsers };
 };

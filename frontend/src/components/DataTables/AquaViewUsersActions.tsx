@@ -1,30 +1,31 @@
-import useFirestore from "@/hooks/useFirestore";
-import { LoggedUser } from "@/hooks/useUserWithDetails";
-import { updateDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import useFirestore from "@/hooks/useFirestore";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
+import { AquaViewUserData } from "@/app/(authorized)/view/data.logic";
+import useUserWithRole from "@/hooks/useUserWithRole";
 
 export type AquaViewUsersActionsProps = {
-  item: Record<string, any>;
-  items: Record<string, any>[];
-  setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
-  isMobileView?: boolean;
-  loggedUser: LoggedUser;
+  singleUser: AquaViewUserData;
+  users: AquaViewUserData[];
+  setUsers: React.Dispatch<React.SetStateAction<AquaViewUserData[]>>;
 };
 
 const AquaViewUsersActions = ({
-  item,
-  items,
-  setItems,
-  isMobileView,
-  loggedUser,
+  singleUser,
+  users,
+  setUsers,
 }: AquaViewUsersActionsProps) => {
   const router = useRouter();
   const firestore = useFirestore();
 
+  const { user } = useUserWithRole();
+
+  const loggedUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
   const viewButtonHandler = () => {
-    router.push(`/view/users/${item.id}`);
+    router.push(`/view/users/${singleUser.id}`);
   };
 
   const messagesButtonHandler = () => {
@@ -32,58 +33,41 @@ const AquaViewUsersActions = ({
   };
 
   const handleFriendChange = async (itemId: string) => {
-    if (loggedUser && loggedUser.id) {
-      const usersRef = doc(firestore, "users", loggedUser.id);
+    const usersRef = doc(firestore, "users", loggedUserWithDetails.id);
 
-      let newFriendsList: string[];
-      let isFriend: boolean;
+    let newFriendsList: string[];
+    let isFriend: boolean;
 
-      if (item.isFriend) {
-        newFriendsList = loggedUser.friends.filter(
-          (friendId) => friendId !== itemId
-        );
-        isFriend = false;
-      } else {
-        newFriendsList = [...loggedUser.friends, itemId];
-        isFriend = true;
+    if (singleUser.isFriend) {
+      newFriendsList = loggedUserWithDetails.friends.filter(
+        (friendId) => friendId !== itemId
+      );
+      isFriend = false;
+    } else {
+      newFriendsList = [...loggedUserWithDetails.friends, itemId];
+      isFriend = true;
+    }
+
+    await updateDoc(usersRef, {
+      friends: newFriendsList,
+    });
+
+    const newItems = users.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, isFriend: isFriend };
       }
+      return item;
+    });
 
-      await updateDoc(usersRef, {
-        friends: newFriendsList,
-      });
-
-      const newItems = items.map((item: Record<string, any>) => {
-        if (item.id === itemId) {
-          return { ...item, isFriend: isFriend };
-        }
-        return item;
-      });
-      setItems(newItems);
-    }
+    setUsers(newItems);
   };
-
-  useEffect(() => {
-    if (loggedUser) {
-      const newItems = items.map((item: Record<string, any>) => {
-        if (item.id === loggedUser.id) {
-          return { ...item, isFriend: loggedUser.friends.includes(item.id) };
-        }
-        return item;
-      });
-      setItems(newItems);
-    }
-  }, [loggedUser]);
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
       <td
-        className={`${
-          isMobileView ? "flex justify-center" : "hidden"
-        } md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
+        className={`md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
       >
-        <div
-          className={`flex items-center ${isMobileView && "justify-center"}`}
-        >
+        <div className={`flex items-center`}>
           <button
             className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
             onClick={() => viewButtonHandler()}
@@ -108,11 +92,13 @@ const AquaViewUsersActions = ({
           <button
             type="button"
             className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
-            onClick={() => handleFriendChange(item.id)}
+            onClick={() => handleFriendChange(singleUser.id)}
           >
             <span className="sr-only">Add to friend</span>
             <Image
-              src={item.isFriend ? "/friend-green.svg" : "/friend-basic.svg"}
+              src={
+                singleUser.isFriend ? "/friend-green.svg" : "/friend-basic.svg"
+              }
               alt="friend"
               className="group-hover:scale-110 transition flex-none"
               height={16}

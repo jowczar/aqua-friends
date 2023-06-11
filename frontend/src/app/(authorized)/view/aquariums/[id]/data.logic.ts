@@ -1,15 +1,14 @@
 import { useCallback, useState } from "react";
 import { DocumentData, doc, getDoc } from "firebase/firestore";
-import { AquariumDataProps } from "../../page";
+import { AquaViewAquariumDataProps } from "../../page";
 import useFirestore from "@/hooks/useFirestore";
 import { CardData } from "./page";
 import { getAndMapAquariumData } from "../../data.logic";
 
 export const useAquariumData = (params: any) => {
   const firestore = useFirestore();
-  const [aquariumData, setAquariumData] = useState<AquariumDataProps | null>(
-    null
-  );
+  const [aquariumData, setAquariumData] =
+    useState<AquaViewAquariumDataProps | null>(null);
 
   const getAquariumData = useCallback(async () => {
     const aquariumId = params.id;
@@ -33,7 +32,7 @@ export const useAquariumData = (params: any) => {
 };
 
 export const generateFirstRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquaViewAquariumDataProps | null
 ): CardData[] => [
   {
     column: "Aquarium title",
@@ -53,7 +52,7 @@ export const generateFirstRowData = (
 ];
 
 export const generateSecondRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquaViewAquariumDataProps | null
 ): CardData[] => [
   {
     column: "Pump",
@@ -73,7 +72,7 @@ export const generateSecondRowData = (
 ];
 
 export const generateThirdRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquaViewAquariumDataProps | null
 ): CardData[] => [
   {
     column: "Plants",
