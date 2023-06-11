@@ -1,4 +1,4 @@
-export const getHistoryColumns = () => {
+export const getHistoryLogsColumns = () => {
   return [
     {
       Header: "Service name",
