@@ -10,7 +10,17 @@
   padding-top: 0.5rem;
 }
 
+.str-chat__channel-list {
+    max-width: 33%;
+}
+
 .str-chat__channel-preview-messenger {
   padding: 1rem;
   padding-right: 1.5rem;
 }
+
+@media only screen and (max-width: 768px) {
+    .str-chat__channel-list {
+      max-width: 100%;
+    }
+  }

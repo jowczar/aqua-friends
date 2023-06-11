@@ -78,7 +78,7 @@ const App = () => {
   if (!client) return null;
 
   return (
-    <div className="flex flex-row w-full h-[calc(100vh-4rem)]">
+    <div className="flex flex-col md:flex-row w-full md:h-[calc(100vh-4rem)]">
       <Chat client={client}>
         <ChannelList filters={filters} sort={sort} options={options} />
         <Channel channel={channel}>
