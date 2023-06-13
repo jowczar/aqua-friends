@@ -4,12 +4,21 @@ import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
-import AquaDecorPage from "./AquaDecorPage";
+import AquaDecorPage, {
+  AquaItem,
+  Decor,
+  Heater,
+  Light,
+  Plant,
+  Pump,
+  Terrain,
+} from "./AquaDecorPage";
 import AquaSummaryPage from "./AquaSummaryPage";
 import AquaLifePage from "./AquaLifePage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
+import { Water } from "@/enums/Water.enum";
 
 const TOTAL_NUMBER_OF_STEPS = 4;
 
@@ -27,12 +36,13 @@ export type Equipment = {
 };
 
 export type AquariumData = {
-  pump: Equipment;
-  heater: Equipment;
-  light: Equipment;
-  plants: Equipment[];
-  decors: Equipment[];
-  terrains: Equipment[];
+  [key: string]: AquaItem | AquaItem[];
+  pump: Pump;
+  heater: Heater;
+  light: Light;
+  plants: Plant[];
+  decors: Decor[];
+  terrains: Terrain[];
 };
 
 export default function Creator() {
@@ -54,34 +64,31 @@ export default function Creator() {
 
   const [aquariumData, setAquariumData] = useState<AquariumData>({
     pump: {
-      image: "",
-      name: "Pump 1",
-      description: "some desc",
-      value: "some",
+      name: "",
     },
     heater: {
+      height: 0,
       image: "",
-      name: "Heater 1",
-      description: "some desc",
-      value: "some",
+      length: 0,
+      maxTemperature: 0,
+      minTemperature: 0,
+      name: "",
+      power: 0,
+      water: Water.HOLYWATER,
+      width: 0,
     },
     light: {
+      height: 0,
       image: "",
-      name: "Light 1",
-      description: "some desc",
-      value: "some",
+      length: 0,
+      name: "",
+      power: 0,
+      water: Water.HOLYWATER,
+      width: 0,
     },
-    plants: [
-      { image: "", name: "Plant 1", description: "some desc", value: "some" },
-      { image: "", name: "Plant 2", description: "some desc", value: "some" },
-      { image: "", name: "Plant 3", description: "some desc", value: "some" },
-    ],
-    decors: [
-      { image: "", name: "Decor 1", description: "some desc", value: "some" },
-    ],
-    terrains: [
-      { image: "", name: "Terrain 1", description: "some desc", value: "some" },
-    ],
+    plants: [{ name: "" }],
+    decors: [{ name: "" }],
+    terrains: [{ name: "" }],
   });
 
   const handleNext = () => {
@@ -192,6 +199,7 @@ export default function Creator() {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 aquariumData={aquariumData}
+                setAquariumData={setAquariumData}
               />
             );
 

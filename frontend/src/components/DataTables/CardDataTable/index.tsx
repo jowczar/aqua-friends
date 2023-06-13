@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Pagination from "../../Pagination";
 import Image from "next/image";
 import { paginationDataHandler } from "../helpers";
+import { AquariumData } from "@/app/(authorized)/creator/page";
+import { AquaItem } from "@/app/(authorized)/creator/AquaDecorPage";
 
 export type CardDataTableProps = {
   columnTitle: string;
   isSingleAnswer: boolean;
-  items: Record<string, any>[];
+  items: AquaItem[];
+  aquariumData: AquariumData;
+  setAquariumData: React.Dispatch<React.SetStateAction<AquariumData>>;
 };
 
 const CardDataTable = ({
   columnTitle,
   isSingleAnswer,
   items,
+  aquariumData,
+  setAquariumData,
 }: CardDataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [selectedItems, setSelectedItems] = useState<{
+    [key: string]: AquaItem;
+  }>({
+    pump: aquariumData.pump,
+    heater: aquariumData.heater,
+    light: aquariumData.light,
+    plants: aquariumData.plants[0],
+    decors: aquariumData.decors[0],
+    terrains: aquariumData.terrains[0],
+  });
+
+  useEffect(() => {
+    setSelectedItems({
+      pump: aquariumData.pump,
+      heater: aquariumData.heater,
+      light: aquariumData.light,
+      plants: aquariumData.plants[0],
+      decors: aquariumData.decors[0],
+      terrains: aquariumData.terrains[0],
+    });
+  }, [aquariumData]);
+
+  const category = columnTitle.toLowerCase();
 
   const itemsPerPage = 6;
 
@@ -25,8 +55,34 @@ const CardDataTable = ({
     currentPage
   );
 
-  const addButtonHandler = () => {
-    //TODO: implement AquaDecorDataTable add button logic here and connect with api
+  const addButtonHandler = (item: AquaItem) => {
+    setAquariumData((prevState) => {
+      const multipleCategories = ["plants", "decors", "terrains"];
+
+      const isMultipleItemCategory = multipleCategories.includes(category);
+      const categoryKey = category as keyof AquariumData;
+
+      if (isMultipleItemCategory) {
+        const field = prevState[categoryKey];
+
+        if (Array.isArray(field)) {
+          return {
+            ...prevState,
+            [categoryKey]: [...field, item],
+          };
+        }
+      }
+
+      return {
+        ...prevState,
+        [categoryKey]: item,
+      };
+    });
+
+    setSelectedItems((prevSelectedItems) => ({
+      ...prevSelectedItems,
+      [category]: item,
+    }));
   };
 
   return (
@@ -75,9 +131,19 @@ const CardDataTable = ({
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           {isSingleAnswer ? (
-                            <input type="radio" name="item" />
+                            <input
+                              type="radio"
+                              name="item"
+                              checked={
+                                selectedItems[category] &&
+                                selectedItems[category].name === item.name
+                              }
+                              onClick={() => addButtonHandler(item as AquaItem)}
+                            />
                           ) : (
-                            <button onClick={() => addButtonHandler()}>
+                            <button
+                              onClick={() => addButtonHandler(item as AquaItem)}
+                            >
                               Add
                             </button>
                           )}

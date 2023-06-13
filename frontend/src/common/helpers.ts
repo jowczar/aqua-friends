@@ -59,3 +59,19 @@ const getLatestFile = async (
 
   return files[metaDataList.indexOf(latestFileMeta)];
 };
+
+export const toCamelCase = (str: string) => {
+  return str.replace(/([-_][a-z])/g, (group) =>
+    group.toUpperCase().replace("-", "").replace("_", "")
+  );
+};
+
+export const transformObjectKeysToCamelCase = (obj: Record<string, any>) => {
+  const newObj: Record<string, any> = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      newObj[toCamelCase(key)] = obj[key];
+    }
+  }
+  return newObj;
+};
