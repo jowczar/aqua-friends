@@ -1,6 +1,6 @@
 "use client";
 
-import AquaViewSwitch from "@/components/AquaViewSwitch";
+import Switch from "@/components/Switch";
 import DataTable from "@/components/DataTables";
 import FilterDropdown from "@/components/FilterDropdown";
 
@@ -108,7 +108,11 @@ export default function View() {
       <div className="my-10 px-5 lg:px-20">
         <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-2">
           <div className="grid-rows-1 md:grid-cols-1 flex justify-center">
-            <AquaViewSwitch setIsUsersView={setIsUserView} />
+            <Switch
+              setView={setIsUserView}
+              firstText="Users"
+              secondText="Aquariums"
+            />
           </div>
           <div className="grid-rows-1 md:grid-cols-2 w-full">
             <FilterDropdown
