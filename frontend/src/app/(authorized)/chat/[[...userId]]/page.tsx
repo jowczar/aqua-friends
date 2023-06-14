@@ -18,6 +18,7 @@ import {
   Window,
 } from "stream-chat-react";
 import { toast } from "react-toastify";
+import { notFound } from "next/navigation";
 
 import useChat from "@/hooks/useChat";
 import Loader from "@/components/Loader";
@@ -25,9 +26,16 @@ import Loader from "@/components/Loader";
 import "./chat.styles.css";
 
 const App = ({ params: { userId } }: { params: { userId: string } }) => {
+  // NextJS does not support optional catch-all routes yet so we have to programmatically
+  // forbid access to the page if there is more than optional userId provided (e.g. /chat/userId/somethingElse)
+  if (userId?.length > 1) {
+    notFound();
+  }
+
+  const initialConversationUserId = userId?.[0] || null;
   const [client, setClient] = useState<StreamChat | null>(null);
   const { chatToken, userId: chatUserId, username } = useChat();
-  console.log({ userId });
+  console.log({ initialConversationUserId });
 
   const filters = {
     type: "messaging",
@@ -49,17 +57,19 @@ const App = ({ params: { userId } }: { params: { userId: string } }) => {
     };
 
     newClient.on("connection.changed", handleConnectionChange);
-    newClient.connectUser(
-      {
-        id: chatUserId,
-        name: username || "Anonymous",
-      },
-      chatToken
-    );
+    newClient
+      .connectUser(
+        {
+          id: chatUserId,
+          name: username || "Anonymous",
+        },
+        chatToken
+      )
+      .catch(console.error);
 
     return () => {
       newClient.off("connection.changed", handleConnectionChange);
-      newClient.disconnectUser();
+      newClient.disconnectUser().catch(console.error);
     };
   }, [chatToken, chatUserId, username]);
 
