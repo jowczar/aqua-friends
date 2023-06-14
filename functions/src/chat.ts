@@ -2,11 +2,13 @@ import express, { Request, Response } from "express";
 import { StreamChat } from "stream-chat";
 import { logger } from "firebase-functions/v1";
 import { object, string } from "yup";
+import { firestore } from "firebase-admin";
 
 import isFirebaseError, { UserRole } from "./utils";
 import isAuthenticated from "./middleware/is-authenticated.middleware";
 import isAuthorized from "./middleware/is-authorized.middleware";
 import validate from "./middleware/validation.middleware";
+import { UserDetails } from "./utils/types";
 
 const router = express.Router();
 
@@ -66,15 +68,33 @@ router.post(
         throw new Error("Stream credentials not set");
       }
 
-      const me = {
+      const otherUserId = req.query.recipientId as string;
+      const usersRef = firestore().collection("users");
+
+      const meDocument = await usersRef.doc(user.uid).get();
+      const otherUserDocument = await usersRef.doc(otherUserId).get();
+
+      if (!meDocument.exists || !otherUserDocument.exists) {
+        res.status(404).send({ message: "User not found" });
+        return;
+      }
+
+      const me = meDocument.data() as UserDetails;
+      const otherUser = otherUserDocument.data() as UserDetails;
+
+      const meInChat = {
         id: user.uid,
+        name: me.username,
+        avatar: me.avatar,
       };
-      const otherUser = {
+      const otherUserInChat = {
         id: req.query.recipientId as string,
+        name: otherUser.username,
+        avatar: otherUser.avatar,
       };
 
       const server = StreamChat.getInstance(apiKey, apiSecret);
-      await server.upsertUsers([me, otherUser]);
+      await server.upsertUsers([meInChat, otherUserInChat]);
       const channel = server.channel("messaging", {
         members: [me.id, otherUser.id],
         created_by_id: me.id,
