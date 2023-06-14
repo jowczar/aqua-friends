@@ -79,6 +79,7 @@ router.post(
       await server.upsertUsers([me, otherUser]);
       const channel = server.channel("messaging", {
         members: [me.id, otherUser.id],
+        created_by_id: me.id,
       });
       await channel.create(); // Stream ensures that only one channel exists
 
