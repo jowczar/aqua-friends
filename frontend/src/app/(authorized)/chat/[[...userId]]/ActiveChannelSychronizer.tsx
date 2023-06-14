@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useChatContext } from "stream-chat-react";
 import { toast } from "react-toastify";
 
-import useChat from "@/hooks/useChat";
+import useChat from "./useChat";
 
 type ActiveChannelSychronizerProps = {
   initialConversationUserId: string | null;
