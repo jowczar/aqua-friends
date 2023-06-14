@@ -26,41 +26,30 @@
 }
 
 .channel-preview__container {
-  height: 56px;
-  border-radius: 8px;
+  height: 4rem;
+  width: 100%;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
+  padding: 16px;
 }
 
 .channel-preview__container:hover {
-  background: #ffffff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.07);
+  background: #f8fafc;
   transition: background 0.1s ease-in-out;
-}
-
-.str-chat.str-chat__theme-dark .channel-preview__container:hover {
-  background: #2c2c30;
 }
 
 .channel-preview__container.selected {
-  background: #ffffff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.07);
+  background-color: #f8fafc;
   transition: background 0.1s ease-in-out;
-}
-
-.str-chat.str-chat__theme-dark .channel-preview__container.selected {
-  background: #2c2c30;
 }
 
 .channel-preview__content-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 8px;
-  margin-right: 8px;
+  margin: 20px;
   width: 100%;
 }
 
@@ -74,12 +63,10 @@
 }
 
 .channel-preview__content-name {
-  font-family: Helvetica Neue, sans-serif;
   font-weight: 500;
   font-size: 15px;
+  margin-right: 8px;
   color: #000000;
-  margin: 0;
-  max-width: 158px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -90,25 +77,21 @@
 }
 
 .channel-preview__content-time {
-  font-family: Helvetica Neue, sans-serif;
   font-size: 11px;
   color: #858688;
   margin: 0;
 }
 
 .channel-preview__content-message {
-  font-family: Helvetica Neue, sans-serif;
   font-size: 13px;
   line-height: 16px;
-  margin: 0;
   color: #858688;
   height: 16px;
-  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .channel-preview__container .str-chat__avatar {
-  margin-right: 0;
+  flex: 0 0;
 }
