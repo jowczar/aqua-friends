@@ -40,6 +40,10 @@ const getChannelName = (members: ChannelMemberResponse[]) => {
   return members[0]?.user?.name || defaultName;
 };
 
+const getChannelAvatar = (members: ChannelMemberResponse[]) => {
+  return members[0]?.user?.avatar || "/man.png";
+};
+
 type MessagingChannelPreviewProps = ChannelPreviewUIComponentProps & {
   channel: Channel;
   setActiveChannel?: ChatContextValue["setActiveChannel"];
@@ -64,7 +68,7 @@ const CustomChannelPreview = (props: MessagingChannelPreviewProps) => {
         setActiveChannel?.(channel);
       }}
     >
-      <Avatar image={"/man.png"} size={40} />
+      <Avatar image={getChannelAvatar(members)} size={40} />
       <div className="channel-preview__content-wrapper">
         <div className="channel-preview__content-top">
           <p className="channel-preview__content-name">
