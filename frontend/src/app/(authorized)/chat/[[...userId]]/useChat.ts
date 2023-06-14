@@ -27,10 +27,17 @@ const useChat = () => {
     return responseData.token;
   }, [idToken]);
 
+  /**
+   * Makes sure that the channel is created and filled with both user details
+   *
+   * @param initialConversationUserId
+   * @throws {Error} if the channel could not be created due to an error
+   * @return {boolean} if synchronization was successful
+   */
   const synchronize = async (initialConversationUserId: string) => {
-    if (!idToken) return;
+    if (!idToken) return false;
 
-    await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/chat/sync?recipientId=${initialConversationUserId}`,
       {
         method: "POST",
@@ -40,6 +47,13 @@ const useChat = () => {
         },
       }
     );
+
+    if (!response.ok) {
+      const responseData = await response.json();
+      throw new Error(responseData.message);
+    }
+
+    return true;
   };
 
   useEffect(() => {
