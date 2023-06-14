@@ -80,34 +80,38 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                 ))}
               </div>
               <div className="flex flex-row gap-3 flex items-center pr-2 sm:pr-0">
-                <Link
-                  href="/chat"
-                  className="rounded-full bg-white hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="sr-only">View messages</span>
-                  <Image
-                    src="/chat.svg"
-                    alt="chat"
-                    className="group-hover:scale-110 transition flex-none"
-                    height={16}
-                    width={18}
-                    aria-hidden="true"
-                  />
-                </Link>
-                <button
-                  type="button"
-                  className="rounded-full bg-white hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="sr-only">View favorites</span>
-                  <Image
-                    src="/heart.svg"
-                    alt="heart"
-                    className="group-hover:scale-110 transition flex-none"
-                    height={16}
-                    width={18}
-                    aria-hidden="true"
-                  />
-                </button>
+                {user?.role === UserRole.USER && (
+                  <>
+                    <Link
+                      href="/chat"
+                      className="rounded-full bg-white hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      <span className="sr-only">View messages</span>
+                      <Image
+                        src="/chat.svg"
+                        alt="chat"
+                        className="group-hover:scale-110 transition flex-none"
+                        height={16}
+                        width={18}
+                        aria-hidden="true"
+                      />
+                    </Link>
+                    <button
+                      type="button"
+                      className="rounded-full bg-white hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      <span className="sr-only">View favorites</span>
+                      <Image
+                        src="/heart.svg"
+                        alt="heart"
+                        className="group-hover:scale-110 transition flex-none"
+                        height={16}
+                        width={18}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </>
+                )}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
