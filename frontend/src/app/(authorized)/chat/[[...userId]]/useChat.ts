@@ -57,7 +57,9 @@ const useChat = () => {
   };
 
   useEffect(() => {
-    getChatToken().then((token) => setChatToken(token));
+    getChatToken()
+      .then((token) => setChatToken(token))
+      .catch(console.error);
   }, [getChatToken]);
 
   return {
