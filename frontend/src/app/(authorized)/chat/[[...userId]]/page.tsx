@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  StreamChat,
-  ChannelSort,
-  ChannelFilters,
-  ChannelOptions,
-} from "stream-chat";
+import { ChannelSort, ChannelFilters, ChannelOptions } from "stream-chat";
 import {
   Chat,
   Channel,
@@ -17,13 +12,13 @@ import {
   Thread,
   Window,
 } from "stream-chat-react";
-import { toast } from "react-toastify";
 import { notFound } from "next/navigation";
 
 import useChat from "@/hooks/useChat";
 import Loader from "@/components/Loader";
 
 import "./chat.styles.css";
+import useConnectUser from "./useConnectUser";
 
 const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   // NextJS does not support optional catch-all routes yet so we have to programmatically
@@ -33,9 +28,11 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   }
 
   const initialConversationUserId = userId?.[0] || null;
-  const [client, setClient] = useState<StreamChat | null>(null);
+
+  const { client, chatUserId } = useConnectUser();
+
+  const { synchronize } = useChat();
   const [channel, setChannel] = useState(null);
-  const { chatToken, userId: chatUserId, username, synchronize } = useChat();
   console.log({ initialConversationUserId });
 
   const filters = {
@@ -44,35 +41,6 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   } as ChannelFilters;
   const options = { state: true, presence: true, limit: 10 } as ChannelOptions;
   const sort = { last_message_at: -1 } as ChannelSort;
-
-  useEffect(() => {
-    if (!chatToken || !chatUserId) return;
-
-    const newClient = new StreamChat(
-      process.env.NEXT_PUBLIC_STREAM_API_KEY || ""
-    );
-
-    const handleConnectionChange = ({ online = false }) => {
-      if (!online) return toast.error("Connection lost...");
-      setClient(newClient);
-    };
-
-    newClient.on("connection.changed", handleConnectionChange);
-    newClient
-      .connectUser(
-        {
-          id: chatUserId,
-          name: username || "Anonymous",
-        },
-        chatToken
-      )
-      .catch(console.error);
-
-    return () => {
-      newClient.off("connection.changed", handleConnectionChange);
-      newClient.disconnectUser().catch(console.error);
-    };
-  }, [chatToken, chatUserId, username]);
 
   useEffect(() => {
     if (!client || !initialConversationUserId) return;
