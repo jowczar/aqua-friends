@@ -23,8 +23,8 @@ export type UserDetails = {
   email: string;
   admin: boolean;
   avatar: string;
-  fav_aquariums: string[];
-  friends: string[];
+  fav_aquariums?: string[];
+  friends?: string[];
 };
 
 declare module "express" {
