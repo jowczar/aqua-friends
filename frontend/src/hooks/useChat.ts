@@ -27,11 +27,29 @@ const useChat = () => {
     return responseData.token;
   }, [idToken]);
 
+  const synchronize = async (initialConversationUserId: string) => {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/chat/sync?recipientId=${initialConversationUserId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     getChatToken().then((token) => setChatToken(token));
   }, [getChatToken]);
 
-  return { chatToken, userId: user?.uid, username: user?.displayName };
+  return {
+    chatToken,
+    userId: user?.uid,
+    username: user?.displayName,
+    synchronize,
+  };
 };
 
 export default useChat;
