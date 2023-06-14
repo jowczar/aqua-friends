@@ -58,7 +58,7 @@ const AquaViewActions = ({
           >
             <span className="sr-only">View messages</span>
             <Image
-              src="chat.svg"
+              src="/chat.svg"
               alt="chat"
               className="group-hover:scale-110 transition flex-none"
               height={16}

@@ -89,7 +89,7 @@ export default function ItemViewPage({ params }: ItemViewPageProps) {
         <div className="flex-shrink-0 h-15 w-15 hidden xl:block mr-4">
           <Image
             className="h-15 w-15 rounded-full"
-            src={itemData?.avatar ? itemData?.avatar : "man.png"}
+            src={itemData?.avatar ? itemData?.avatar : "/man.png"}
             alt="Default avatar"
             height={100}
             width={100}

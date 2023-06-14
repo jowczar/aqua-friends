@@ -110,7 +110,7 @@ const DataTable = ({
               <div className="flex-shrink-0 h-15 w-15 hidden xl:block">
                 <Image
                   className="h-15 w-15 rounded-full"
-                  src={imageUrl ? imageUrl : "man.png"}
+                  src={imageUrl ? imageUrl : "/man.png"}
                   alt="Default avatar"
                   height={62}
                   width={62}
