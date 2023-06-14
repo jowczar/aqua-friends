@@ -34,7 +34,8 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
 
   const initialConversationUserId = userId?.[0] || null;
   const [client, setClient] = useState<StreamChat | null>(null);
-  const { chatToken, userId: chatUserId, username } = useChat();
+  const [channel, setChannel] = useState(null);
+  const { chatToken, userId: chatUserId, username, synchronize } = useChat();
   console.log({ initialConversationUserId });
 
   const filters = {
@@ -73,6 +74,21 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
     };
   }, [chatToken, chatUserId, username]);
 
+  useEffect(() => {
+    if (!client || !initialConversationUserId) return;
+
+    // TOOD: this does not check whether the initialConversationUserId is valid user id
+    synchronize(initialConversationUserId).then(() => {
+      console.log("synchronized");
+
+      const channel = client.channel("messaging", {
+        members: [chatUserId, initialConversationUserId],
+      });
+
+      setChannel(channel);
+    });
+  }, [client, initialConversationUserId]);
+
   if (!client) {
     return (
       <div className="flex items-center justify-center mx-auto bg-white px-12 py-8 rounded shadow my-10 max-w-2xl">
@@ -86,7 +102,7 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
       <Chat client={client}>
         <ChannelList filters={filters} sort={sort} options={options} />
         {/* TODO: channel={channel} can be used to set a specific channel e.g. when we are redirected here from the list of users */}
-        <Channel>
+        <Channel channel={channel}>
           <Window>
             <ChannelHeader />
             <MessageList />
