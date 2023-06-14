@@ -29,7 +29,7 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   }
 
   const initialConversationUserId = userId?.[0] || null;
-  const { client, chatUserId } = useConnectUser();
+  const { client, chatUserId, chatToken } = useConnectUser();
 
   const filters = {
     type: "messaging",
@@ -55,9 +55,11 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   return (
     <div className="flex flex-col md:flex-row w-full md:h-[calc(100vh-4rem)]">
       <Chat client={client}>
-        <ActiveChannelSychronizer
-          initialConversationUserId={initialConversationUserId}
-        />
+        {chatToken && (
+          <ActiveChannelSychronizer
+            initialConversationUserId={initialConversationUserId}
+          />
+        )}
         <ChannelList
           {...channelListOptions}
           Preview={(props) => <CustomChannelPreview {...props} />}

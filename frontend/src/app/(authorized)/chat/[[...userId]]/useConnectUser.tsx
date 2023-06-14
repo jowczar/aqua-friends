@@ -58,7 +58,7 @@ const useConnectUser = () => {
     };
   }, [chatToken, chatUserId, username]);
 
-  return { client, chatUserId };
+  return { client, chatUserId, chatToken };
 };
 
 export default useConnectUser;
