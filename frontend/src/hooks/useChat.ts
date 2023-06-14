@@ -28,6 +28,8 @@ const useChat = () => {
   }, [idToken]);
 
   const synchronize = async (initialConversationUserId: string) => {
+    if (!idToken) return;
+
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/chat/sync?recipientId=${initialConversationUserId}`,
       {
