@@ -20,17 +20,23 @@ const ActiveChannelSychronizer = ({
 
       //   TODO: add check whether initial covo user id exists
       synchronize(initialConversationUserId)
-        .then(async () => {
+        .then(async (isSynchronized) => {
+          console.log({ isSynchronized });
+          if (!isSynchronized) return;
+
           console.log("synchronized");
 
           const channel = client.channel("messaging", {
-            members: [client.userID || "", initialConversationUserId], // TODO: maybe get that info from backend on synchronize? and make sure that the user with it exists – it could be also set properly in a preview (with data of the user)
+            members: [client.userID ?? "", initialConversationUserId],
           });
           await channel.watch();
 
           setActiveChannel(channel);
         })
-        .catch(console.error);
+        .catch((err) => {
+          console.error(err);
+          toast.error("Could not create conversation with that user");
+        });
     },
     [client]
   );
