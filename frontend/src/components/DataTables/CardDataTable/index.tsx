@@ -29,9 +29,6 @@ const CardDataTable = ({
     pump: aquariumData.pump,
     heater: aquariumData.heater,
     light: aquariumData.light,
-    plants: aquariumData.plants[0],
-    decors: aquariumData.decors[0],
-    terrains: aquariumData.terrains[0],
   });
 
   useEffect(() => {
@@ -39,9 +36,6 @@ const CardDataTable = ({
       pump: aquariumData.pump,
       heater: aquariumData.heater,
       light: aquariumData.light,
-      plants: aquariumData.plants[0],
-      decors: aquariumData.decors[0],
-      terrains: aquariumData.terrains[0],
     });
   }, [aquariumData]);
 
@@ -56,12 +50,12 @@ const CardDataTable = ({
   );
 
   const addButtonHandler = (item: AquaItem) => {
+    const multipleCategories = ["plants", "decors", "terrains"];
+
+    const isMultipleItemCategory = multipleCategories.includes(category);
+    const categoryKey = category as keyof AquariumData;
+
     setAquariumData((prevState) => {
-      const multipleCategories = ["plants", "decors", "terrains"];
-
-      const isMultipleItemCategory = multipleCategories.includes(category);
-      const categoryKey = category as keyof AquariumData;
-
       if (isMultipleItemCategory) {
         const field = prevState[categoryKey];
 
@@ -79,10 +73,35 @@ const CardDataTable = ({
       };
     });
 
-    setSelectedItems((prevSelectedItems) => ({
-      ...prevSelectedItems,
-      [category]: item,
-    }));
+    if (!isMultipleItemCategory) {
+      setSelectedItems((prevSelectedItems) => ({
+        ...prevSelectedItems,
+        [category]: item,
+      }));
+    }
+  };
+
+  const removeButtonHandler = (item: AquaItem) => {
+    const multipleCategories = ["plants", "decors", "terrains"];
+
+    if (multipleCategories.includes(category)) {
+      setAquariumData((prevState) => {
+        const categoryKey = category as keyof AquariumData;
+
+        const field = prevState[categoryKey];
+
+        if (Array.isArray(field)) {
+          const filteredItems = field.filter(
+            (i: AquaItem) => i.name !== item.name
+          );
+          return {
+            ...prevState,
+            [categoryKey]: filteredItems,
+          };
+        }
+        return prevState;
+      });
+    }
   };
 
   return (
@@ -140,6 +159,16 @@ const CardDataTable = ({
                               }
                               onClick={() => addButtonHandler(item as AquaItem)}
                             />
+                          ) : (aquariumData[category] as AquaItem[]).find(
+                              (i: AquaItem) => i.name === item.name
+                            ) ? (
+                            <button
+                              onClick={() =>
+                                removeButtonHandler(item as AquaItem)
+                              }
+                            >
+                              Remove
+                            </button>
                           ) : (
                             <button
                               onClick={() => addButtonHandler(item as AquaItem)}
