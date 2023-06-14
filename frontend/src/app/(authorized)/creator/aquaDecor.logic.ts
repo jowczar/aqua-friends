@@ -40,7 +40,6 @@ export const switchDecorTableData = (
   terrains: Terrain[]
 ) => {
   let items: AquaItem[] = [];
-  let isSingleAnswer = true;
 
   switch (currentTab.tabName) {
     case TabEnum.PUMP:
@@ -54,19 +53,19 @@ export const switchDecorTableData = (
       break;
     case TabEnum.DECORS:
       items = decors;
-      isSingleAnswer = false;
+
       break;
     case TabEnum.PLANTS:
       items = plants;
-      isSingleAnswer = false;
+
       break;
     case TabEnum.TERRAINS:
       items = terrains;
-      isSingleAnswer = false;
+
       break;
     default:
       break;
   }
 
-  return { items, isSingleAnswer };
+  return { items };
 };

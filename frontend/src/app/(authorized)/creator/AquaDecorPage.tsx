@@ -84,7 +84,6 @@ const AquaDecorPage = ({
   const firestore = useFirestore();
 
   const [searchText, setSearchText] = useState("");
-  const [isSingleAnswer, setIsSingleAnswer] = useState(false);
 
   const [pumps, setPumps] = useState<Pump[]>([]);
   const [heaters, setHeaters] = useState<Heater[]>([]);
@@ -155,7 +154,6 @@ const AquaDecorPage = ({
     });
 
     setItems(newItems.items);
-    setIsSingleAnswer(newItems.isSingleAnswer);
   };
 
   useEffect(() => {
@@ -245,7 +243,6 @@ const AquaDecorPage = ({
         </div>
         <CardDataTable
           columnTitle={currentTab.tabName}
-          isSingleAnswer={isSingleAnswer}
           items={filteredItems}
           aquariumData={aquariumData}
           setAquariumData={setAquariumData}

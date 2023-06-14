@@ -88,7 +88,7 @@ export default function Creator() {
       lph: 0,
       name: "",
       power: 0,
-      water: Water.HOLYWATER,
+      water: Water.BOTH,
       width: 0,
     },
     heater: {
@@ -99,7 +99,7 @@ export default function Creator() {
       minTemperature: 0,
       name: "",
       power: 0,
-      water: Water.HOLYWATER,
+      water: Water.BOTH,
       width: 0,
     },
     light: {
@@ -108,7 +108,7 @@ export default function Creator() {
       length: 0,
       name: "",
       power: 0,
-      water: Water.HOLYWATER,
+      water: Water.BOTH,
       width: 0,
     },
     plants: [],

@@ -5,10 +5,11 @@ import Image from "next/image";
 import { paginationDataHandler } from "../helpers";
 import { AquariumData } from "@/app/(authorized)/creator/page";
 import { AquaItem } from "@/app/(authorized)/creator/AquaDecorPage";
+import Modal from "@/components/Modal";
+import { Water } from "@/enums/Water.enum";
 
 export type CardDataTableProps = {
   columnTitle: string;
-  isSingleAnswer: boolean;
   items: AquaItem[];
   aquariumData: AquariumData;
   setAquariumData: React.Dispatch<React.SetStateAction<AquariumData>>;
@@ -16,12 +17,12 @@ export type CardDataTableProps = {
 
 const CardDataTable = ({
   columnTitle,
-  isSingleAnswer,
   items,
   aquariumData,
   setAquariumData,
 }: CardDataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: AquaItem;
@@ -41,6 +42,8 @@ const CardDataTable = ({
 
   const category = columnTitle.toLowerCase();
 
+  const isSingleAnswer = ["pump", "heater", "light"].includes(category);
+
   const itemsPerPage = 6;
 
   const paginationData = paginationDataHandler(
@@ -54,6 +57,21 @@ const CardDataTable = ({
 
     const isMultipleItemCategory = multipleCategories.includes(category);
     const categoryKey = category as keyof AquariumData;
+
+    const otherTypeExists = Object.values(aquariumData).some((data) => {
+      if (Array.isArray(data)) {
+        return data.some((i) => {
+          if (item.water === Water.BOTH) return false;
+          return i.water !== item.water && i.water !== Water.BOTH;
+        });
+      }
+      return data.water !== item.water && data.water !== Water.BOTH;
+    });
+
+    if (otherTypeExists) {
+      setShowModal(true);
+      return;
+    }
 
     setAquariumData((prevState) => {
       if (isMultipleItemCategory) {
@@ -102,6 +120,10 @@ const CardDataTable = ({
         return prevState;
       });
     }
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -193,6 +215,16 @@ const CardDataTable = ({
           />
         </div>
       </div>
+      {showModal && (
+        <Modal
+          title="Błąd"
+          message="Nie możesz dodać elementu dla Fresh Water, ponieważ jest już element z Salt Water (i odwrotnie)"
+          cancelButtonText="Anuluj"
+          detailsButtonText="Zrozumiałem"
+          onCancelClick={hideModal}
+          onDetailsClick={hideModal}
+        />
+      )}
     </div>
   );
 };
