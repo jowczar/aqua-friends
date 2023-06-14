@@ -52,8 +52,8 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                   <Image
                     src={
                       user?.role === UserRole.ADMIN
-                        ? "admin-logo.svg"
-                        : "logo.svg"
+                        ? "/admin-logo.svg"
+                        : "/logo.svg"
                     }
                     alt="Aqua friends"
                     height={32}
@@ -86,7 +86,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                 >
                   <span className="sr-only">View messages</span>
                   <Image
-                    src="chat.svg"
+                    src="/chat.svg"
                     alt="chat"
                     className="group-hover:scale-110 transition flex-none"
                     height={16}
@@ -100,7 +100,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                 >
                   <span className="sr-only">View favorites</span>
                   <Image
-                    src="heart.svg"
+                    src="/heart.svg"
                     alt="heart"
                     className="group-hover:scale-110 transition flex-none"
                     height={16}
@@ -116,7 +116,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 transition group-hover:scale-110 rounded-full flex-none"
-                        src={user?.photoURL || "man.png"}
+                        src={user?.photoURL || "/man.png"}
                         alt="user photo"
                       />
                     </Menu.Button>
