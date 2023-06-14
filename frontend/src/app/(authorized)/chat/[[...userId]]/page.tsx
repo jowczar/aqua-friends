@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ChannelSort, ChannelFilters, ChannelOptions } from "stream-chat";
 import {
   Chat,
@@ -11,6 +11,7 @@ import {
   MessageInput,
   Thread,
   Window,
+  useChatContext,
 } from "stream-chat-react";
 import { notFound } from "next/navigation";
 
@@ -19,6 +20,7 @@ import Loader from "@/components/Loader";
 
 import "./chat.styles.css";
 import useConnectUser from "./useConnectUser";
+import CustomChannelPreview from "./CustomChannelPreview";
 
 const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   // NextJS does not support optional catch-all routes yet so we have to programmatically
@@ -28,12 +30,8 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   }
 
   const initialConversationUserId = userId?.[0] || null;
-
+  const { setActiveChannel } = useChatContext();
   const { client, chatUserId } = useConnectUser();
-
-  const { synchronize } = useChat();
-  const [channel, setChannel] = useState(null);
-  console.log({ initialConversationUserId });
 
   const filters = {
     type: "messaging",
@@ -41,6 +39,16 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   } as ChannelFilters;
   const options = { state: true, presence: true, limit: 10 } as ChannelOptions;
   const sort = { last_message_at: -1 } as ChannelSort;
+
+  const channelListOptions = {
+    filters,
+    options,
+    sort,
+  };
+
+  // TODO: move this somewhere
+  const { synchronize } = useChat();
+  console.log({ initialConversationUserId });
 
   useEffect(() => {
     if (!client || !initialConversationUserId) return;
@@ -51,11 +59,14 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
 
       const channel = client.channel("messaging", {
         members: [chatUserId, initialConversationUserId],
+        name: "My first channel", // TODO: maybe get that info from backend on synchronize? and make sure that the user with it exists – it could be also set properly in a preview (with data of the user)
       });
+      channel.watch();
 
-      setChannel(channel);
+      setActiveChannel(channel);
     });
   }, [client, initialConversationUserId]);
+  //
 
   if (!client) {
     return (
@@ -68,9 +79,11 @@ const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   return (
     <div className="flex flex-col md:flex-row w-full md:h-[calc(100vh-4rem)]">
       <Chat client={client}>
-        <ChannelList filters={filters} sort={sort} options={options} />
-        {/* TODO: channel={channel} can be used to set a specific channel e.g. when we are redirected here from the list of users */}
-        <Channel channel={channel}>
+        <ChannelList
+          {...channelListOptions}
+          Preview={(props) => <CustomChannelPreview {...props} />}
+        />
+        <Channel>
           <Window>
             <ChannelHeader />
             <MessageList />
