@@ -32,17 +32,15 @@ router.post(
       const server = StreamChat.getInstance(apiKey, apiSecret);
       const token = server.createToken(user.uid);
 
-      return res.status(201).send({ token });
+      res.status(201).send({ token });
     } catch (err) {
       logger.error(err);
       if (isFirebaseError(err)) {
-        return res
-          .status(400)
-          .send({ message: `${err.code} - ${err.message}` });
+        res.status(400).send({ message: `${err.code} - ${err.message}` });
       } else if (err instanceof Error) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
       } else {
-        return res.status(500).send({ message: "Something went wrong" });
+        res.status(500).send({ message: "Something went wrong" });
       }
     }
   }
@@ -83,17 +81,15 @@ router.post(
       });
       await channel.create(); // Stream ensures that only one channel exists
 
-      return res.status(204).send();
+      res.status(204).send();
     } catch (err) {
       logger.error(err);
       if (isFirebaseError(err)) {
-        return res
-          .status(400)
-          .send({ message: `${err.code} - ${err.message}` });
+        res.status(400).send({ message: `${err.code} - ${err.message}` });
       } else if (err instanceof Error) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
       } else {
-        return res.status(500).send({ message: "Something went wrong" });
+        res.status(500).send({ message: "Something went wrong" });
       }
     }
   }
