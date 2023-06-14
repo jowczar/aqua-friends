@@ -3,7 +3,7 @@
  * @link https://github.com/GetStream/website-react-examples/blob/master/social-messenger-ts/src/hooks/useConnectUser.ts
  */
 
-import useChat from "@/hooks/useChat";
+import useChat from "./useChat";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { StreamChat } from "stream-chat";
