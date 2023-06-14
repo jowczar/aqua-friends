@@ -80,7 +80,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                 ))}
               </div>
               <div className="flex flex-row gap-3 flex items-center pr-2 sm:pr-0">
-                {user?.role === UserRole.USER && (
+                {user?.role !== UserRole.ADMIN && (
                   <>
                     <Link
                       href="/chat"
