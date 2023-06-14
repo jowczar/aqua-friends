@@ -25,7 +25,7 @@ import Loader from "@/components/Loader";
 
 import "./chat.styles.css";
 
-const App = ({ params: { userId } }: { params: { userId: string } }) => {
+const App = ({ params: { userId } }: { params: { userId: string[] } }) => {
   // NextJS does not support optional catch-all routes yet so we have to programmatically
   // forbid access to the page if there is more than optional userId provided (e.g. /chat/userId/somethingElse)
   if (userId?.length > 1) {
