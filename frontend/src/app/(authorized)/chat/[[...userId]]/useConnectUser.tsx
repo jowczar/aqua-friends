@@ -46,13 +46,15 @@ const useConnectUser = () => {
       didUserConnectInterrupt = true;
       // there might be a pending "connectUser" operation, wait for it to finish
       // before executing the "disconnectUser" in order to prevent race-conditions.
-      connectUser.then(() => {
-        setClient(null);
-        newClient.disconnectUser().catch((e) => {
-          toast.error("Failed to disconnect user");
-          console.error("Failed to disconnect user", e);
-        });
-      });
+      connectUser
+        .then(() => {
+          setClient(null);
+          newClient.disconnectUser().catch((e) => {
+            toast.error("Failed to disconnect user");
+            console.error("Failed to disconnect user", e);
+          });
+        })
+        .catch(console.error);
     };
   }, [chatToken, chatUserId, username]);
 
