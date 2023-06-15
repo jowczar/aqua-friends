@@ -14,7 +14,7 @@ import AquaDecorPage, {
   Terrain,
 } from "./AquaDecorPage";
 import AquaSummaryPage from "./AquaSummaryPage";
-import AquaLifePage from "./AquaLifePage";
+import AquaLifePage, { Fish } from "./AquaLifePage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
@@ -206,6 +206,8 @@ export default function Creator() {
     }));
   };
 
+  const [fishes, setFishes] = useState<Fish[]>([]);
+
   const buttons = (
     <>
       {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
@@ -281,7 +283,13 @@ export default function Creator() {
             );
 
           case AquaCreatorStep.AQUA_LIFE_PAGE:
-            return <AquaLifePage />;
+            return (
+              <AquaLifePage
+                isFreshWater={isFreshWater}
+                userFishes={fishes}
+                setUserFishes={setFishes}
+              />
+            );
 
           case AquaCreatorStep.AQUA_SUMMARY_PAGE:
             return (
