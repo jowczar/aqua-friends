@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import useFirestore from "@/hooks/useFirestore";
 import { Water } from "@/enums/Water.enum";
-import { getFishData } from "./aquaLife.logic";
+import { getFishData, getFishRules } from "./aquaLife.logic";
 import AquaLifeCardDataTable from "@/components/DataTables/AquaLifeCardDataTable";
 import AquaLifeSummaryCard from "@/components/AquaLifeSummaryCard";
 import Search from "@/components/Search";
+import { FishRuleSet } from "@/enums/FishRuleSet.enum";
 
 type AquaLifePageProps = {
   isFreshWater: boolean;
@@ -31,6 +32,14 @@ export type Fish = {
   species: string;
 };
 
+export type FishCompatibility = {
+  [fishName: string]: FishRuleSet;
+};
+
+export type FishRules = {
+  [fishName: string]: FishCompatibility;
+};
+
 const AquaLifePage = ({
   isFreshWater,
   userFishes,
@@ -42,8 +51,15 @@ const AquaLifePage = ({
 
   const [allFishes, setAllFishes] = useState<Fish[]>([]);
 
+  const [fishRules, setFishRules] = useState<FishRules>({
+    fish: {
+      fish: FishRuleSet.COMPATIBLE,
+    },
+  });
+
   useEffect(() => {
     getFishData(firestore, setAllFishes, isFreshWater);
+    getFishRules(firestore, setFishRules, isFreshWater);
   }, [firestore, isFreshWater]);
 
   const filteredFishes = allFishes.filter((fish) =>
@@ -69,6 +85,7 @@ const AquaLifePage = ({
           userFishes={userFishes}
           setUserFishes={setUserFishes}
           itemsPerPage={5}
+          fishRules={fishRules}
         />
       </div>
     </div>

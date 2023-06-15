@@ -4,7 +4,8 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { Fish } from "./AquaLifePage";
+import { Fish, FishRules } from "./AquaLifePage";
+import { FishRuleSet } from "@/enums/FishRuleSet.enum";
 
 export const getFishData = async (
   firestore: Firestore,
@@ -40,4 +41,34 @@ export const getFishData = async (
   const fishData = await Promise.all(fishDataPromises);
 
   setFishes(fishData);
+};
+
+const fishRuleSetMap: { [key: string]: FishRuleSet } = {
+  y: FishRuleSet.COMPATIBLE,
+  n: FishRuleSet.NOT_COMPATIBLE,
+  c: FishRuleSet.CAUTION_REQUIRED,
+};
+
+export const getFishRules = async (
+  firestore: Firestore,
+  setRules: React.Dispatch<React.SetStateAction<FishRules>>,
+  isFreshWater: boolean
+) => {
+  const collectionName = isFreshWater
+    ? "freshwater_fish_ruleset"
+    : "saltwater_fish_ruleset";
+  const querySnapshot = await getDocs(collection(firestore, collectionName));
+
+  let ruleSet: {
+    [fishName: string]: { [otherFishName: string]: FishRuleSet };
+  } = {};
+
+  querySnapshot.docs.forEach((doc: DocumentData) => {
+    const data = doc.data();
+    const docName = doc.id;
+
+    ruleSet[docName] = data;
+  });
+
+  setRules(ruleSet);
 };

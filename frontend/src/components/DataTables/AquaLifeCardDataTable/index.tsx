@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import Pagination from "../../Pagination";
 import Image from "next/image";
 import { paginationDataHandler } from "../helpers";
-import { AquaItem } from "@/app/(authorized)/creator/AquaDecorPage";
+
 import Modal from "@/components/Modal";
-import { Fish } from "@/app/(authorized)/creator/AquaLifePage";
+import { Fish, FishRules } from "@/app/(authorized)/creator/AquaLifePage";
+import { FishRuleSet } from "@/enums/FishRuleSet.enum";
 
 export type AquaLifeCardDataTableProps = {
   columnTitle: string;
@@ -13,6 +14,7 @@ export type AquaLifeCardDataTableProps = {
   userFishes: Fish[];
   setUserFishes: React.Dispatch<React.SetStateAction<Fish[]>>;
   itemsPerPage: number;
+  fishRules: FishRules;
 };
 
 const AquaLifeCardDataTable = ({
@@ -21,9 +23,15 @@ const AquaLifeCardDataTable = ({
   userFishes,
   setUserFishes,
   itemsPerPage,
+  fishRules,
 }: AquaLifeCardDataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalCompatible, setShowModalCompatible] = useState(false);
+  const [showModalNotCompatible, setShowModalNotCompatible] = useState(false);
+  const [showModalCaution, setShowModalCaution] = useState(false);
+
+  const [currentFish, setCurrentFish] = useState<Fish | null>(null);
+  const [incompatibleFish, setIncompatibleFish] = useState<Fish | null>(null);
 
   const paginationData = paginationDataHandler(
     allFishes,
@@ -31,9 +39,28 @@ const AquaLifeCardDataTable = ({
     currentPage
   );
 
-  console.log("co w userFishes");
   const addButtonHandler = (item: Fish) => {
-    setUserFishes([...userFishes, item]);
+    setCurrentFish(item);
+
+    const incompatibilityDetected = userFishes.some((userFish) => {
+      const compatibility = fishRules[item.species][userFish.species];
+      switch (compatibility) {
+        case FishRuleSet.NOT_COMPATIBLE:
+          setIncompatibleFish(userFish);
+          setShowModalNotCompatible(true);
+          return true;
+        case FishRuleSet.CAUTION_REQUIRED:
+          setShowModalCaution(true);
+          return true;
+        default:
+          return false;
+      }
+    });
+
+    if (!incompatibilityDetected) {
+      setUserFishes([...userFishes, item]);
+      setShowModalCompatible(true);
+    }
   };
 
   const removeButtonHandler = (item: Fish) => {
@@ -42,11 +69,20 @@ const AquaLifeCardDataTable = ({
     );
   };
 
+  const addFishWithCaution = () => {
+    if (currentFish) {
+      setUserFishes([...userFishes, currentFish]);
+    }
+    setShowModalCaution(false);
+  };
+
   const isFishInAquarium = (item: Fish) =>
     userFishes?.find((fish) => fish?.name === item.name);
 
   const hideModal = () => {
-    setShowModal(false);
+    setShowModalCompatible(false);
+    setShowModalNotCompatible(false);
+    setShowModalCaution(false);
   };
 
   return (
@@ -87,6 +123,9 @@ const AquaLifeCardDataTable = ({
                               <div className="text-sm font-medium text-gray-900">
                                 {item.name}
                               </div>
+                              <div className="text-sm text-gray-500 whitespace-normal break-all">
+                                {item.species}
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -117,12 +156,49 @@ const AquaLifeCardDataTable = ({
           />
         </div>
       </div>
-      {showModal && (
+      {showModalNotCompatible && (
         <Modal
           title="Błąd"
-          message="Nie możesz dodać elementu dla Fresh Water, ponieważ jest już element z Salt Water (i odwrotnie)"
+          message={
+            <>
+              Nie możesz dodać rybki gatunku{" "}
+              <strong className="text-red-600">{currentFish?.species}</strong>,
+              ponieważ jest niekompatybilna z rybką gatunku{" "}
+              <strong className="text-red-600">
+                {incompatibleFish?.species}
+              </strong>
+              , która jest już w twoim akwarium.
+            </>
+          }
           cancelButtonText="Anuluj"
           detailsButtonText="Zrozumiałem"
+          onCancelClick={hideModal}
+          onDetailsClick={hideModal}
+        />
+      )}
+      {showModalCaution && (
+        <Modal
+          title="Ostrzeżenie"
+          message={
+            <>
+              Czy na pewno chcesz dodać rybkę gatunku{" "}
+              <strong className="text-red-600">{currentFish?.species}</strong>?
+              Może nie być to najlepsza opcja.
+            </>
+          }
+          cancelButtonText="Anuluj"
+          detailsButtonText="Dodaj mimo wszystko"
+          onCancelClick={hideModal}
+          onDetailsClick={addFishWithCaution}
+        />
+      )}
+
+      {showModalCompatible && (
+        <Modal
+          title="Sukces"
+          message="Rybka została dodana do akwarium."
+          cancelButtonText="Zamknij"
+          detailsButtonText="Zamknij"
           onCancelClick={hideModal}
           onDetailsClick={hideModal}
         />

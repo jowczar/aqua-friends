@@ -20,6 +20,14 @@ const AquaLifeSummaryCard = ({ fishes }: AquaLifeSummaryCardProps) => {
               {formatArrayToString(fishes?.map((fish: Fish) => fish?.name))}
             </span>
           </div>
+          <div className="flex text-sm md:text-lg font-bold gap-2">
+            Species:{" "}
+            <span className="font-normal">
+              {formatArrayToString(
+                Array.from(new Set(fishes?.map((fish: Fish) => fish?.species)))
+              )}
+            </span>
+          </div>
         </div>
       </div>
     </div>
