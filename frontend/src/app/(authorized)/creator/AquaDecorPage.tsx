@@ -20,54 +20,35 @@ type AquaDecorPageProps = Omit<TabsProps, "className"> & {
   setIsFreshWater: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export type Pump = {
-  height: number;
-  image: string;
-  length: number;
-  lph: number;
+export type BasicAquariumItem = {
   name: string;
-  power: number;
+  image: string;
   water: Water;
+};
+
+export type DimensionalAquariumItem = BasicAquariumItem & {
+  height: number;
+  length: number;
   width: number;
 };
-export type Heater = {
-  height: number;
-  image: string;
-  length: number;
+
+export type PoweredAquariumItem = DimensionalAquariumItem & {
+  power: number;
+};
+
+export type Pump = PoweredAquariumItem & {
+  lph: number;
+};
+
+export type Heater = PoweredAquariumItem & {
   maxTemperature: number;
   minTemperature: number;
-  name: string;
-  power: number;
-  water: Water;
-  width: number;
 };
-export type Light = {
-  height: number;
-  image: string;
-  length: number;
-  name: string;
-  power: number;
-  water: Water;
-  width: number;
-};
-export type Plant = {
-  name: string;
-  image: string;
-  water: Water;
-};
-export type Decor = {
-  height: number;
-  image: string;
-  length: number;
-  name: string;
-  width: number;
-  water: Water;
-};
-export type Terrain = {
-  image: string;
-  name: string;
-  water: Water;
-};
+
+export type Light = PoweredAquariumItem;
+export type Plant = BasicAquariumItem;
+export type Decor = DimensionalAquariumItem;
+export type Terrain = BasicAquariumItem;
 
 export type AquaItem = Pump | Heater | Light | Plant | Decor | Terrain;
 
