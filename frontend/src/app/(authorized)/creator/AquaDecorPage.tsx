@@ -126,12 +126,12 @@ const AquaDecorPage = ({
       terrains
     );
 
-    newItems.items = newItems.items.filter((item: any) => {
-      if (isFreshWater) {
-        return item.water === Water.FRESHWATER || item.water === Water.BOTH;
-      } else {
-        return item.water === Water.SALTWATER || item.water === Water.BOTH;
-      }
+    newItems.items = newItems.items.filter((item: AquaItem) => {
+      if (item.water === Water.BOTH) return true;
+
+      return isFreshWater
+        ? item.water === Water.FRESHWATER
+        : item.water === Water.SALTWATER;
     });
 
     setItems(newItems.items);
