@@ -138,15 +138,19 @@ const AquaDecorPage = ({
   };
 
   useEffect(() => {
-    if (
-      heaters.length &&
-      lights.length &&
-      pumps.length &&
-      decors.length &&
-      terrains.length &&
-      freshWaterPlants.length &&
-      saltWaterPlants.length
-    ) {
+    const arraysToCheck = [
+      heaters,
+      lights,
+      pumps,
+      decors,
+      terrains,
+      freshWaterPlants,
+      saltWaterPlants,
+    ];
+
+    const allArraysHaveItems = arraysToCheck.every((array) => array.length > 0);
+
+    if (allArraysHaveItems) {
       setNewItems();
     }
   }, [
@@ -171,25 +175,23 @@ const AquaDecorPage = ({
   };
 
   const updateTabs = () => {
+    const currentTabName = currentTab.tabName.toLowerCase();
+    let currentData = aquariumData[currentTabName];
     let numberOfElements = 0;
-    let currentData = aquariumData[currentTab.tabName.toLowerCase()];
 
     if (Array.isArray(currentData)) {
       numberOfElements = ["plants", "decors", "terrains"].includes(
-        currentTab.tabName.toLowerCase()
+        currentTabName
       )
         ? currentData.length
         : 0;
     }
 
     const shouldShowSuccess =
-      ["pump", "heater", "light"].includes(currentTab.tabName.toLowerCase()) &&
-      (currentData as AquaItem).name
-        ? true
-        : false;
+      ["pump", "heater", "light"].includes(currentTabName) &&
+      !!(currentData as AquaItem).name;
 
-    const shouldShowWarning =
-      shouldShowSuccess === false ? !shouldShowSuccess : false;
+    const shouldShowWarning = !shouldShowSuccess;
 
     updateTabsData({
       ...currentTab,
