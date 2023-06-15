@@ -314,9 +314,7 @@ export default function Creator() {
                     <Modal
                       title={"Aqua Friends"}
                       message={"Data saved successfully!"}
-                      cancelButtonText={"Close"}
-                      detailsButtonText={"I understand"}
-                      onCancelClick={handleClose}
+                      detailsButtonText={"Close"}
                       onDetailsClick={handleClose}
                     />
                   </div>
