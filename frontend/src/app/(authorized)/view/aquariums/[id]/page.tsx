@@ -15,6 +15,7 @@ import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { doc, updateDoc } from "firebase/firestore";
+import useAddLog from "@/hooks/useAddLog";
 
 interface AquariumAquaViewPageProps {
   params: { id: string };
@@ -35,6 +36,12 @@ export default function AquariumAquaViewPage({
   const { user } = useUserWithRole();
 
   const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
+  const { addLog } = useAddLog(
+    firestore,
+    "Aqua View Aquarium Service",
+    loggedInUserWithDetails.id
+  );
 
   const { aquariumData, getAquariumData, setAquariumData } = useAquariumData(
     params.id,
@@ -126,12 +133,18 @@ export default function AquariumAquaViewPage({
         (friendId: string) => friendId !== aquariumData.id
       );
       isLiked = false;
+      addLog(
+        `Remove ${aquariumData?.aquariumTitle} to liked aquariums for user ${loggedInUserWithDetails.username}`
+      );
     } else {
       newFavAquariumList = [
         ...loggedInUserWithDetails.fav_aquariums,
         aquariumData?.id || "",
       ];
       isLiked = true;
+      addLog(
+        `Add ${aquariumData?.aquariumTitle} to liked aquariums for user ${loggedInUserWithDetails.username}`
+      );
     }
 
     await updateDoc(usersRef, {

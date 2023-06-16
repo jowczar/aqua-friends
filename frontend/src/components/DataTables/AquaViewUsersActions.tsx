@@ -5,6 +5,7 @@ import useFirestore from "@/hooks/useFirestore";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquaViewUserData } from "@/app/(authorized)/view/data.logic";
 import useUserWithRole from "@/hooks/useUserWithRole";
+import useAddLog from "@/hooks/useAddLog";
 
 export type AquaViewUsersActionsProps = {
   singleUser: AquaViewUserData;
@@ -23,6 +24,12 @@ const AquaViewUsersActions = ({
   const { user } = useUserWithRole();
 
   const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
+  const { addLog } = useAddLog(
+    firestore,
+    "Aqua View User Service",
+    loggedInUserWithDetails.id
+  );
 
   const viewButtonHandler = () => {
     router.push(`/view/users/${singleUser.id}`);
@@ -43,9 +50,15 @@ const AquaViewUsersActions = ({
         (friendId) => friendId !== itemId
       );
       isFriend = false;
+      addLog(
+        `Remove ${singleUser.name} to friends for user ${loggedInUserWithDetails.username}`
+      );
     } else {
       newFriendsList = [...loggedInUserWithDetails.friends, itemId];
       isFriend = true;
+      addLog(
+        `Add ${singleUser.name} from friends for user ${loggedInUserWithDetails.username}`
+      );
     }
 
     await updateDoc(usersRef, {

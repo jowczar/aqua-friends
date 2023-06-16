@@ -22,6 +22,8 @@ import { Water } from "@/enums/Water.enum";
 import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
 import { collection, doc, setDoc } from "firebase/firestore";
+import useAddLog from "@/hooks/useAddLog";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 
 const TOTAL_NUMBER_OF_STEPS = 4;
 
@@ -70,6 +72,14 @@ export default function Creator() {
   const firestore = useFirestore();
 
   const { user } = useUserWithRole();
+
+  const userWithDetails = useUserWithDetails(firestore, user?.uid);
+
+  const { addLog } = useAddLog(
+    firestore,
+    "Creator Service",
+    userWithDetails.id
+  );
 
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
@@ -161,6 +171,10 @@ export default function Creator() {
     });
 
     setOpenDialog(true);
+
+    addLog(
+      `Aquarium of ${aquariumName} has been created for user ${userWithDetails.username}`
+    );
   };
 
   const handleClose = () => {

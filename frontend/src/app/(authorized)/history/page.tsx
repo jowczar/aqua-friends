@@ -12,6 +12,8 @@ import getHistoryLogs, {
   StartDate,
 } from "./data.logic";
 import { getHistoryLogsColumns } from "./history.columns";
+import useUserWithRole from "@/hooks/useUserWithRole";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 
 type DateRange = [StartDate, EndDate];
 
@@ -36,16 +38,25 @@ const CustomInput = forwardRef<HTMLButtonElement, CustomInputProps>(
 export default function History() {
   const firestore = useFirestore();
 
+  const { user } = useUserWithRole();
+
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
   const [dateRange, setDateRange] = useState<DateRange>([null, null]);
   const [startDate, endDate] = dateRange;
 
   const [historyLogs, setHistoryLogs] = useState<HistoryLogsData[]>([]);
 
   const handleHistoryLogs = useCallback(async () => {
-    const historyLogsData = await getHistoryLogs(firestore, startDate, endDate);
+    const historyLogsData = await getHistoryLogs(
+      firestore,
+      startDate,
+      endDate,
+      loggedInUserWithDetails.id
+    );
 
     setHistoryLogs(historyLogsData);
-  }, [firestore, startDate, endDate]);
+  }, [firestore, startDate, endDate, loggedInUserWithDetails]);
 
   useEffect(() => {
     handleHistoryLogs();

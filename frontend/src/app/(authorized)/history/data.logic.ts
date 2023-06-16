@@ -21,17 +21,22 @@ export type EndDate = Date | null;
 const getHistoryLogs = async (
   firestore: Firestore,
   startDate: StartDate,
-  endDate: EndDate
+  endDate: EndDate,
+  userId: string
 ): Promise<HistoryLogsData[]> => {
   const logsRef = collection(firestore, "logs");
 
-  const filterQuery = query(
-    logsRef,
-    where("date", ">=", startDate),
-    where("date", "<=", endDate)
-  );
+  let filterQuery = query(logsRef, where("user_id", "==", userId));
 
-  const snapshot = await getDocs(startDate && endDate ? filterQuery : logsRef);
+  if (startDate && endDate) {
+    filterQuery = query(
+      filterQuery,
+      where("date", ">=", startDate),
+      where("date", "<=", endDate)
+    );
+  }
+
+  const snapshot = await getDocs(filterQuery);
 
   const historyLogsData = snapshot.docs.map((doc: DocumentData) => {
     const data = doc.data();
