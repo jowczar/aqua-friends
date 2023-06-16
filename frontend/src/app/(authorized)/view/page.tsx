@@ -70,6 +70,10 @@ const aquariumFilterOptions = [
     label: "Show only liked",
     value: AquariumFilterOptions.ONLY_LIKED,
   },
+  {
+    label: "Show only your aquariums",
+    value: AquariumFilterOptions.USER_AQUARIUMS,
+  },
 ];
 
 export default function View() {

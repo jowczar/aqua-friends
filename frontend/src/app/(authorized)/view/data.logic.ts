@@ -71,6 +71,7 @@ export const getAndMapAquariumData = async (
       decors: data?.decors,
       terrains: data?.terrains,
     },
+    userId: data?.user_id,
   };
 };
 
@@ -106,6 +107,13 @@ export const useAquariumData = (
       if (currentAquariumFilter.value === AquariumFilterOptions.ONLY_LIKED) {
         return aquarium.isLiked;
       }
+
+      if (
+        currentAquariumFilter.value === AquariumFilterOptions.USER_AQUARIUMS
+      ) {
+        return aquarium.userId === loggedInUserWithDetails.id;
+      }
+
       return true;
     });
 
