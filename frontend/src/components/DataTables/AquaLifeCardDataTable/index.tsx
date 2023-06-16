@@ -7,6 +7,7 @@ import { paginationDataHandler } from "../helpers";
 import Modal from "@/components/Modal";
 import { Fish, FishRules } from "@/app/(authorized)/creator/AquaLifePage";
 import { FishRuleSet } from "@/enums/FishRuleSet.enum";
+import { AquariumData } from "@/app/(authorized)/creator/page";
 
 export type AquaLifeCardDataTableProps = {
   columnTitle: string;
@@ -15,6 +16,7 @@ export type AquaLifeCardDataTableProps = {
   setUserFishes: React.Dispatch<React.SetStateAction<Fish[]>>;
   itemsPerPage: number;
   fishRules: FishRules;
+  aquariumData: AquariumData;
 };
 
 const AquaLifeCardDataTable = ({
@@ -24,11 +26,14 @@ const AquaLifeCardDataTable = ({
   setUserFishes,
   itemsPerPage,
   fishRules,
+  aquariumData,
 }: AquaLifeCardDataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModalCompatible, setShowModalCompatible] = useState(false);
   const [showModalNotCompatible, setShowModalNotCompatible] = useState(false);
   const [showModalCaution, setShowModalCaution] = useState(false);
+  const [showModalWaterTypeMismatch, setShowModalWaterTypeMismatch] =
+    useState(false);
 
   const [currentFish, setCurrentFish] = useState<Fish | null>(null);
   const [incompatibleFish, setIncompatibleFish] = useState<Fish | null>(null);
@@ -40,6 +45,13 @@ const AquaLifeCardDataTable = ({
   );
 
   const addButtonHandler = (item: Fish) => {
+    const isWaterTypeMismatch =
+      aquariumData.plants[0]?.water !== item.requirements.water;
+    if (isWaterTypeMismatch) {
+      setShowModalWaterTypeMismatch(true);
+      return;
+    }
+
     setCurrentFish(item);
 
     const incompatibilityDetected = userFishes.some((userFish) => {
@@ -197,6 +209,15 @@ const AquaLifeCardDataTable = ({
           message="Rybka została dodana do akwarium."
           detailsButtonText="Zamknij"
           onDetailsClick={hideModal}
+        />
+      )}
+
+      {showModalWaterTypeMismatch && (
+        <Modal
+          title="Błąd"
+          message="Typ wody rybki nie jest zgodny z typem wody akwarium. Nie możesz dodać tej rybki."
+          detailsButtonText="Zamknij"
+          onDetailsClick={() => setShowModalWaterTypeMismatch(false)}
         />
       )}
     </div>

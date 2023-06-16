@@ -8,9 +8,11 @@ import AquaLifeCardDataTable from "@/components/DataTables/AquaLifeCardDataTable
 import AquaLifeSummaryCard from "@/components/AquaLifeSummaryCard";
 import Search from "@/components/Search";
 import { FishRuleSet } from "@/enums/FishRuleSet.enum";
+import { AquariumData } from "./page";
 
 type AquaLifePageProps = {
   isFreshWater: boolean;
+  aquariumData: AquariumData;
   userFishes: Fish[];
   setUserFishes: React.Dispatch<React.SetStateAction<Fish[]>>;
 };
@@ -42,6 +44,7 @@ export type FishRules = {
 
 const AquaLifePage = ({
   isFreshWater,
+  aquariumData,
   userFishes,
   setUserFishes,
 }: AquaLifePageProps) => {
@@ -86,6 +89,7 @@ const AquaLifePage = ({
           setUserFishes={setUserFishes}
           itemsPerPage={5}
           fishRules={fishRules}
+          aquariumData={aquariumData}
         />
       </div>
     </div>

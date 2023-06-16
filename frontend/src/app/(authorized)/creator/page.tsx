@@ -208,6 +208,17 @@ export default function Creator() {
 
   const [fishes, setFishes] = useState<Fish[]>([]);
 
+  const canCreateAquarium = () => {
+    const { pump, heater, light, terrains } = aquariumData;
+    return (
+      pump.name !== "" &&
+      heater.name !== "" &&
+      light.name !== "" &&
+      fishes.length > 0 &&
+      terrains.length > 0
+    );
+  };
+
   const buttons = (
     <>
       {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
@@ -230,7 +241,12 @@ export default function Creator() {
         {stepsCompleted.length === TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleSave}
-            className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal text-white hover:bg-opacity-90"
+            disabled={!canCreateAquarium()}
+            className={`w-full inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal ${
+              canCreateAquarium()
+                ? "bg-green-600 text-white hover:bg-opacity-90"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            } `}
           >
             Create your new world
           </button>
@@ -288,6 +304,7 @@ export default function Creator() {
                 isFreshWater={isFreshWater}
                 userFishes={fishes}
                 setUserFishes={setFishes}
+                aquariumData={aquariumData}
               />
             );
 
@@ -298,6 +315,7 @@ export default function Creator() {
                 setAquariumName={setAquariumName}
                 aquariumDimensions={aquariumDimensions}
                 aquariumData={aquariumData}
+                fishes={fishes}
               />
             );
           case AquaCreatorStep.AQUA_MODAL:
@@ -308,6 +326,7 @@ export default function Creator() {
                   setAquariumName={setAquariumName}
                   aquariumDimensions={aquariumDimensions}
                   aquariumData={aquariumData}
+                  fishes={fishes}
                 />
                 {openDialog && (
                   <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
