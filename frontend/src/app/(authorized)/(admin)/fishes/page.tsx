@@ -25,7 +25,7 @@ const initialRules = [
       Salmon: "y",
       Trout: "n",
       Bass: "y",
-      Catkey: "n",
+      Catfish: "n",
       Walleye: "n",
     },
   },
@@ -35,7 +35,7 @@ const initialRules = [
       Salmon: "y",
       Trout: "n",
       Bass: "n",
-      Catkey: "n",
+      Catfish: "n",
       Walleye: "n",
     },
   },
@@ -45,17 +45,17 @@ const initialRules = [
       Salmon: "n",
       Trout: "y",
       Bass: "n",
-      Catkey: "n",
+      Catfish: "n",
       Walleye: "n",
     },
   },
   {
-    key: "Catkey",
+    key: "Catfish",
     rules: {
       Salmon: "n",
       Trout: "n",
       Bass: "n",
-      Catkey: "y",
+      Catfish: "y",
       Walleye: "n",
     },
   },
@@ -65,7 +65,7 @@ const initialRules = [
       Salmon: "n",
       Trout: "n",
       Bass: "n",
-      Catkey: "n",
+      Catfish: "n",
       Walleye: "y",
     },
   },
@@ -121,7 +121,7 @@ const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddF
                     onClick={() => {}}
                     type="submit"
                     className={classNames(
-                      "bg-primary rounded px-4 py-2 mt-4 text-white text-xs cursor-pointer transition w-full",
+                      "bg-primary rounded px-4 py-2 mt-4   text-white text-xs cursor-pointer transition w-full",
                       "hover:bg-[#2644a8] active:bg-[#2644a8]",
                     )}
                   >
