@@ -7,25 +7,27 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Form from "./form";
+import { Fish } from "../../creator/AquaLifePage";
+import { getFishData } from "../../creator/aquaLife.logic";
 
-type AddAdminModalProps = {
+type AddFishModalProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
 
-const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
+const AddFishModal = ({ isOpen, setIsOpen }: AddFishModalProps) => {
   return (
     <Dialog
       open={isOpen}
       onClose={() => setIsOpen(false)}
-      id="addAdminModal"
+      id="addFishModal"
       className="fixed z-50 left-0 top-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
     >
       <div className="max-h-full">
         <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
-              Add new admin
+              Add new fish
             </Dialog.Title>
             <button
               type="button"
@@ -43,8 +45,7 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
             </button>
           </div>
           <Dialog.Description className="text-sm text-gray-500">
-            Administrators can manage all aspects of the app, including adding
-            and removing other administrators.
+            Add new fish. Don't forget to adjust compability later! 
           </Dialog.Description>
           <Form onSubmit={() => setIsOpen(false)} />
         </Dialog.Panel>
@@ -53,52 +54,60 @@ const AddAdminModal = ({ isOpen, setIsOpen }: AddAdminModalProps) => {
   );
 };
 
-type Admin = {
-  username: string;
-  email: string;
-  admin: boolean;
-};
-
 // TODO: this route is not protected from non-admins users
-export default function Admins() {
+export default function Fishes() {
   const [isOpen, setIsOpen] = useState(false);
-  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [fishes, setFishes] = useState<Fish[]>([]);
   const columns = [
     {
-      Header: "Username",
-      accessor: "username",
+      Header: "Image",
+      accessor: "image",
       centerHeader: true,
     },
     {
-      Header: "E-mail",
-      accessor: "email",
+      Header: "Name",
+      accessor: "name",
+      centerHeader: true,
+    },
+    {
+      Header: "Species",
+      accessor: "species",
       centerHeader: true,
     },
   ];
   const firestore = useFirestore();
 
-  const fetchAdmins = async () => {
-    const q = query(collection(firestore, "users"), where("admin", "==", true));
-    await getDocs(q).then((snapshot) => {
-      const data = snapshot.docs.map((doc) => doc.data() as Admin);
-      setAdmins(data);
-    });
+  const fetchFishes = async () => {
+    const fishes = getFishData(firestore, setFishes, true);
+  
+    // getFishData
+    // const q = query(collection(firestore, "users"), where("admin", "==", true));
+    // await getDocs(q).then((snapshot) => {
+    //   const data = snapshot.docs.map((doc) => doc.data() as Fish);
+    //   // setAdmins(data);
+    // });
   };
 
   useEffect(() => {
-    fetchAdmins();
+    fetchFishes();
   }, []);
 
   return (
     <div className="my-10 px-5 lg:px-20">
-      <AddAdminModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <AddFishModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <button
         className="self-end bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-fit hover:bg-[#2644a8] active:bg-[#2644a8]"
         onClick={() => setIsOpen(true)}
       >
-        Add new admin
+        Add new fish
       </button>
-      <DataTable columnsData={columns} rowsData={admins} itemsPerPage={10} />
+      <button
+        className="self-end border ml-4 border-primary rounded px-4 py-2 text-black text-sm cursor-pointer transition w-fit hover:border-[#2644a8] hover:bg-slate-200 active:bg-slate-200 active:border-[#2644a8]"
+        onClick={() => setIsOpen(true)}
+      >
+        Change compability rules
+      </button>
+      <DataTable columnsData={columns} rowsData={fishes} itemsPerPage={10} />
     </div>
   );
 }
