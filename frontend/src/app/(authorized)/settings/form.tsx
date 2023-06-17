@@ -21,8 +21,11 @@ import {
   FormInputText,
 } from "@/components/Form/FormField";
 import useFileUploader from "@/hooks/useFileUploader";
-import { UserData } from "@/common/types";
-import { formSchema, handleFirebaseError } from "./schema";
+import { UserData, UserDetails } from "@/common/types";
+import { handleFirebaseError } from "@/common/firebase";
+import { formSchema } from "./schema";
+import useFirestore from "@/hooks/useFirestore";
+import { doc, setDoc } from "firebase/firestore";
 
 type SettingsFormValues = UserData & {
   password: string;
@@ -34,6 +37,7 @@ type SettingsFormValues = UserData & {
 const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
   const { uploadFile } = useFileUploader();
+  const firestore = useFirestore();
   const { control, watch, handleSubmit } = useForm<SettingsFormValues>({
     mode: "onTouched",
     resolver: yupResolver(formSchema),
@@ -45,6 +49,14 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
   const watchPassword = watch("password");
   const watchCurrentPassword = watch("currentPassword");
   const watchEmail = watch("email");
+
+  const updateUserDetails = (
+    uid: string,
+    userDetails: Omit<UserDetails, "id" | "admin">
+  ) => {
+    const userRef = doc(firestore, "users", uid);
+    setDoc(userRef, userDetails, { merge: true });
+  };
 
   const reauthenticate = (user: User) => {
     const provider = user.providerData[0].providerId;
@@ -81,6 +93,13 @@ const Form = ({ email, displayName }: Omit<UserData, "photoUrl">) => {
         displayName: data.displayName,
         photoURL: url || user.photoURL,
       });
+
+      if (url)
+        updateUserDetails(user.uid, {
+          avatar: url,
+          username: data.displayName,
+          email: data.email,
+        });
 
       toast.success("Profile updated!");
     } catch (error) {

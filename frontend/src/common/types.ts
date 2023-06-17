@@ -23,3 +23,16 @@ export type UserData = {
   displayName: string;
   photoUrl: string;
 };
+
+/**
+ * User data stored in firestore as users/{uid}
+ */
+export type UserDetails = {
+  id: string;
+  username: string;
+  email: string;
+  admin: boolean;
+  avatar: string;
+  fav_aquariums?: string[];
+  friends?: string[];
+};

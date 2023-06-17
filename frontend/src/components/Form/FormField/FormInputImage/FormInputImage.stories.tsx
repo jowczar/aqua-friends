@@ -17,7 +17,7 @@ type Story = StoryObj<typeof FormInputImage>;
 
 const FileUploaderDecorator = (Story: FC) => {
   return (
-    <FileUploaderProvider defaultImage="man.png">
+    <FileUploaderProvider defaultImage="/man.png">
       <Story />
     </FileUploaderProvider>
   );

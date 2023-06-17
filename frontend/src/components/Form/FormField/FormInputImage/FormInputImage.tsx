@@ -1,8 +1,10 @@
 import React, { ChangeEvent } from "react";
 import { Controller } from "react-hook-form";
+import Image from "next/image";
+
 import { FormInputProps } from "@/common/types";
 import useFileUploader from "@/hooks/useFileUploader";
-import Image from "next/image";
+import CropperModal from "./CropperModal";
 
 const FormInputImage = <TFormValues extends Record<string, unknown>>({
   name,
@@ -12,6 +14,7 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
   className,
 }: FormInputProps<TFormValues>): JSX.Element => {
   const { defaultImage, imageToUpload, setImageToUpload } = useFileUploader();
+  const [isCropperOpen, setIsCropperOpen] = React.useState(false);
   const [internalImage, setInternalImage] = React.useState<string>(
     imageToUpload ? URL.createObjectURL(imageToUpload) : defaultImage
   );
@@ -19,8 +22,19 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     if (!input.files?.length) return;
-    setImageToUpload(input.files[0]);
     setInternalImage(URL.createObjectURL(input.files[0]));
+  };
+
+  const onCrop = (canvas: HTMLCanvasElement) => {
+    setIsCropperOpen(false);
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob as BlobPart], "fileName.jpg", {
+        type: "image/jpeg",
+      });
+      setImageToUpload(file);
+      setInternalImage(URL.createObjectURL(file));
+    }, "image/jpeg");
   };
 
   return (
@@ -40,7 +54,7 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
               className={`w-24 h-24 rounded-full transition group-hover:brightness-50 shadow duration-300 ${className}`}
             />
             <Image
-              src="pencil.svg"
+              src="/pencil.svg"
               alt="change avatar"
               height={24}
               width={24}
@@ -55,12 +69,18 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
             accept="image/png,image/jpeg"
             onChange={(e) => {
               handleFileChange(e);
-              onChange(e.target.value);
+              setIsCropperOpen(true);
             }}
           />
           {error && (
             <span className="text-red-500 text-xs">{error?.message}</span>
           )}
+          <CropperModal
+            isOpen={isCropperOpen}
+            setIsOpen={setIsCropperOpen}
+            image={internalImage}
+            onSubmit={onCrop}
+          />
         </label>
       )}
     />

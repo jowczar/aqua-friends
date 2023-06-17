@@ -1,3 +1,5 @@
+import { FirebaseError } from "firebase/app";
+
 // See Firebase documentation for more info: https://firebase.google.com/docs/reference/js/auth#autherrorcodes
 export enum FIREBASE_AUTH_ERROR_CODES {
   ADMIN_ONLY_OPERATION = "auth/admin-restricted-operation",
@@ -105,3 +107,23 @@ export enum FIREBASE_AUTH_ERROR_CODES {
   INVALID_RECAPTCHA_VERSION = "auth/invalid-recaptcha-version",
   INVALID_REQ_TYPE = "auth/invalid-req-type",
 }
+
+export const handleFirebaseError = (error: FirebaseError) => {
+  switch (error.code) {
+    case FIREBASE_AUTH_ERROR_CODES.EMAIL_EXISTS:
+      return "Email already in use";
+    case FIREBASE_AUTH_ERROR_CODES.INVALID_EMAIL:
+      return "Invalid email";
+    case FIREBASE_AUTH_ERROR_CODES.WEAK_PASSWORD:
+      return "Password is too weak";
+    case FIREBASE_AUTH_ERROR_CODES.INVALID_PASSWORD:
+      return "Wrong password";
+    case FIREBASE_AUTH_ERROR_CODES.MISSING_PASSWORD:
+      return "Please enter your current password";
+    case FIREBASE_AUTH_ERROR_CODES.TOO_MANY_ATTEMPTS_TRY_LATER:
+      return "Too many requests. Try again later";
+    default:
+      console.error(error);
+      return "Something went wrong";
+  }
+};

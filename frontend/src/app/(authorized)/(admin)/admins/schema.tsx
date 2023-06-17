@@ -6,10 +6,9 @@ export const formSchema = object().shape({
     .max(30, "Name is too long")
     .required("Name is required"),
   email: yupString().email("Invalid email").required("Email is required"),
-  password: yupString().min(
-    6,
-    "Password length should be at least 6 characters"
-  ),
+  password: yupString()
+    .min(6, "Password length should be at least 6 characters")
+    .required("Password is required"),
   passwordConfirm: yupString()
     .oneOf([ref("password")], "Passwords must match")
     .when("password", {
