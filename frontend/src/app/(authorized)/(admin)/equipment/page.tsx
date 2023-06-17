@@ -63,7 +63,10 @@ export default function Fishes() {
     {
       Header: "Image",
       accessor: "image",
-      centerHeader: true,
+      centerHeader: false,
+      Cell: props => (
+        <Image src={props.row.original.image || "/no-equipment.png"} width={40} height={40} alt={props.name} className="w-12 h-12 rounded-full"></Image>
+      )
     },
     {
       Header: "Name",
