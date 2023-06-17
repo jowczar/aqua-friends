@@ -158,6 +158,11 @@ export default function Fishes() {
       accessor: "species",
       centerHeader: true,
     },
+    {
+      Header: "Type of water",
+      accessor: "requirements.water",
+      centerHeader: true,
+    }
   ];
   const firestore = useFirestore();
 
