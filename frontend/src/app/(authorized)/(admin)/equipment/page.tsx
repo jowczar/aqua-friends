@@ -9,6 +9,7 @@ import Image from "next/image";
 import Form from "./form";
 import { Fish } from "../../creator/AquaLifePage";
 import { getFishData } from "../../creator/aquaLife.logic";
+import { getDecorTableData } from "../../creator/aquaDecor.logic";
 
 type AddFishModalProps = {
   isOpen: boolean;
@@ -70,20 +71,31 @@ export default function Fishes() {
       centerHeader: true,
     },
     {
-      Header: "Species",
-      accessor: "species",
+      Header: "Length",
+      accessor: "length",
+      centerHeader: true,
+    },
+    {
+      Header: "Width",
+      accessor: "width",
+      centerHeader: true,
+    },
+    {
+      Header: "Height",
+      accessor: "height",
       centerHeader: true,
     },
     {
       Header: "Type of water",
-      accessor: "requirements.water",
+      accessor: "water",
       centerHeader: true,
     }
   ];
   const firestore = useFirestore();
 
   const fetchFishes = async () => {
-    const fishes = getFishData(firestore, setFishes, true);
+    // const fishes = getFishData(firestore, setFishes, true);
+    const equipment = getDecorTableData(firestore, setFishes, "pumps")
   
     // getFishData
     // const q = query(collection(firestore, "users"), where("admin", "==", true));
