@@ -21,10 +21,10 @@ const AddFishModal = ({ isOpen, setIsOpen }: AddFishModalProps) => {
       open={isOpen}
       onClose={() => setIsOpen(false)}
       id="addFishModal"
-      className="fixed z-50 left-0 top-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+      className="fixed z-50 left-0 top-0 flex items-center justify-center w-full h-full bg-black bg-opacity-5"
     >
       <div className="max-h-full">
-        <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
+        <Dialog.Panel className="w-full max-w-lg md:min-w-[540px] rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
               Add new equipment

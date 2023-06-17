@@ -30,7 +30,7 @@ const Form = ({ onSubmit }: EquipmentModalForm) => {
   });
 
   return (
-    <FileUploaderProvider defaultImage={false || "/no-fish.png"}>
+    <FileUploaderProvider defaultImage={false || "/no-equipment.png"}>
       <form
         onSubmit={onInternalSubmit}
         className="flex flex-col md:flex-row gap-10 items-center mx-auto bg-white rounded mt-8 mb-2 max-w-2xl"
@@ -68,6 +68,13 @@ const Form = ({ onSubmit }: EquipmentModalForm) => {
             type="text"
             control={control}
             label="Water type"
+            autocomplete={false}
+          />
+          <FormInputText
+            name="equipmentType"
+            type="text"
+            control={control}
+            label="Equipment type"
             autocomplete={false}
           />
           <div className="flex items-center pt-4 space-x-2">

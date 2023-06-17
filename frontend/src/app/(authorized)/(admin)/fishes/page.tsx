@@ -82,7 +82,7 @@ const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddF
       className="fixed z-50 left-0 top-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
     >
       <div className="max-h-full">
-        <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
+        <Dialog.Panel className="w-full md:min-w-[540px] max-w-lg rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
               {formType === "add" ? "Add new fish" : "Change fish compatibility"}
