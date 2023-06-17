@@ -13,9 +13,10 @@ import { getFishData } from "../../creator/aquaLife.logic";
 type AddFishModalProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  formType: "compability" | "add"
 };
 
-const AddFishModal = ({ isOpen, setIsOpen }: AddFishModalProps) => {
+const AddFishModal = ({ isOpen, setIsOpen, formType }: AddFishModalProps) => {
   return (
     <Dialog
       open={isOpen}
@@ -44,10 +45,21 @@ const AddFishModal = ({ isOpen, setIsOpen }: AddFishModalProps) => {
               />
             </button>
           </div>
-          <Dialog.Description className="text-sm text-gray-500">
-            Add new fish. Don't forget to adjust compability later! 
-          </Dialog.Description>
-          <Form onSubmit={() => setIsOpen(false)} />
+          {formType === "add" && (
+            <>
+              <Dialog.Description className="text-sm text-gray-500">
+                Add new fish. Don't forget to adjust compability later!
+              </Dialog.Description>
+              <Form onSubmit={() => setIsOpen(false)} />
+            </>
+          )}
+          {formType === "compability" && (
+            <>
+              <Dialog.Description className="text-sm text-gray-500">
+                Change compability of fishes. Available values are: C – caution, Y - no problems, N – don't match
+              </Dialog.Description>
+            </>
+          )}
         </Dialog.Panel>
       </div>
     </Dialog>
@@ -57,6 +69,7 @@ const AddFishModal = ({ isOpen, setIsOpen }: AddFishModalProps) => {
 // TODO: this route is not protected from non-admins users
 export default function Fishes() {
   const [isOpen, setIsOpen] = useState(false);
+  const [formType, setFormType] = useState("compability");
   const [fishes, setFishes] = useState<Fish[]>([]);
   const columns = [
     {
@@ -94,16 +107,22 @@ export default function Fishes() {
 
   return (
     <div className="my-10 px-5 lg:px-20">
-      <AddFishModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <AddFishModal isOpen={isOpen} setIsOpen={setIsOpen} formType={formType} />
       <button
         className="self-end bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-fit hover:bg-[#2644a8] active:bg-[#2644a8]"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setFormType("add");
+          setIsOpen(true);
+        }}
       >
         Add new fish
       </button>
       <button
         className="self-end border ml-4 border-primary rounded px-4 py-2 text-black text-sm cursor-pointer transition w-fit hover:border-[#2644a8] hover:bg-slate-200 active:bg-slate-200 active:border-[#2644a8]"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setFormType("compability"); 
+          setIsOpen(true);
+        }}
       >
         Change compability rules
       </button>
