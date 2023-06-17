@@ -15,7 +15,7 @@ import classNames from "classnames";
 type AddFishModalProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  formType: "compability" | "add"
+  formType: "compatibility" | "add"
 };
 
 const initialRules = [
@@ -85,7 +85,7 @@ const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddF
         <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
-              {formType === "add" ? "Add new fish" : "Change fish compability"}
+              {formType === "add" ? "Add new fish" : "Change fish compatibility"}
             </Dialog.Title>
             <button
               type="button"
@@ -105,30 +105,28 @@ const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddF
           {formType === "add" && (
             <>
               <Dialog.Description className="text-sm text-gray-500">
-                Add new fish. Don't forget to adjust compability later!
+                Add new fish. Don't forget to adjust compatibility later!
               </Dialog.Description>
               <Form onSubmit={() => setIsOpen(false)} />
             </>
           )}
-          {formType === "compability" && (
+          {formType === "compatibility" && (
             <>
               <Dialog.Description className="text-sm text-gray-500">
-                Available values are: C – caution, Y - no problems, N – don't match
+                Available values are: <br /><b>C</b> – can match with caution,<br /> <b>Y</b> - no problems, <br /><b>N</b> – don't match<br />
               </Dialog.Description>
               <div className="flex flex-col gap-2 items-center mt-10">
                 <RuleGrid rules={rules} options={options} onChange={onRuleChange} />
-                <div className="flex items-center pt-4 space-x-2">
-                    <button
-                      onClick={() => {}}
-                      type="submit"
-                      className={classNames(
-                        "bg-primary rounded px-4 py-2 text-white text-xs cursor-pointer transition w-full",
-                        "hover:bg-[#2644a8] active:bg-[#2644a8]",
-                      )}
-                    >
-                      Save new rules
-                    </button>
-                </div>
+                  <button
+                    onClick={() => {}}
+                    type="submit"
+                    className={classNames(
+                      "bg-primary rounded px-4 py-2 mt-4 text-white text-xs cursor-pointer transition w-full",
+                      "hover:bg-[#2644a8] active:bg-[#2644a8]",
+                    )}
+                  >
+                    Save new rules
+                  </button>
               </div>
             </>
           )}
@@ -141,7 +139,7 @@ const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddF
 // TODO: this route is not protected from non-admins users
 export default function Fishes() {
   const [isOpen, setIsOpen] = useState(false);
-  const [formType, setFormType] = useState("compability");
+  const [formType, setFormType] = useState("compatibility");
   const [fishes, setFishes] = useState<Fish[]>([]);
   const [rules, setRules] = useState(initialRules);
   const columns = [
@@ -193,11 +191,11 @@ export default function Fishes() {
       <button
         className="self-end border ml-4 border-primary rounded px-4 py-2 text-black text-sm cursor-pointer transition w-fit hover:border-[#2644a8] hover:bg-slate-200 active:bg-slate-200 active:border-[#2644a8]"
         onClick={() => {
-          setFormType("compability"); 
+          setFormType("compatibility"); 
           setIsOpen(true);
         }}
       >
-        Change compability rules
+        Change compatibility rules
       </button>
       <DataTable columnsData={columns} rowsData={fishes} itemsPerPage={10} />
     </div>
