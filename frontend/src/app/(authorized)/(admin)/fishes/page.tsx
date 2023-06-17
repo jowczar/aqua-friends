@@ -9,6 +9,8 @@ import Image from "next/image";
 import Form from "./form";
 import { Fish } from "../../creator/AquaLifePage";
 import { getFishData } from "../../creator/aquaLife.logic";
+import RuleGrid from "@/components/RuleGrid";
+import classNames from "classnames";
 
 type AddFishModalProps = {
   isOpen: boolean;
@@ -16,7 +18,62 @@ type AddFishModalProps = {
   formType: "compability" | "add"
 };
 
-const AddFishModal = ({ isOpen, setIsOpen, formType }: AddFishModalProps) => {
+const initialRules = [
+  {
+    key: "Bass",
+    rules: {
+      Salmon: "y",
+      Trout: "n",
+      Bass: "y",
+      Catkey: "n",
+      Walleye: "n",
+    },
+  },
+  {
+    key: "Salmon",
+    rules: {
+      Salmon: "y",
+      Trout: "n",
+      Bass: "n",
+      Catkey: "n",
+      Walleye: "n",
+    },
+  },
+  {
+    key: "Trout",
+    rules: {
+      Salmon: "n",
+      Trout: "y",
+      Bass: "n",
+      Catkey: "n",
+      Walleye: "n",
+    },
+  },
+  {
+    key: "Catkey",
+    rules: {
+      Salmon: "n",
+      Trout: "n",
+      Bass: "n",
+      Catkey: "y",
+      Walleye: "n",
+    },
+  },
+  {
+    key: "Walleye",
+    rules: {
+      Salmon: "n",
+      Trout: "n",
+      Bass: "n",
+      Catkey: "n",
+      Walleye: "y",
+    },
+  },
+];
+
+const options = ["y", "n", "c"];
+
+const AddFishModal = ({ isOpen, setIsOpen, formType, rules, onRuleChange }: AddFishModalProps) => {
   return (
     <Dialog
       open={isOpen}
@@ -28,7 +85,7 @@ const AddFishModal = ({ isOpen, setIsOpen, formType }: AddFishModalProps) => {
         <Dialog.Panel className="w-full max-w-lg rounded bg-white p-6">
           <div className="flex flex-row justify-between items-center">
             <Dialog.Title className="text-xl font-semibold text-gray-900">
-              Add new fish
+              {formType === "add" ? "Add new fish" : "Change fish compability"}
             </Dialog.Title>
             <button
               type="button"
@@ -56,8 +113,23 @@ const AddFishModal = ({ isOpen, setIsOpen, formType }: AddFishModalProps) => {
           {formType === "compability" && (
             <>
               <Dialog.Description className="text-sm text-gray-500">
-                Change compability of fishes. Available values are: C – caution, Y - no problems, N – don't match
+                Available values are: C – caution, Y - no problems, N – don't match
               </Dialog.Description>
+              <div className="flex flex-col gap-2 items-center mt-10">
+                <RuleGrid rules={rules} options={options} onChange={onRuleChange} />
+                <div className="flex items-center pt-4 space-x-2">
+                    <button
+                      onClick={() => {}}
+                      type="submit"
+                      className={classNames(
+                        "bg-primary rounded px-4 py-2 text-white text-xs cursor-pointer transition w-full",
+                        "hover:bg-[#2644a8] active:bg-[#2644a8]",
+                      )}
+                    >
+                      Save new rules
+                    </button>
+                </div>
+              </div>
             </>
           )}
         </Dialog.Panel>
@@ -71,6 +143,7 @@ export default function Fishes() {
   const [isOpen, setIsOpen] = useState(false);
   const [formType, setFormType] = useState("compability");
   const [fishes, setFishes] = useState<Fish[]>([]);
+  const [rules, setRules] = useState(initialRules);
   const columns = [
     {
       Header: "Image",
@@ -107,7 +180,7 @@ export default function Fishes() {
 
   return (
     <div className="my-10 px-5 lg:px-20">
-      <AddFishModal isOpen={isOpen} setIsOpen={setIsOpen} formType={formType} />
+      <AddFishModal isOpen={isOpen} setIsOpen={setIsOpen} formType={formType} rules={rules} onRuleChange={setRules} />
       <button
         className="self-end bg-primary rounded px-4 py-2 text-white text-sm cursor-pointer transition w-fit hover:bg-[#2644a8] active:bg-[#2644a8]"
         onClick={() => {
