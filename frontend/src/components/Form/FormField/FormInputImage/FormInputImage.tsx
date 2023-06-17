@@ -22,13 +22,19 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     if (!input.files?.length) return;
-    // setImageToUpload(input.files[0]);
     setInternalImage(URL.createObjectURL(input.files[0]));
   };
 
-  const onCrop = () => {
+  const onCrop = (canvas: HTMLCanvasElement) => {
     setIsCropperOpen(false);
-    // setImageToUpload();
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob as BlobPart], "fileName.jpg", {
+        type: "image/jpeg",
+      });
+      setImageToUpload(file);
+      setInternalImage(URL.createObjectURL(file));
+    }, "image/jpeg");
   };
 
   return (
@@ -73,7 +79,7 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
             isOpen={isCropperOpen}
             setIsOpen={setIsCropperOpen}
             image={internalImage}
-            onCrop={onCrop}
+            onSubmit={onCrop}
           />
         </label>
       )}

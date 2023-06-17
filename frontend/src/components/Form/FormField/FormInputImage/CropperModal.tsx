@@ -9,15 +9,21 @@ type CropperModalProps = {
   image: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onSubmit: (canvas: HTMLCanvasElement) => void;
 };
 
-const CropperModal = ({ image, isOpen, setIsOpen }: CropperModalProps) => {
+const CropperModal = ({
+  image,
+  isOpen,
+  setIsOpen,
+  onSubmit,
+}: CropperModalProps) => {
   const cropperRef = useRef<ReactCropperElement>(null);
   const onCrop = () => {
     const cropper = cropperRef.current?.cropper;
     if (!cropper) return;
 
-    console.log(cropper.getCroppedCanvas().toDataURL());
+    onSubmit(cropper.getCroppedCanvas());
   };
 
   return (
@@ -57,7 +63,7 @@ const CropperModal = ({ image, isOpen, setIsOpen }: CropperModalProps) => {
           </div>
           <button
             type="button"
-            className="bg-primary rounded px-4 py-2 text-white text-xs cursor-pointer transition w-full hover:bg-[#2644a8] active:bg-[#2644a8]"
+            className="bg-primary mt-4 rounded px-4 py-2 text-white text-xs cursor-pointer transition w-full hover:bg-[#2644a8] active:bg-[#2644a8]"
             onClick={onCrop}
           >
             Crop image and update avatar
