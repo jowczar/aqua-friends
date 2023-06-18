@@ -50,7 +50,9 @@ export default function AquariumAquaViewPage({
 
   useEffect(() => {
     getAquariumData();
-  }, [getAquariumData, aquariumData]);
+  }, [getAquariumData]);
+
+  console.log("aquariumData", aquariumData);
 
   const firstRowData = generateFirstRowData(aquariumData);
   const secondRowData = generateSecondRowData(aquariumData);
@@ -61,6 +63,7 @@ export default function AquariumAquaViewPage({
     264, 417, 438, 887, 309, 397, 550, 575, 563, 430, 525, 592, 492, 467, 513,
     546, 983, 340, 539, 243, 226, 192,
   ];
+
   const sensors: MonitorCardProps[] = [
     {
       parameter: "NO2 – Nitrogen dioxide",
@@ -157,6 +160,10 @@ export default function AquariumAquaViewPage({
     });
   };
 
+  const editAquariumButtonHandler = () => {
+    router.push(`/view/aquariums/${params.id}/edit`);
+  };
+
   const likeButton = (
     <>
       <button
@@ -168,6 +175,18 @@ export default function AquariumAquaViewPage({
         } border-solid border-2" inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal  hover:bg-opacity-90 mb-2 md:mb-0`}
       >
         {aquariumData?.isLiked ? "Remove from favorites" : "Add to favorites"}
+      </button>
+    </>
+  );
+
+  const editAquarium = (
+    <>
+      <button
+        onClick={async () => editAquariumButtonHandler()}
+        className={`w-full md:w-auto bg-stepsGreen border-green-500 text-gray-100
+         border-solid border-2" inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal  hover:bg-opacity-90 mb-2 md:mb-0`}
+      >
+        Edit Aquarium
       </button>
     </>
   );
@@ -205,6 +224,7 @@ export default function AquariumAquaViewPage({
       <div className={`w-full mb-5 mt-5  md:flex gap-4`}>
         {previousButton}
         {likeButton}
+        {editAquarium}
       </div>
 
       <div className="flex py-8">

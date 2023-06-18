@@ -7,8 +7,6 @@ type AquaLifeSummaryCardProps = {
 const AquaLifeSummaryCard = ({ fishes }: AquaLifeSummaryCardProps) => {
   const formatArrayToString = (array: string[]) => array?.join(", ");
 
-  console.log("fishes", fishes);
-
   return (
     <div className="w-full  mx-auto bg-white rounded-xl shadow-sm overflow-hidden  m-4 md:py-4">
       <div className="text-lg md:text-2xl font-light text-center mt-4">
