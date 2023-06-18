@@ -7,6 +7,12 @@ import { getAndMapAquariumData } from "../../data.logic";
 import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumDataProps } from "../../page";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
+import { Fish } from "@/app/(authorized)/creator/AquaLifePage";
+import {
+  Decor,
+  Plant,
+  Terrain,
+} from "@/app/(authorized)/creator/AquaDecorPage";
 
 const initialAquariumData: AquariumDataProps = {
   id: "",
@@ -108,7 +114,7 @@ export const generateThirdRowData = (
     value:
       aquariumData?.aquariumData?.plants &&
       aquariumData?.aquariumData?.plants
-        .map((plants: any) => plants.name)
+        .map((plants: Plant) => plants.name)
         .join(", "),
     iconUrl: "/plants.svg",
   },
@@ -117,7 +123,7 @@ export const generateThirdRowData = (
     value:
       aquariumData?.aquariumData?.decors &&
       aquariumData?.aquariumData?.decors
-        .map((decor: any) => decor.name)
+        .map((decor: Decor) => decor.name)
         .join(", "),
     iconUrl: "/decors.svg",
   },
@@ -126,7 +132,7 @@ export const generateThirdRowData = (
     value:
       aquariumData?.aquariumData?.terrains &&
       aquariumData?.aquariumData?.terrains
-        .map((terrain: any) => terrain.name)
+        .map((terrain: Terrain) => terrain.name)
         .join(", "),
     iconUrl: "/terrain.svg",
   },
@@ -135,7 +141,7 @@ export const generateThirdRowData = (
     value:
       aquariumData?.aquariumData?.fishes &&
       aquariumData?.aquariumData?.fishes
-        .map((fish: any) => fish.name)
+        .map((fish: Fish) => `${fish.name} [${fish.amount}]`)
         .join(", "),
     iconUrl: "/fishes.svg",
   },

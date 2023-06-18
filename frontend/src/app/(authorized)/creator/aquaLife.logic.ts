@@ -35,18 +35,13 @@ export const getFishData = async (
         water: data.requirements.water,
       },
       species: data.species,
+      amount: 1,
     };
   });
 
   const fishData = await Promise.all(fishDataPromises);
 
   setFishes(fishData);
-};
-
-const fishRuleSetMap: { [key: string]: FishRuleSet } = {
-  y: FishRuleSet.COMPATIBLE,
-  n: FishRuleSet.NOT_COMPATIBLE,
-  c: FishRuleSet.CAUTION_REQUIRED,
 };
 
 export const getFishRules = async (

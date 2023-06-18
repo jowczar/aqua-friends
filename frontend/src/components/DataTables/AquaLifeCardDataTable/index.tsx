@@ -38,15 +38,32 @@ const AquaLifeCardDataTable = ({
   const [currentFish, setCurrentFish] = useState<Fish | null>(null);
   const [incompatibleFish, setIncompatibleFish] = useState<Fish | null>(null);
 
+  const [showAddFishAmountModal, setShowAddFishAmountModal] = useState(false);
+  const [fishAmountToAdd, setFishAmountToAdd] = useState(1);
+
   const paginationData = paginationDataHandler(
     allFishes,
     itemsPerPage,
     currentPage
   );
 
+  const addAmountOfFishes = (item: Fish) => {
+    setCurrentFish(item);
+    setShowAddFishAmountModal(true);
+  };
+
+  const confirmFishAmount = () => {
+    if (currentFish) {
+      addButtonHandler(currentFish);
+    }
+
+    setShowAddFishAmountModal(false);
+  };
+
   const addButtonHandler = (item: Fish) => {
     const isWaterTypeMismatch =
       aquariumData.plants[0]?.water !== item.requirements.water;
+
     if (isWaterTypeMismatch) {
       setShowModalWaterTypeMismatch(true);
       return;
@@ -70,7 +87,7 @@ const AquaLifeCardDataTable = ({
     });
 
     if (!incompatibilityDetected) {
-      setUserFishes([...userFishes, item]);
+      setUserFishes([...userFishes, { ...item, amount: fishAmountToAdd }]);
       setShowModalCompatible(true);
     }
   };
@@ -147,7 +164,7 @@ const AquaLifeCardDataTable = ({
                               Remove
                             </button>
                           ) : (
-                            <button onClick={() => addButtonHandler(item)}>
+                            <button onClick={() => addAmountOfFishes(item)}>
                               Add
                             </button>
                           )}
@@ -168,17 +185,50 @@ const AquaLifeCardDataTable = ({
           />
         </div>
       </div>
+      {showAddFishAmountModal && (
+        <Modal
+          title="Add Fish"
+          message={
+            <>
+              How many fish of{" "}
+              <strong className="text-red-600">{currentFish?.name}</strong>{" "}
+              would you like to add?
+            </>
+          }
+          detailsButtonText="Add"
+          cancelButtonText="Close"
+          onDetailsClick={confirmFishAmount}
+          onCancelClick={() => {
+            setShowAddFishAmountModal(false);
+            setFishAmountToAdd(1);
+          }}
+        >
+          <input
+            type="number"
+            min="1"
+            value={fishAmountToAdd}
+            onChange={(e) => setFishAmountToAdd(parseInt(e.target.value))}
+            className="mt-2 py-2 px-3 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm md:text-lg border-gray-300 text-center"
+          />
+        </Modal>
+      )}
       {showModalNotCompatible && (
         <Modal
           title="Error"
           message={
             <>
-              You cannot add the fish of species{" "}
+              You cannot add{" "}
+              <strong className="text-green-600">{currentFish?.name}</strong> of
+              species{" "}
               <strong className="text-red-600">{currentFish?.species}</strong>,
-              as it is incompatible with the fish of species{" "}
+              as it is incompatible with{" "}
+              <strong className="text-green-600">
+                {incompatibleFish?.name}
+              </strong>{" "}
+              of species{" "}
               <strong className="text-red-600">
                 {incompatibleFish?.species}
-              </strong>
+              </strong>{" "}
               that is already in your aquarium.
             </>
           }
@@ -191,24 +241,41 @@ const AquaLifeCardDataTable = ({
           title="Warning"
           message={
             <>
-              Are you sure you want to add the fish of species{" "}
+              Are you sure you want to add {fishAmountToAdd}
+              <strong className="text-green-600">{currentFish?.name}</strong> of
+              species{" "}
               <strong className="text-red-600">{currentFish?.species}</strong>?
               This might not be the best choice.
             </>
           }
           cancelButtonText="Cancel"
           detailsButtonText="Add Anyway"
-          onCancelClick={hideModal}
-          onDetailsClick={addFishWithCaution}
+          onCancelClick={() => {
+            hideModal();
+            setFishAmountToAdd(1);
+          }}
+          onDetailsClick={() => {
+            addFishWithCaution();
+            setFishAmountToAdd(1);
+          }}
         />
       )}
 
       {showModalCompatible && (
         <Modal
           title="Success"
-          message="The fish has been added to the aquarium."
+          message={
+            <>
+              {fishAmountToAdd}{" "}
+              <strong className="text-green-600">{currentFish?.name}</strong>{" "}
+              has been added to the aquarium.
+            </>
+          }
           detailsButtonText="Close"
-          onDetailsClick={hideModal}
+          onDetailsClick={() => {
+            hideModal();
+            setFishAmountToAdd(1);
+          }}
         />
       )}
 

@@ -74,6 +74,7 @@ const ImagesSummaryCard = ({ title, data }: ImagesSummaryCardProps) => {
             <p>Min PH: {fish.requirements.minPh}</p>
             <p>Min Temp: {fish.requirements.minTemp}°C</p>
             <p>Minimum Tank Size: {fish.requirements.minimumTankSize} L</p>
+            <p>Amount: {fish.amount}</p>
           </div>
         );
       case "Decor":

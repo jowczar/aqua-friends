@@ -253,6 +253,22 @@ export default function Creator() {
     );
   };
 
+  const canGoNextStep = () => {
+    const { pump, heater, light, terrains, plants } = aquariumData;
+    switch (currentStep) {
+      case AquaCreatorStep.AQUA_DECOR_PAGE:
+        return (
+          pump.name !== "" &&
+          heater.name !== "" &&
+          light.name !== "" &&
+          terrains.length > 0 &&
+          plants.length > 0
+        );
+      default:
+        return true;
+    }
+  };
+
   const buttons = (
     <>
       {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
@@ -267,7 +283,12 @@ export default function Creator() {
         {currentStep < TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
             onClick={handleNext}
-            className="w-full bg-primary inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal text-white hover:bg-opacity-90  mb-2 md:mb-0"
+            disabled={!canGoNextStep()}
+            className={`w-full inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal ${
+              canGoNextStep()
+                ? "bg-primary text-white hover:bg-opacity-90"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            } mb-2 md:mb-0`}
           >
             Next Step
           </button>
