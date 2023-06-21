@@ -16,6 +16,8 @@ import useUserWithRole from "@/hooks/useUserWithRole";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { doc, updateDoc } from "firebase/firestore";
 import useAddLog from "@/hooks/useAddLog";
+import { AquariumData } from "@/app/(authorized)/creator/page";
+import { Water } from "@/enums/Water.enum";
 
 interface AquariumAquaViewPageProps {
   params: { id: string };
@@ -25,6 +27,10 @@ export type CardData = {
   column: string;
   value: string | undefined;
   iconUrl: string;
+};
+
+const isAquariumFreshWater = (aquariumData: AquariumData) => {
+  return aquariumData.plants[0].water === Water.FRESHWATER ? true : false;
 };
 
 export default function AquariumAquaViewPage({
@@ -51,8 +57,6 @@ export default function AquariumAquaViewPage({
   useEffect(() => {
     getAquariumData();
   }, [getAquariumData]);
-
-  console.log("aquariumData", aquariumData);
 
   const firstRowData = generateFirstRowData(aquariumData);
   const secondRowData = generateSecondRowData(aquariumData);
@@ -161,7 +165,10 @@ export default function AquariumAquaViewPage({
   };
 
   const editAquariumButtonHandler = () => {
-    router.push(`/view/aquariums/${params.id}/edit`);
+    const isFreshWater = isAquariumFreshWater(aquariumData.aquariumData);
+    router.push(
+      `/view/aquariums/${params.id}/edit?isFreshWater=${isFreshWater}`
+    );
   };
 
   const likeButton = (
@@ -179,17 +186,20 @@ export default function AquariumAquaViewPage({
     </>
   );
 
-  const editAquarium = (
-    <>
-      <button
-        onClick={async () => editAquariumButtonHandler()}
-        className={`w-full md:w-auto bg-stepsGreen border-green-500 text-gray-100
+  const editAquarium = () => {
+    if (aquariumData?.userId !== loggedInUserWithDetails?.id) return;
+    return (
+      <>
+        <button
+          onClick={async () => editAquariumButtonHandler()}
+          className={`w-full md:w-auto bg-stepsGreen border-green-500 text-gray-100
          border-solid border-2" inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal  hover:bg-opacity-90 mb-2 md:mb-0`}
-      >
-        Edit Aquarium
-      </button>
-    </>
-  );
+        >
+          Edit Aquarium
+        </button>
+      </>
+    );
+  };
 
   const Cards = ({ data }: { data: CardData[] }) => {
     return (
@@ -224,7 +234,7 @@ export default function AquariumAquaViewPage({
       <div className={`w-full mb-5 mt-5  md:flex gap-4`}>
         {previousButton}
         {likeButton}
-        {editAquarium}
+        {editAquarium()}
       </div>
 
       <div className="flex py-8">

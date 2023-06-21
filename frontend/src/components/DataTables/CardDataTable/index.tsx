@@ -44,8 +44,10 @@ const CardDataTable = ({
     name: string;
     water: Water;
   }>({ name: "", water: Water.BOTH });
+
   const [currentAquariumWaterType, setCurrentAquariumWaterType] =
     useState<Water>();
+
   const category = columnTitle.toLowerCase();
 
   const isSingleAnswer = ["pump", "heater", "light"].includes(category);

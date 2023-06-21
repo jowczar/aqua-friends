@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -9,10 +9,6 @@ import useUserWithRole from "@/hooks/useUserWithRole";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import useAddLog from "@/hooks/useAddLog";
 import { useAquariumData } from "../data.logic";
-import AquaLifeSummaryCard from "@/components/AquaLifeSummaryCard";
-import AquaDecorSummaryCard from "@/components/AquaDecorSummaryCard";
-import Search from "@/components/Search";
-import AquaLifeCardDataTable from "@/components/DataTables/AquaLifeCardDataTable";
 import { Fish, FishRules } from "@/app/(authorized)/creator/AquaLifePage";
 import { FishRuleSet } from "@/enums/FishRuleSet.enum";
 import {
@@ -30,10 +26,13 @@ import {
 import CardDataTable from "@/components/DataTables/CardDataTable";
 import { getDecorTableData } from "@/app/(authorized)/creator/aquaDecor.logic";
 import { AquariumData } from "@/app/(authorized)/creator/page";
-import { AquariumDataProps } from "../../../page";
+import AquaLifeCardDataTable from "@/components/DataTables/AquaLifeCardDataTable";
+import { Water } from "@/enums/Water.enum";
+import { doc, updateDoc } from "firebase/firestore";
+import Modal from "@/components/Modal";
 
 interface AquariumEditPageProps {
-  params: { id: string; isFreshWater: string };
+  params: { id: string };
 }
 
 export default function AquariumEditPage({ params }: AquariumEditPageProps) {
@@ -41,6 +40,9 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
   const firestore = useFirestore();
 
   const { user } = useUserWithRole();
+
+  const searchParams = useSearchParams();
+  const isFreshWaterFromQuery = searchParams.get("isFreshWater");
 
   const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
@@ -50,11 +52,9 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
     loggedInUserWithDetails.id
   );
 
-  const [isFreshWater, setIsFreshWater] = useState(
-    Boolean(params.isFreshWater)
-  );
+  const isFreshWater = Boolean(isFreshWaterFromQuery);
 
-  const { aquariumData, getAquariumData, setAquariumData } = useAquariumData(
+  const { aquariumData, getAquariumData } = useAquariumData(
     params.id,
     loggedInUserWithDetails
   );
@@ -62,8 +62,45 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
   const [aquariumName, setAquariumName] = useState("");
   const [searchText, setSearchText] = useState("");
 
+  const [openDataSavedDialog, setOpenDataSavedDialog] = useState(false);
+
   const [internalAquariumData, setInternalAquariumData] =
-    useState<AquariumData>();
+    useState<AquariumData>({
+      pump: {
+        height: 0,
+        image: "",
+        length: 0,
+        lph: 0,
+        name: "",
+        power: 0,
+        water: Water.BOTH,
+        width: 0,
+      },
+      heater: {
+        height: 0,
+        image: "",
+        length: 0,
+        maxTemperature: 0,
+        minTemperature: 0,
+        name: "",
+        power: 0,
+        water: Water.BOTH,
+        width: 0,
+      },
+      light: {
+        height: 0,
+        image: "",
+        length: 0,
+        name: "",
+        power: 0,
+        water: Water.BOTH,
+        width: 0,
+      },
+      plants: [],
+      decors: [],
+      terrains: [],
+      fishes: [],
+    });
 
   const [allFishes, setAllFishes] = useState<Fish[]>([]);
 
@@ -120,86 +157,23 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
     setPlants(isFreshWater ? freshWaterPlants : saltWaterPlants);
   }, [isFreshWater, freshWaterPlants, saltWaterPlants]);
 
+  interface ModalData {
+    type: string;
+    data: any;
+  }
+
+  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [userFishes, setUserFishes] = useState<Fish[]>([]);
 
-  const [showPumpModal, setShowPumpModal] = useState(false);
-  const [showHeaterModal, setShowHeaterModal] = useState(false);
-  const [showLightModal, setShowLightModal] = useState(false);
-  const [showDecorsModal, setShowDecorsModal] = useState(false);
-  const [showTerrainsModal, setShowTerrainsModal] = useState(false);
-  const [showPlantsModal, setShowPlantsModal] = useState(false);
-  const [showFishesModal, setShowFishesModal] = useState(false);
-
-  const handleOpenPumpModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowPumpModal(true);
+  const openModal = (modalName: string, modalData: any) => {
+    setModalData({ type: modalName, data: modalData });
   };
-
-  const handleClosePumpModal = () => {
-    setShowPumpModal(false);
-  };
-
-  const handleOpenHeaterModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowHeaterModal(true);
-  };
-
-  const handleCloseHeaterModal = () => {
-    setShowHeaterModal(false);
-  };
-
-  const handleOpenLightModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowLightModal(true);
-  };
-
-  const handleCloseLightModal = () => {
-    setShowLightModal(false);
-  };
-
-  const handleOpenDecorsModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowDecorsModal(true);
-  };
-
-  const handleCloseDecorsModal = () => {
-    setShowDecorsModal(false);
-  };
-
-  const handleOpenTerrainsModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowTerrainsModal(true);
-  };
-
-  const handleCloseTerrainsModal = () => {
-    setShowTerrainsModal(false);
-  };
-
-  const handleOpenPlantsModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowPlantsModal(true);
-  };
-
-  const handleClosePlantsModal = () => {
-    setShowPlantsModal(false);
-  };
-
-  const handleOpenFishesModal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setShowFishesModal(true);
-  };
-
-  const handleCloseFishesModal = () => {
-    setShowFishesModal(false);
-  };
-
-  console.log("aquariumData", aquariumData);
 
   useEffect(() => {
     getAquariumData();
     getFishData(firestore, setAllFishes, isFreshWater);
     getFishRules(firestore, setFishRules, isFreshWater);
-  }, [getAquariumData]);
+  }, [getAquariumData, isFreshWater, firestore]);
 
   useEffect(() => {
     setAquariumName(aquariumData?.aquariumTitle);
@@ -211,15 +185,34 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
     router.push(`/view/aquariums/${params.id}`);
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-  };
-
   const filteredFishes = allFishes.filter((fish) =>
     fish.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const handleSaveDataButton = () => {};
+  const handleSaveDataButton = async () => {
+    const aquariumsRef = doc(firestore, "aquariums", params.id);
+
+    await updateDoc(aquariumsRef, {
+      decors: internalAquariumData.decors,
+      fishes: userFishes,
+      heater: internalAquariumData.heater,
+      light: internalAquariumData.light,
+      plants: internalAquariumData.plants,
+      pump: internalAquariumData.pump,
+      terrains: internalAquariumData.terrains,
+      name: aquariumName,
+    });
+
+    addLog(`Successfully updated ${aquariumName} data`);
+
+    setOpenDataSavedDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDataSavedDialog(false);
+
+    router.push(`/view/aquariums/${params.id}`);
+  };
 
   const previousButton = (
     <>
@@ -235,13 +228,127 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
   const saveDataButton = (
     <>
       <button
-        onClick={handleSaveDataButton}
+        onClick={async () => await handleSaveDataButton()}
         className="w-full md:w-auto bg-green-600 text-white inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal  hover:bg-opacity-90 mb-2 md:mb-0"
       >
         Save Data
       </button>
     </>
   );
+
+  const getModalDataTitle = (type: string, data: any) => {
+    switch (type) {
+      case "pump":
+      case "heater":
+      case "light":
+        return data[type]?.name;
+      case "plants":
+      case "decors":
+      case "terrains":
+        return data[type]?.map((item: any) => item.name).join(", ");
+      case "fishes":
+        return data[type]
+          ?.map((fish: Fish) => `${fish.name} [${fish.amount}]`)
+          .join(", ");
+      default:
+        return "";
+    }
+  };
+
+  const [aquariumNameModal, setAquariumNameModal] = useState(false);
+
+  const AquariumNameModal = () => {
+    const [newAquariumName, setNewAquariumName] = useState(aquariumName);
+    return (
+      <Modal
+        title="Aquarium Name"
+        message="Change aquarium name"
+        detailsButtonText="Save"
+        onDetailsClick={() => {
+          setAquariumNameModal(false), setAquariumName(newAquariumName);
+        }}
+      >
+        <input
+          type="text"
+          value={newAquariumName}
+          onChange={(e) => setNewAquariumName(e.target.value)}
+          className="mt-2 py-2 px-3 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm md:text-lg border-gray-300 text-center"
+        />
+      </Modal>
+    );
+  };
+
+  const ModalData = () => {
+    if (!modalData || !internalAquariumData) return null;
+
+    const { fishes, ...internalAquariumDataWithoutFishes } =
+      internalAquariumData;
+
+    return (
+      <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+
+          <div
+            className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <p>
+                {modalData.type}:{" "}
+                {getModalDataTitle(
+                  modalData.type.toLowerCase(),
+                  internalAquariumData
+                )}
+              </p>
+
+              <div className="w-full xl:pl-4">
+                {modalData.type === "fishes" ? (
+                  <AquaLifeCardDataTable
+                    columnTitle="Fishes"
+                    allFishes={filteredFishes}
+                    userFishes={userFishes}
+                    setUserFishes={setUserFishes}
+                    itemsPerPage={5}
+                    fishRules={fishRules}
+                    aquariumData={internalAquariumData}
+                  />
+                ) : (
+                  <CardDataTable
+                    columnTitle={modalData.type}
+                    items={modalData.data}
+                    aquariumData={internalAquariumDataWithoutFishes}
+                    setAquariumData={setInternalAquariumData}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                onClick={() => setModalData(null)}
+                type="button"
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Save changes
+              </button>
+              <button
+                onClick={() => setModalData(null)}
+                type="button"
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   interface AquariumCardProps {
     name: string;
@@ -294,28 +401,28 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
         <AquariumCard
           name="Aquarium Name"
           value={aquariumName}
-          onEdit={() => {}}
+          onEdit={() => setAquariumNameModal(true)}
           iconUrl="/title.svg"
         />
 
         <AquariumCard
           name="Pump"
           value={internalAquariumData?.pump?.name as string}
-          onEdit={handleOpenPumpModal}
+          onEdit={() => openModal("pump", pumps)}
           iconUrl="/pump.svg"
         />
 
         <AquariumCard
           name="Heater"
           value={internalAquariumData?.heater?.name as string}
-          onEdit={handleOpenHeaterModal}
+          onEdit={() => openModal("heater", heaters)}
           iconUrl="/heater.svg"
         />
 
         <AquariumCard
           name="Light"
           value={internalAquariumData?.light?.name as string}
-          onEdit={handleOpenLightModal}
+          onEdit={() => openModal("light", lights)}
           iconUrl="/light.svg"
         />
 
@@ -324,7 +431,7 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
           value={(internalAquariumData as AquariumData)?.plants
             .map((plants: Plant) => plants.name)
             .join(", ")}
-          onEdit={handleOpenPlantsModal}
+          onEdit={() => openModal("plants", plants)}
           iconUrl="/plants.svg"
         />
 
@@ -333,7 +440,7 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
           value={(internalAquariumData as AquariumData)?.decors
             .map((decor: Decor) => decor.name)
             .join(", ")}
-          onEdit={handleOpenDecorsModal}
+          onEdit={() => openModal("decors", decors)}
           iconUrl="/decors.svg"
         />
 
@@ -342,133 +449,34 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
           value={(internalAquariumData as AquariumData)?.terrains
             .map((terrain: Terrain) => terrain.name)
             .join(", ")}
-          onEdit={handleOpenTerrainsModal}
+          onEdit={() => openModal("terrains", terrains)}
           iconUrl="/terrain.svg"
         />
 
         <AquariumCard
           name="Fishes"
-          value={(internalAquariumData as any)?.fishes
+          value={userFishes
             .map((fish: Fish) => `${fish.name} [${fish.amount}]`)
             .join(", ")}
-          onEdit={handleOpenFishesModal}
+          onEdit={() => openModal("fishes", allFishes)}
           iconUrl="/fishes.svg"
         />
       </div>
 
-      {showPumpModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
+      {modalData && <ModalData />}
 
-            <div
-              className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <p>Pump: {internalAquariumData?.pump?.name}</p>
+      {aquariumNameModal && <AquariumNameModal />}
 
-                <div className="w-full xl:pl-4">
-                  <CardDataTable
-                    columnTitle="Pump"
-                    items={pumps}
-                    aquariumData={internalAquariumData as AquariumData}
-                    setAquariumData={
-                      setInternalAquariumData as React.Dispatch<
-                        React.SetStateAction<AquariumData>
-                      >
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  onClick={handleClosePumpModal}
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                >
-                  Save changes
-                </button>
-                <button
-                  onClick={handleClosePumpModal}
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
+      {openDataSavedDialog && (
+        <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <Modal
+            title={"Aqua Friends"}
+            message={"Data saved successfully!"}
+            detailsButtonText={"Close"}
+            onDetailsClick={handleClose}
+          />
         </div>
       )}
-
-      {/* {showEditModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <div
-              className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="w-full  xl:pr-4 mt-4 xl:mt-0">
-                  <AquaLifeSummaryCard
-                    fishes={aquariumData.aquariumData.fishes}
-                  />
-                </div>
-
-                <div className="w-full xl:pl-4">
-                  <div className="xl:flex xl:justify-between w-full xl:-flex-col mb-2">
-                    <Search className="w-full" onChange={handleSearchChange} />
-                  </div>
-                  <AquaLifeCardDataTable
-                    columnTitle="Fishes"
-                    allFishes={filteredFishes}
-                    userFishes={userFishes}
-                    setUserFishes={setUserFishes}
-                    itemsPerPage={5}
-                    fishRules={fishRules}
-                    aquariumData={aquariumData.aquariumData}
-                  />
-                </div>
-              </div>
-
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  onClick={handleCloseEditModal}
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                >
-                  Save changes
-                </button>
-                <button
-                  onClick={handleCloseEditModal}
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }
