@@ -1,29 +1,102 @@
 import React from "react";
 import Image from "next/image";
 import { useMediaQuery } from "react-responsive";
+import {
+  Decor,
+  Heater,
+  Light,
+  Plant,
+  Pump,
+  Terrain,
+} from "@/app/(authorized)/creator/AquaDecorPage";
+import { Fish } from "@/app/(authorized)/creator/AquaLifePage";
 
-type ImageSummaryCardData = {
-  image: string;
-  name: string;
-  description: string;
-  value: string;
-};
+type AllItems = Pump | Heater | Light | Fish | Decor | Plant | Terrain;
 
 type ImagesSummaryCardProps = {
   title: string;
-  data: ImageSummaryCardData[];
+  data: AllItems[];
 };
 
 const ImagesSummaryCard = ({ title, data }: ImagesSummaryCardProps) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-  const renderTooltip = (item: ImageSummaryCardData) => (
-    <div>
-      <p>Name: {item.name}</p>
-      <p>Description: {item.description}</p>
-      <p>Value: {item.value}</p>
-    </div>
-  );
+  const getItemType = (item: AllItems): string => {
+    if ("lph" in item) return "Pump";
+    if ("maxTemperature" in item) return "Heater";
+    if ("power" in item) return "Light";
+    if ("requirements" in item) return "Fish";
+    if ("height" in item) return "Decor";
+    if ("water" in item) return "PlantOrTerrain";
+    return "Unknown";
+  };
+
+  const renderTooltip = (item: AllItems) => {
+    switch (getItemType(item)) {
+      case "Pump":
+        const pump = item as Pump;
+        return (
+          <div>
+            <p>Name: {pump.name}</p>
+            <p>Power: {pump.power} W</p>
+            <p>Flow Rate: {pump.lph} L/h</p>
+          </div>
+        );
+      case "Heater":
+        const heater = item as Heater;
+        return (
+          <div>
+            <p>Name: {heater.name}</p>
+            <p>Power: {heater.power} W</p>
+            <p>
+              Temperature Range: {heater.minTemperature}°C -{" "}
+              {heater.maxTemperature}°C
+            </p>
+          </div>
+        );
+      case "Light":
+        const light = item as Light;
+        return (
+          <div>
+            <p>Name: {light.name}</p>
+            <p>Power: {light.power} W</p>
+          </div>
+        );
+      case "Fish":
+        const fish = item as Fish;
+        return (
+          <div>
+            <p>Name: {fish.name}</p>
+            <p>Species: {fish.species}</p>
+            <p>Max KH: {fish.requirements.maxKh}</p>
+            <p>Min KH: {fish.requirements.minKh}</p>
+            <p>Max PH: {fish.requirements.maxPh}</p>
+            <p>Min PH: {fish.requirements.minPh}</p>
+            <p>Min Temp: {fish.requirements.minTemp}°C</p>
+            <p>Minimum Tank Size: {fish.requirements.minimumTankSize} L</p>
+          </div>
+        );
+      case "Decor":
+        const decor = item as Decor;
+        return (
+          <div>
+            <p>Name: {decor.name}</p>
+            <p>Height: {decor.height}</p>
+            <p>Length: {decor.length}</p>
+            <p>Width: {decor.width}</p>
+          </div>
+        );
+      case "PlantOrTerrain":
+        const plantOrTerrain = item as Plant | Terrain;
+        return (
+          <div>
+            <p>Name: {plantOrTerrain.name}</p>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="mx-auto rounded-xl overflow-visible m-4 z-10">

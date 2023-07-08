@@ -19,6 +19,9 @@ import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
 import { Water } from "@/enums/Water.enum";
+import useFirestore from "@/hooks/useFirestore";
+import useUserWithRole from "@/hooks/useUserWithRole";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 const TOTAL_NUMBER_OF_STEPS = 4;
 
@@ -63,6 +66,10 @@ export type TabsElements = {
 
 export default function Creator() {
   const router = useRouter();
+
+  const firestore = useFirestore();
+
+  const { user } = useUserWithRole();
 
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepsCompleted, setStepsCompleted] = useState<number[]>([]);
@@ -132,15 +139,28 @@ export default function Creator() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (currentStep !== 4) {
       setStepsCompleted([...stepsCompleted, currentStep]);
       setCurrentStep(4);
     }
 
-    setOpenDialog(true);
+    await setDoc(doc(firestore, "aquariums", crypto.randomUUID()), {
+      user_id: user?.uid,
+      name: aquariumName,
+      width: aquariumDimensions.width,
+      height: aquariumDimensions.height,
+      length: aquariumDimensions.length,
+      pump: aquariumData.pump,
+      heater: aquariumData.heater,
+      light: aquariumData.light,
+      plants: aquariumData.plants,
+      decors: aquariumData.decors,
+      terrains: aquariumData.terrains,
+      fishes,
+    });
 
-    //TODO: implement saving logic and connect with api
+    setOpenDialog(true);
   };
 
   const handleClose = () => {
@@ -208,6 +228,17 @@ export default function Creator() {
 
   const [fishes, setFishes] = useState<Fish[]>([]);
 
+  const canCreateAquarium = () => {
+    const { pump, heater, light, terrains } = aquariumData;
+    return (
+      pump.name !== "" &&
+      heater.name !== "" &&
+      light.name !== "" &&
+      fishes.length > 0 &&
+      terrains.length > 0
+    );
+  };
+
   const buttons = (
     <>
       {currentStep > AquaCreatorStep.AQUA_SIZE_PAGE && (
@@ -229,8 +260,13 @@ export default function Creator() {
         )}
         {stepsCompleted.length === TOTAL_NUMBER_OF_STEPS - 1 && (
           <button
-            onClick={handleSave}
-            className="w-full bg-green-600 inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal text-white hover:bg-opacity-90"
+            onClick={async () => await handleSave()}
+            disabled={!canCreateAquarium()}
+            className={`w-full inline-flex items-center justify-center rounded-md py-2 px-4 text-center text-base font-normal ${
+              canCreateAquarium()
+                ? "bg-green-600 text-white hover:bg-opacity-90"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            } `}
           >
             Create your new world
           </button>
@@ -288,6 +324,7 @@ export default function Creator() {
                 isFreshWater={isFreshWater}
                 userFishes={fishes}
                 setUserFishes={setFishes}
+                aquariumData={aquariumData}
               />
             );
 
@@ -298,6 +335,7 @@ export default function Creator() {
                 setAquariumName={setAquariumName}
                 aquariumDimensions={aquariumDimensions}
                 aquariumData={aquariumData}
+                fishes={fishes}
               />
             );
           case AquaCreatorStep.AQUA_MODAL:
@@ -308,6 +346,7 @@ export default function Creator() {
                   setAquariumName={setAquariumName}
                   aquariumDimensions={aquariumDimensions}
                   aquariumData={aquariumData}
+                  fishes={fishes}
                 />
                 {openDialog && (
                   <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex items-center justify-center">
