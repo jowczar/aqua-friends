@@ -11,6 +11,7 @@ import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
 import { getAquariumsColumns } from "./aquariums.columns";
 import { AquaViewAquariumDataProps } from "../../page";
+import useAddLog from "@/hooks/useAddLog";
 
 interface UserAquaViewPageProps {
   params: { id: string };
@@ -44,6 +45,12 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
   const { user } = useUserWithRole();
 
   const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
+  const { addLog } = useAddLog(
+    firestore,
+    "Aqua View Users Service",
+    loggedInUserWithDetails.id
+  );
 
   const [aquariumsData, setAquariumsData] = useState<UserAquariumDataProps[]>(
     []
@@ -84,9 +91,15 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
         (friendId: string) => friendId !== userData.id
       );
       isFriend = false;
+      addLog(
+        `Remove ${userData?.name} from friends for user ${loggedInUserWithDetails.username}`
+      );
     } else {
       newFriendsList = [...loggedInUserWithDetails.friends, userData?.id || ""];
       isFriend = true;
+      addLog(
+        `Add ${userData?.name} to friends for user ${loggedInUserWithDetails.username}`
+      );
     }
 
     await updateDoc(usersRef, {

@@ -5,6 +5,8 @@ import useFirestore from "@/hooks/useFirestore";
 import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 
 import useUserWithRole from "@/hooks/useUserWithRole";
+import useAddLog from "@/hooks/useAddLog";
+import { AquaViewAquariumDataProps } from "@/app/(authorized)/view/page";
 
 interface BasicAquariumProps {
   id: string;
@@ -33,6 +35,12 @@ const AquaViewAquariumsActions = <T extends BasicAquariumProps>({
     router.push(`/view/aquariums/${singleAquarium.id}`);
   };
 
+  const { addLog } = useAddLog(
+    firestore,
+    "Aqua View Aquarium Service",
+    loggedInUserWithDetails.id
+  );
+
   const handleFavoriteChange = async (aquariumId: string) => {
     const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
@@ -44,9 +52,21 @@ const AquaViewAquariumsActions = <T extends BasicAquariumProps>({
         (favId) => favId !== aquariumId
       );
       isFavorite = false;
+      addLog(
+        `Remove ${
+          (singleAquarium as unknown as AquaViewAquariumDataProps)
+            ?.aquariumTitle
+        } to liked aquariums for user ${loggedInUserWithDetails.username}`
+      );
     } else {
       newFavoriteList = [...loggedInUserWithDetails.fav_aquariums, aquariumId];
       isFavorite = true;
+      addLog(
+        `Add ${
+          (singleAquarium as unknown as AquaViewAquariumDataProps)
+            ?.aquariumTitle
+        } to liked aquariums for user ${loggedInUserWithDetails.username}`
+      );
     }
 
     await updateDoc(usersRef, {
