@@ -212,6 +212,7 @@ const AquaDecorPage = ({
           setView={setIsFreshWater}
           firstText="Fresh water"
           secondText="Salt water"
+          isFirstView={isFreshWater}
         />
         <AquaDecorSummaryCard aquariumData={aquariumData} />
       </div>

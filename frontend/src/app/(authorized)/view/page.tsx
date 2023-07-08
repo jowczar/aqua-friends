@@ -116,6 +116,7 @@ export default function View() {
               setView={setIsUserView}
               firstText="Users"
               secondText="Aquariums"
+              isFirstView={isUsersView}
             />
           </div>
           <div className="grid-rows-1 md:grid-cols-2 w-full">

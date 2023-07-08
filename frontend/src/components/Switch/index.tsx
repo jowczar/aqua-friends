@@ -8,9 +8,15 @@ const AquaViewSwitch = ({ setIsUsersView }: AquaViewSwitchProps) => {
   firstText: string;
   secondText: string;
   setView: React.Dispatch<React.SetStateAction<boolean>>;
+  isFirstView?: boolean;
 };
 
-const Switch = ({ firstText, secondText, setView }: AquaViewSwitchProps) => {
+const Switch = ({
+  firstText,
+  secondText,
+  setView,
+  isFirstView,
+}: AquaViewSwitchProps) => {
   const handleFirstElementSelected = () => {
     setIsFirstElementSelected(true);
     setView(true);
@@ -23,14 +29,11 @@ const Switch = ({ firstText, secondText, setView }: AquaViewSwitchProps) => {
     setIsSecondElementSelected(true);
   };
 
-  const handleUsersSelected = () => {
-    setIsUsersSelected(true);
-    setIsUsersView(true);
-    setIsAquariumsSelected(false);
-  };
-
-  const [isFirstElementSelected, setIsFirstElementSelected] = useState(true);
-  const [isSecondElementSelected, setIsSecondElementSelected] = useState(false);
+  const [isFirstElementSelected, setIsFirstElementSelected] =
+    useState(isFirstView);
+  const [isSecondElementSelected, setIsSecondElementSelected] = useState(
+    !isFirstView
+  );
 
   return (
     <label

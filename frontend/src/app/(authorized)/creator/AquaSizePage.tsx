@@ -21,7 +21,7 @@ const AquaSizePage = ({
         <ProgressBar
           title={"Aquarium Length"}
           min={10}
-          max={200}
+          max={500}
           unit={Unit.CENTIMETER}
           element={aquariumDimensions.length}
           setElement={(newValue: number) =>
@@ -34,7 +34,7 @@ const AquaSizePage = ({
         <ProgressBar
           title={"Aquarium Width"}
           min={10}
-          max={200}
+          max={500}
           unit={Unit.CENTIMETER}
           element={aquariumDimensions.width}
           setElement={(newValue: number) =>
@@ -47,7 +47,7 @@ const AquaSizePage = ({
         <ProgressBar
           title={"Aquarium Height"}
           min={10}
-          max={200}
+          max={500}
           unit={Unit.CENTIMETER}
           element={aquariumDimensions.height}
           setElement={(newValue: number) =>

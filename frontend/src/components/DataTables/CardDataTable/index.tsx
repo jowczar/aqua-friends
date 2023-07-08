@@ -40,9 +40,19 @@ const CardDataTable = ({
     });
   }, [aquariumData]);
 
+  const [currentElementToAdd, setCurrentElementToAdd] = useState<{
+    name: string;
+    water: Water;
+  }>({ name: "", water: Water.BOTH });
+  const [currentAquariumWaterType, setCurrentAquariumWaterType] =
+    useState<Water>();
   const category = columnTitle.toLowerCase();
 
   const isSingleAnswer = ["pump", "heater", "light"].includes(category);
+  const multipleCategories = ["plants", "decors", "terrains"];
+  const isMultipleItemCategory = multipleCategories.includes(category);
+
+  const categoryKey = category as keyof AquariumData;
 
   const itemsPerPage = 6;
 
@@ -53,22 +63,31 @@ const CardDataTable = ({
   );
 
   const addButtonHandler = (item: AquaItem) => {
-    const multipleCategories = ["plants", "decors", "terrains"];
+    let conflictExists = null;
 
-    const isMultipleItemCategory = multipleCategories.includes(category);
-    const categoryKey = category as keyof AquariumData;
+    setCurrentElementToAdd({ name: item.name, water: item.water });
 
-    const otherTypeExists = Object.values(aquariumData).some((data) => {
-      if (Array.isArray(data)) {
-        return data.some((i) => {
-          if (item.water === Water.BOTH) return false;
-          return i.water !== item.water && i.water !== Water.BOTH;
-        });
-      }
-      return data.water !== item.water && data.water !== Water.BOTH;
-    });
+    if (item.water !== Water.BOTH) {
+      conflictExists = Object.values(aquariumData).some((data) => {
+        if (Array.isArray(data)) {
+          return data.some((i) => {
+            if (i.water !== item.water && i.water !== Water.BOTH) {
+              setCurrentAquariumWaterType(i.water);
+              return true;
+            }
+            return false;
+          });
+        }
 
-    if (otherTypeExists) {
+        if (data.water !== item.water && data.water !== Water.BOTH) {
+          setCurrentAquariumWaterType(data.water);
+          return true;
+        }
+        return false;
+      });
+    }
+
+    if (conflictExists) {
       setShowModal(true);
       return;
     }
@@ -100,8 +119,6 @@ const CardDataTable = ({
   };
 
   const removeButtonHandler = (item: AquaItem) => {
-    const multipleCategories = ["plants", "decors", "terrains"];
-
     if (multipleCategories.includes(category)) {
       setAquariumData((prevState) => {
         const categoryKey = category as keyof AquariumData;
@@ -165,7 +182,7 @@ const CardDataTable = ({
                                 {item.name}
                               </div>
                               <div className="text-sm text-gray-500 whitespace-normal break-all">
-                                {item.description}
+                                Water type: {item.water}
                               </div>
                             </div>
                           </div>
@@ -217,9 +234,27 @@ const CardDataTable = ({
       </div>
       {showModal && (
         <Modal
-          title="Błąd"
-          message="Nie możesz dodać elementu dla Fresh Water, ponieważ jest już element z Salt Water (i odwrotnie)"
-          detailsButtonText="Zamknij"
+          title="Error"
+          message={
+            <>
+              Unable to add
+              <strong className="text-green-600">
+                {" "}
+                {currentElementToAdd.name}
+              </strong>{" "}
+              with water type
+              <strong className="text-red-600">
+                {" "}
+                {currentElementToAdd.water}
+              </strong>{" "}
+              due to incompatibility with the current aquarium water type:
+              <strong className="text-red-600">
+                {" "}
+                {currentAquariumWaterType}
+              </strong>
+            </>
+          }
+          detailsButtonText="Close"
           onDetailsClick={hideModal}
         />
       )}
