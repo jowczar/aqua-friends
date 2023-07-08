@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export type User = {
+  uid: string;
   displayName: string | null;
   email: string | null;
   photoURL: string | null;
@@ -11,13 +12,17 @@ export type User = {
 
 const useUserWithRole = () => {
   const [userWithRole, setUserWithRole] = useState<User | null>(null);
+  const [idToken, setIdToken] = useState<string | null>(null);
   const [user, loading, error] = useAuthState(getAuth(), {
     onUserChanged: async (user: FirebaseUser | null) => {
       if (!user) return;
+      const idToken = await user.getIdToken();
       const idTokenResult = await user.getIdTokenResult();
       const role = idTokenResult.claims.role;
 
+      setIdToken(idToken);
       setUserWithRole({
+        uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
@@ -26,7 +31,7 @@ const useUserWithRole = () => {
     },
   });
 
-  return { user, userWithRole, loading, error };
+  return { user, userWithRole, loading, error, idToken };
 };
 
 export default useUserWithRole;

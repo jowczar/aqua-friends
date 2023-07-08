@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { Gothic_A1 } from "next/font/google";
 
 import { User } from "@/hooks/useUserWithRole";
+import { UserRole } from "@/enums/UserRole.enum";
 
 const font = Gothic_A1({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
@@ -49,7 +50,11 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
               <div className="flex flex-shrink-0 items-center">
                 <Link href="/" className="flex items-center">
                   <Image
-                    src={user?.role === "admin" ? "admin-logo.svg" : "logo.svg"}
+                    src={
+                      user?.role === UserRole.ADMIN
+                        ? "/admin-logo.svg"
+                        : "/logo.svg"
+                    }
                     alt="Aqua friends"
                     height={32}
                     width={166}
@@ -75,34 +80,38 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                 ))}
               </div>
               <div className="flex flex-row gap-3 flex items-center pr-2 sm:pr-0">
-                <button
-                  type="button"
-                  className="rounded-full bg-white hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="sr-only">View messages</span>
-                  <Image
-                    src="chat.svg"
-                    alt="chat"
-                    className="group-hover:scale-110 transition flex-none"
-                    height={16}
-                    width={18}
-                    aria-hidden="true"
-                  />
-                </button>
-                <button
-                  type="button"
-                  className="rounded-full bg-white hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="sr-only">View favorites</span>
-                  <Image
-                    src="heart.svg"
-                    alt="heart"
-                    className="group-hover:scale-110 transition flex-none"
-                    height={16}
-                    width={18}
-                    aria-hidden="true"
-                  />
-                </button>
+                {user?.role !== UserRole.ADMIN && (
+                  <>
+                    <Link
+                      href="/chat"
+                      className="rounded-full bg-white hidden sm:flex w-8 h-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      <span className="sr-only">View messages</span>
+                      <Image
+                        src="/chat.svg"
+                        alt="chat"
+                        className="group-hover:scale-110 transition flex-none"
+                        height={16}
+                        width={18}
+                        aria-hidden="true"
+                      />
+                    </Link>
+                    <button
+                      type="button"
+                      className="rounded-full bg-white hidden sm:flex h-8 w-8 group items-center justify-center focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      <span className="sr-only">View favorites</span>
+                      <Image
+                        src="/heart.svg"
+                        alt="heart"
+                        className="group-hover:scale-110 transition flex-none"
+                        height={16}
+                        width={18}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </>
+                )}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
@@ -111,7 +120,7 @@ const Navbar = ({ navigation, user, signOut }: NavbarProps) => (
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 transition group-hover:scale-110 rounded-full flex-none"
-                        src={user?.photoURL || "man.png"}
+                        src={user?.photoURL || "/man.png"}
                         alt="user photo"
                       />
                     </Menu.Button>

@@ -33,7 +33,7 @@ export default function Settings() {
   }
 
   return (
-    <FileUploaderProvider defaultImage={user.photoUrl || "man.png"}>
+    <FileUploaderProvider defaultImage={user.photoUrl || "/man.png"}>
       <Form displayName={user.displayName} email={user.email} />
     </FileUploaderProvider>
   );

@@ -1,6 +1,10 @@
 import { useState } from "react";
 
 type AquaViewSwitchProps = {
+  setIsUsersView: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const AquaViewSwitch = ({ setIsUsersView }: AquaViewSwitchProps) => {
   firstText: string;
   secondText: string;
   setView: React.Dispatch<React.SetStateAction<boolean>>;

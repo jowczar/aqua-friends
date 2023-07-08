@@ -15,11 +15,12 @@
   },
   "homepage": "https://github.com/jowczar/aqua-friends#readme",
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@hookform/resolvers": "^3.1.0",
     "@headlessui/react": "^1.7.14",
-    "@ant-design/charts": "^1.4.2",
+    "@hookform/resolvers": "^3.1.0",
+    "@stream-io/stream-chat-css": "^3.9.2",
     "@types/node": "18.16.3",
     "@types/react": "18.2.0",
     "classnames": "^2.3.2",
@@ -33,13 +34,18 @@
     "next": "13.3.1",
     "prettier": "^2.8.8",
     "react": "18.2.0",
+    "react-cropper": "^2.3.3",
+    "react-datepicker": "^4.12.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.44.1",
     "react-icons": "^4.8.0",
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
+    "react-table": "^7.8.0",
     "react-toastify": "^9.1.3",
+    "stream-chat": "^8.9.0",
+    "stream-chat-react": "^10.8.2",
     "typescript": "5.0.4",
     "yup": "^1.2.0"
   },
@@ -61,11 +67,19 @@
     "frontend/src/**/*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "functions/src/**/*.{ts}": [
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^5.0.10"
   }
 }

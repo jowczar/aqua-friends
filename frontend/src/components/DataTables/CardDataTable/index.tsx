@@ -170,7 +170,7 @@ const CardDataTable = ({
                               <Image
                                 className="rounded-full"
                                 src={
-                                  item.image ? item.image : "default-fish.png"
+                                  item.image ? item.image : "/default-fish.png"
                                 }
                                 alt="Default image"
                                 height={70}
