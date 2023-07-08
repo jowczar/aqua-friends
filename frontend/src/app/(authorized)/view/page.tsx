@@ -15,6 +15,7 @@ import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 import { getUsersColumns } from "./users.columns";
 import { getAquariumsColumns } from "./aquariums.columns";
+import { useRouter } from "next/navigation";
 
 //TODO: types here needs to be changed
 type AquariumData = {
@@ -80,6 +81,7 @@ export default function View() {
   const firestore = useFirestore();
 
   const { user } = useUserWithRole();
+  const router = useRouter();
 
   const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
@@ -115,7 +117,7 @@ export default function View() {
       <h1 className="font-bold text-xl mb-2">You might like...</h1>
       <div className="flex flex-row gap-1 justify-between">
         {recommendations.map((recommendation, i) => (
-          <div className="flex flex-col items-center justify-center" key={"recommendation_" + i}>
+          <div className="flex flex-col cursor-pointer items-center justify-center" key={"recommendation_" + i} onClick={() => router.push('/view/aquariums/' + recommendation.id)}>
             <img
               className="rounded-full w-20 h-20"
               src={recommendation.avatar}
