@@ -39,7 +39,7 @@ const ImagesSummaryCard = ({ title, data }: ImagesSummaryCardProps) => {
             <div className="group">
               <Image
                 className="h-15 w-15 rounded-full md:h-15 md:w-15"
-                src={item.image ? item.image : "man.png"}
+                src={item.image ? item.image : "/man.png"}
                 alt={item.name}
                 height={isMobile ? 90 : 105}
                 width={isMobile ? 90 : 105}

@@ -40,7 +40,7 @@ const FormInputImage = <TFormValues extends Record<string, unknown>>({
               className={`w-24 h-24 rounded-full transition group-hover:brightness-50 shadow duration-300 ${className}`}
             />
             <Image
-              src="pencil.svg"
+              src="/pencil.svg"
               alt="change avatar"
               height={24}
               width={24}
