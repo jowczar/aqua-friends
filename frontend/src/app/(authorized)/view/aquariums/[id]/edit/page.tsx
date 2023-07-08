@@ -461,6 +461,20 @@ export default function AquariumEditPage({ params }: AquariumEditPageProps) {
           onEdit={() => openModal("fishes", allFishes)}
           iconUrl="/fishes.svg"
         />
+
+        <AquariumCard
+          name="Exceptional situations"
+          value={"No exceptional or critical situations"}
+          onEdit={() => openModal("critical", allFishes)}
+          iconUrl="https://as2.ftcdn.net/v2/jpg/02/18/36/89/1000_F_218368902_uD1oGpUkOv0Oj2axcokoqIp1pfDwAawu.jpg"
+        />
+
+        <AquariumCard
+          name="Measurements"
+          value={"No measurements"}
+          onEdit={() => openModal("measurement", allFishes)}
+          iconUrl="https://static.vecteezy.com/system/resources/previews/007/388/543/original/speedometer-icon-speedometer-sign-performance-measurement-symbol-tachometer-sign-vector.jpg"
+        />
       </div>
 
       {modalData && <ModalData />}
