@@ -15,21 +15,22 @@ const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {
       <div className="md:flex">
         <div className="p-4 md:p-8">
           <div className="flex text-sm md:text-lg font-bold gap-2">
-            Pumps: <span className="font-normal">{aquariumData.pump.name}</span>
+            Pumps:{" "}
+            <span className="font-normal">{aquariumData.pump?.name}</span>
           </div>
           <div className="flex text-sm md:text-lg font-bold gap-2">
             Heater:{" "}
-            <span className="font-normal">{aquariumData.heater.name}</span>
+            <span className="font-normal">{aquariumData.heater?.name}</span>
           </div>
           <div className="flex text-sm md:text-lg font-bold gap-2">
             Light:{" "}
-            <span className="font-normal">{aquariumData.light.name}</span>
+            <span className="font-normal">{aquariumData.light?.name}</span>
           </div>
           <div className="flex text-sm md:text-lg font-bold gap-2">
             Plants:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.plants.map((plant: Equipment) => plant.name)
+                aquariumData.plants.map((plant: Equipment) => plant?.name)
               )}
             </span>
           </div>
@@ -37,7 +38,7 @@ const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {
             Decors:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.decors.map((decor: Equipment) => decor.name)
+                aquariumData.decors.map((decor: Equipment) => decor?.name)
               )}
             </span>
           </div>
@@ -45,7 +46,7 @@ const AquaDecorSummaryCard = ({ aquariumData }: AquaDecorSummaryCardProps) => {
             Terrains:{" "}
             <span className="font-normal">
               {formatArrayToString(
-                aquariumData.terrains.map((terrain: Equipment) => terrain.name)
+                aquariumData.terrains.map((terrain: Equipment) => terrain?.name)
               )}
             </span>
           </div>
