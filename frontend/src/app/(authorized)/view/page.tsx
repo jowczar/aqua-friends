@@ -7,13 +7,14 @@ import FilterDropdown from "@/components/FilterDropdown";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import useFirestore from "@/hooks/useFirestore";
 import useUserWithRole from "@/hooks/useUserWithRole";
-import { User } from "firebase/auth";
 
 import { useEffect, useState } from "react";
-import { useAquariumData, useUserData } from "./data.logic";
-import { useLoggedUser } from "@/hooks/useLoggedUser";
+import { AquaViewUserData, useAquariumData, useUserData } from "./data.logic";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
+import { getUsersColumns } from "./users.columns";
+import { getAquariumsColumns } from "./aquariums.columns";
 
 //TODO: types here needs to be changed
 type AquariumData = {
@@ -38,6 +39,8 @@ export type AquariumDataProps = {
   aquariumData: AquariumData;
 };
 
+export type AquaViewAquariumDataProps = Omit<AquariumDataProps, "aquariumData">;
+
 export type UserFilter = {
   label: string;
   value: UserFilterOptions;
@@ -47,15 +50,6 @@ export type AquariumFilter = {
   label: string;
   value: AquariumFilterOptions;
 };
-
-const aquariumsColumns = [
-  "Owner",
-  "Aquarium Title",
-  "Aquarium Size",
-  "Health Status",
-];
-
-const usersColumns = ["User", "Aquariums"];
 
 const userFilterOptions = [
   {
@@ -81,9 +75,9 @@ const aquariumFilterOptions = [
 export default function View() {
   const firestore = useFirestore();
 
-  const { user }: { user: User | null | undefined } = useUserWithRole();
+  const { user } = useUserWithRole();
 
-  const loggedUser = useLoggedUser(firestore, user?.uid);
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
 
   const [isUsersView, setIsUserView] = useState(true);
   const [currentUserFilter, setCurrentUserFilter] = useState(
@@ -93,23 +87,28 @@ export default function View() {
     aquariumFilterOptions[0]
   );
 
-  const { aquariums } = useAquariumData(
+  const { aquariums, setAquariums } = useAquariumData(
     firestore,
     currentAquariumFilter,
-    loggedUser
+    loggedInUserWithDetails
   );
 
-  const { users } = useUserData(firestore, currentUserFilter, loggedUser);
+  const { users, setUsers } = useUserData(
+    firestore,
+    currentUserFilter,
+    loggedInUserWithDetails
+  );
+
+  const usersColumns = getUsersColumns(users, setUsers);
+
+  const aquariumsColumns = getAquariumsColumns(aquariums, setAquariums);
 
   return (
     <div>
       <div className="my-10 px-5 lg:px-20">
         <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-2">
           <div className="grid-rows-1 md:grid-cols-1 flex justify-center">
-            <AquaViewSwitch
-              isUsersView={isUsersView}
-              setIsUsersView={setIsUserView}
-            />
+            <AquaViewSwitch setIsUsersView={setIsUserView} />
           </div>
           <div className="grid-rows-1 md:grid-cols-2 w-full">
             <FilterDropdown
@@ -125,15 +124,19 @@ export default function View() {
             />
           </div>
         </div>
-        <DataTable
-          data={isUsersView ? users : aquariums}
-          columns={isUsersView ? usersColumns : aquariumsColumns}
-          itemsPerPage={10}
-          allowAquaViewUsersActions={isUsersView ? true : false}
-          allowAquaViewAquariumsActions={isUsersView ? false : true}
-          allowImages={true}
-          loggedUser={loggedUser}
-        />
+        {isUsersView ? (
+          <DataTable<AquaViewUserData>
+            rowsData={users}
+            columnsData={usersColumns}
+            itemsPerPage={10}
+          />
+        ) : (
+          <DataTable<AquaViewAquariumDataProps>
+            rowsData={aquariums}
+            columnsData={aquariumsColumns}
+            itemsPerPage={10}
+          />
+        )}
       </div>
     </div>
   );

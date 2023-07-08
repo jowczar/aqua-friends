@@ -77,7 +77,7 @@ const ProgressBar = ({
       <div className="w-full  mt-14 relative flex flex-row">
         <button onClick={handleDecrement} className="mr-4 ">
           <Image
-            src={"left-arrow-aqua-creator.svg"}
+            src="left-arrow-aqua-creator.svg"
             alt="Left arrow"
             height={25}
             width={25}
@@ -114,7 +114,7 @@ const ProgressBar = ({
 
         <button onClick={handleIncrement} className="ml-4">
           <Image
-            src={"right-arrow-aqua-creator.svg"}
+            src="right-arrow-aqua-creator.svg"
             alt="Right arrow"
             height={25}
             width={25}

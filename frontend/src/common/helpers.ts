@@ -1,4 +1,13 @@
 import { Timestamp } from "firebase/firestore";
+import {
+  getDownloadURL,
+  ref,
+  getStorage,
+  listAll,
+  getMetadata,
+  FullMetadata,
+  StorageReference,
+} from "firebase/storage";
 
 export const formatDate = (dateObj: Timestamp) => {
   const date = new Date(dateObj.seconds * 1000);
@@ -12,4 +21,41 @@ export const formatDate = (dateObj: Timestamp) => {
     minute: "2-digit",
   });
   return formattedDate;
+};
+
+export const getUserAvatar = async (userId: string) => {
+  const storage = getStorage();
+  const listRef = ref(storage, `avatars/${userId}`);
+
+  try {
+    const res = await listAll(listRef);
+
+    if (res.items.length > 0) {
+      const latestAvatarRef = await getLatestFile(res.items);
+      const url = await getDownloadURL(latestAvatarRef);
+      return url;
+    } else {
+      throw new Error("No files in avatars storage");
+    }
+  } catch (error) {
+    console.error(`Could not download avatar for ${userId}: ${error}`);
+    return "/man.png";
+  }
+};
+
+const getLatestFile = async (
+  files: StorageReference[]
+): Promise<StorageReference> => {
+  const metaDataList: FullMetadata[] = await Promise.all(
+    files.map((file) => getMetadata(file))
+  );
+  const latestFileMeta: FullMetadata = metaDataList.reduce(
+    (latestFile: FullMetadata, currentFile: FullMetadata) => {
+      return new Date(latestFile.updated) > new Date(currentFile.updated)
+        ? latestFile
+        : currentFile;
+    }
+  );
+
+  return files[metaDataList.indexOf(latestFileMeta)];
 };

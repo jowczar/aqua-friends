@@ -1,7 +1,7 @@
 import { usersMock } from "./data-mock";
 
-export const paginationDataHandler = (
-  items: Record<string, any>[],
+export const paginationDataHandler = <T extends Record<string, any>>(
+  items: T[],
   itemsPerPage: number,
   currentPage: number
 ) => {

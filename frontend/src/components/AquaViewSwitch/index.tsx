@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-const AquaViewSwitch = ({ setIsUsersView }: any) => {
+type AquaViewSwitchProps = {
+  setIsUsersView: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const AquaViewSwitch = ({ setIsUsersView }: AquaViewSwitchProps) => {
   const handleUsersSelected = () => {
     setIsUsersSelected(true);
     setIsUsersView(true);

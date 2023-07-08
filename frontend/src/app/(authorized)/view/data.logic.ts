@@ -11,12 +11,18 @@ import {
 } from "firebase/firestore";
 
 import { useCallback, useEffect, useState } from "react";
-import { AquariumDataProps, AquariumFilter, UserFilter } from "./page";
-import { LoggedUser } from "@/hooks/useLoggedUser";
+import {
+  AquaViewAquariumDataProps,
+  AquariumDataProps,
+  AquariumFilter,
+  UserFilter,
+} from "./page";
+import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
 import { UserFilterOptions } from "@/enums/UserFilterOptions.enum";
 import { AquariumFilterOptions } from "@/enums/AquariumFilterOptions.enum";
+import { getUserAvatar } from "@/common/helpers";
 
-type UserData = {
+export type AquaViewUserData = {
   id: string;
   name: string;
   avatar: string;
@@ -25,16 +31,57 @@ type UserData = {
   isFriend: boolean;
 };
 
+export const getAndMapAquariumData = async (
+  firestore: Firestore,
+  data: DocumentData,
+  userId: string,
+  aquariumId: string,
+  loggeInUserWithDetails: LoggedInUserWithDetails
+) => {
+  const aquariumSize =
+    (data.width / 100) * (data.height / 100) * (data.length / 100) + "m^3";
+
+  const usersRef = doc(firestore, "users", userId);
+
+  const userSnapshot = await getDoc(usersRef);
+
+  const user = userSnapshot.data();
+
+  const avatarUrl = await getUserAvatar(userId);
+
+  //TODO: how is healthStatus prepared?
+  const healthStatus = HealthStatus.GOOD;
+
+  return {
+    id: aquariumId,
+    name: user?.username || "",
+    avatar: avatarUrl,
+    email: user?.email || "",
+    aquariumTitle: data.name,
+    healthStatus,
+    aquariumSize,
+    isLiked:
+      loggeInUserWithDetails?.fav_aquariums?.includes(aquariumId) || false,
+    aquariumData: {
+      fishes: data?.fishes,
+      pump: data?.pump,
+      heater: data?.heater,
+      light: data?.light,
+      plants: data?.plants,
+      decors: data?.decors,
+      terrains: data?.terrains,
+    },
+  };
+};
+
 export const useAquariumData = (
   firestore: Firestore,
   currentAquariumFilter: AquariumFilter,
-  loggedUser: LoggedUser | null
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ) => {
-  const [aquariums, setAquariums] = useState<AquariumDataProps[]>([]);
+  const [aquariums, setAquariums] = useState<AquaViewAquariumDataProps[]>([]);
 
   const getAquariums = useCallback(async () => {
-    if (!firestore) return;
-
     const aquariumsRef = collection(firestore, "aquariums");
 
     const snapshot = await getDocs(aquariumsRef);
@@ -43,40 +90,15 @@ export const useAquariumData = (
       snapshot.docs.map(async (document: DocumentData) => {
         const data = document.data();
         const aquariumId = document.id;
-
-        const aquariumSize =
-          (data.width / 100) * (data.height / 100) * (data.length / 100) +
-          "m^3";
-
         const userId = data.user_id;
 
-        const usersRef = doc(firestore, "users", userId);
-
-        const userSnapshot = await getDoc(usersRef);
-
-        const user = userSnapshot.data();
-
-        //TODO: how is healthStatus prepared?
-        const healthStatus = HealthStatus.GOOD;
-        return {
-          id: aquariumId,
-          name: user?.username || "",
-          avatar: "",
-          email: user?.email || "",
-          aquariumTitle: data.name,
-          healthStatus,
-          aquariumSize,
-          isLiked: loggedUser?.fav_aquariums?.includes(aquariumId) || false,
-          aquariumData: {
-            fishes: data.fishes,
-            pump: data.pump,
-            heater: data.heater,
-            light: data.light,
-            plants: data.plants,
-            decors: data.decors,
-            terrains: data.terrains,
-          },
-        };
+        return getAndMapAquariumData(
+          firestore,
+          data,
+          userId,
+          aquariumId,
+          loggedInUserWithDetails
+        );
       })
     );
 
@@ -88,27 +110,23 @@ export const useAquariumData = (
     });
 
     setAquariums(filteredAquariums);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAquariumFilter, loggedUser]);
+  }, [firestore, loggedInUserWithDetails, currentAquariumFilter.value]);
 
   useEffect(() => {
     getAquariums();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAquariumFilter, loggedUser]);
+  }, [getAquariums, loggedInUserWithDetails]);
 
-  return { aquariums };
+  return { aquariums, setAquariums };
 };
 
 export const useUserData = (
   firestore: Firestore,
   currentUserFilter: UserFilter,
-  loggedUser: LoggedUser | null
+  loggedInUserWithDetails: LoggedInUserWithDetails
 ) => {
-  const [users, setUsers] = useState<UserData[]>([]);
+  const [users, setUsers] = useState<AquaViewUserData[]>([]);
 
   const getUsers = useCallback(async () => {
-    if (!firestore) return;
-
     const usersRef = collection(firestore, "users");
 
     const snapshot = await getDocs(usersRef);
@@ -128,12 +146,15 @@ export const useUserData = (
         });
 
         const aquariums = aquariumNames.join(", ");
-        const isFriend = loggedUser?.friends?.includes(userId) || false;
+        const isFriend =
+          loggedInUserWithDetails?.friends?.includes(userId) || false;
+
+        const avatarUrl = await getUserAvatar(userId);
 
         return {
           id: userId,
           name: data?.username || "",
-          avatar: "",
+          avatar: avatarUrl,
           email: data?.email || "",
           aquariums,
           isFriend,
@@ -149,13 +170,11 @@ export const useUserData = (
     });
 
     setUsers(filteredUsers);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserFilter, loggedUser]);
+  }, [currentUserFilter.value, firestore, loggedInUserWithDetails?.friends]);
 
   useEffect(() => {
     getUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUserFilter, loggedUser]);
+  }, [currentUserFilter, getUsers, loggedInUserWithDetails]);
 
-  return { users };
+  return { users, setUsers };
 };

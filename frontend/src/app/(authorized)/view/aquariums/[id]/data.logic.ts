@@ -1,72 +1,66 @@
 import { useCallback, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { HealthStatus } from "@/enums/HealthStatus.enum";
-import { AquariumDataProps } from "../../page";
+import { DocumentData, doc, getDoc } from "firebase/firestore";
+
 import useFirestore from "@/hooks/useFirestore";
 import { CardData } from "./page";
+import { getAndMapAquariumData } from "../../data.logic";
+import { LoggedInUserWithDetails } from "@/hooks/useUserWithDetails";
+import { AquariumDataProps } from "../../page";
+import { HealthStatus } from "@/enums/HealthStatus.enum";
 
-export const useAquariumData = (params: any) => {
+const initialAquariumData: AquariumDataProps = {
+  id: "",
+  name: "",
+  avatar: "",
+  email: "",
+  aquariumTitle: "",
+  healthStatus: HealthStatus.GOOD,
+  aquariumSize: "",
+  isLiked: false,
+  aquariumData: {
+    fishes: [],
+    pump: null,
+    heater: null,
+    light: null,
+    plants: [],
+    decors: [],
+    terrains: [],
+  },
+};
+
+export const useAquariumData = (
+  aquariumIdFromParams: string,
+  loggedInUserWithDetails: LoggedInUserWithDetails
+) => {
   const firestore = useFirestore();
-  const [aquariumData, setAquariumData] = useState<AquariumDataProps | null>(
-    null
-  );
+
+  const [aquariumData, setAquariumData] =
+    useState<AquariumDataProps>(initialAquariumData);
 
   const getAquariumData = useCallback(async () => {
-    if (!firestore) return;
-
-    const aquariumId = params.id;
+    const aquariumId = aquariumIdFromParams;
     const aquariumRef = doc(firestore, "aquariums", aquariumId);
 
     const aquariumSnapshot = await getDoc(aquariumRef);
-
     const aquariumData = aquariumSnapshot.data();
-
     const userId = aquariumData?.user_id;
 
-    const usersRef = doc(firestore, "users", userId);
-
-    const userSnapshot = await getDoc(usersRef);
-
-    const user = userSnapshot.data();
-
-    const aquariumSize =
-      (aquariumData?.width / 100) *
-        (aquariumData?.height / 100) *
-        (aquariumData?.length / 100) +
-      "m^3";
-
-    //TODO: how is healthStatus prepared?
-    const healthStatus = HealthStatus.GOOD;
-    const mappedAquariumData = {
-      id: aquariumId,
-      name: user?.username || "",
-      avatar: "",
-      email: user?.email || "",
-      aquariumTitle: aquariumData?.name,
-      healthStatus,
-      aquariumSize,
-      isLiked: user?.fav_aquariums?.includes(aquariumId) || false,
-      aquariumData: {
-        fishes: aquariumData?.fishes,
-        pump: aquariumData?.pump,
-        heater: aquariumData?.heater,
-        light: aquariumData?.light,
-        plants: aquariumData?.plants,
-        decors: aquariumData?.decors,
-        terrains: aquariumData?.terrains,
-      },
-    };
+    const mappedAquariumData = await getAndMapAquariumData(
+      firestore,
+      aquariumData as DocumentData,
+      userId,
+      aquariumId,
+      loggedInUserWithDetails
+    );
 
     setAquariumData(mappedAquariumData);
+  }, [firestore, aquariumIdFromParams, loggedInUserWithDetails]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return { aquariumData, getAquariumData };
+  return { aquariumData, getAquariumData, setAquariumData };
 };
 
 export const generateFirstRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Aquarium title",
@@ -86,7 +80,7 @@ export const generateFirstRowData = (
 ];
 
 export const generateSecondRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Pump",
@@ -105,8 +99,9 @@ export const generateSecondRowData = (
   },
 ];
 
+//TODO: this any typeing will be changeing when i will know full proper structure of plants, decors etc.
 export const generateThirdRowData = (
-  aquariumData: AquariumDataProps | null
+  aquariumData: AquariumDataProps
 ): CardData[] => [
   {
     column: "Plants",

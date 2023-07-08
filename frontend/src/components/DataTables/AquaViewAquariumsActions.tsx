@@ -2,85 +2,87 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 import useFirestore from "@/hooks/useFirestore";
-import { LoggedUser } from "@/hooks/useLoggedUser";
+import { useUserWithDetails } from "@/hooks/useUserWithDetails";
 
-export type AquaViewAquariumsActionsProps = {
-  item: Record<string, any>;
-  items: Record<string, any>[];
-  setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
-  isMobileView?: boolean;
-  loggedUser: LoggedUser | null | undefined;
+import useUserWithRole from "@/hooks/useUserWithRole";
+
+interface BasicAquariumProps {
+  id: string;
+  isLiked: boolean;
+}
+
+export type AquariumActionsProps<T extends BasicAquariumProps> = {
+  singleAquarium: T;
+  aquariums: T[];
+  setAquariums: React.Dispatch<React.SetStateAction<T[]>>;
 };
 
-const AquaViewAquariumsActions = ({
-  item,
-  items,
-  setItems,
-  isMobileView,
-  loggedUser,
-}: AquaViewAquariumsActionsProps) => {
+const AquaViewAquariumsActions = <T extends BasicAquariumProps>({
+  singleAquarium,
+  aquariums,
+  setAquariums,
+}: AquariumActionsProps<T>) => {
   const router = useRouter();
   const firestore = useFirestore();
 
+  const { user } = useUserWithRole();
+
+  const loggedInUserWithDetails = useUserWithDetails(firestore, user?.uid);
+
   const viewButtonHandler = () => {
-    router.push(`/view/aquariums/${item.id}`);
+    router.push(`/view/aquariums/${singleAquarium.id}`);
   };
 
-  const handleFavoriteChange = async (itemId: string) => {
-    if (loggedUser && loggedUser.id) {
-      const usersRef = doc(firestore, "users", loggedUser.id);
+  const handleFavoriteChange = async (aquariumId: string) => {
+    const usersRef = doc(firestore, "users", loggedInUserWithDetails.id);
 
-      let newFavAquariumsList: string[];
-      let isFav: boolean;
+    let newFavoriteList: string[];
+    let isFavorite: boolean;
 
-      if (item.isLiked) {
-        newFavAquariumsList = loggedUser.fav_aquariums.filter(
-          (aquariumId) => aquariumId !== itemId
-        );
-        isFav = false;
-      } else {
-        newFavAquariumsList = [...loggedUser.fav_aquariums, itemId];
-        isFav = true;
-      }
-
-      await updateDoc(usersRef, {
-        fav_aquariums: newFavAquariumsList,
-      });
-
-      const newItems = items.map((item: Record<string, any>) => {
-        if (item.id === itemId) {
-          return { ...item, isLiked: isFav };
-        }
-        return item;
-      });
-      setItems(newItems);
+    if (singleAquarium.isLiked) {
+      newFavoriteList = loggedInUserWithDetails.fav_aquariums.filter(
+        (favId) => favId !== aquariumId
+      );
+      isFavorite = false;
+    } else {
+      newFavoriteList = [...loggedInUserWithDetails.fav_aquariums, aquariumId];
+      isFavorite = true;
     }
+
+    await updateDoc(usersRef, {
+      fav_aquariums: newFavoriteList,
+    });
+
+    const newAquariumList = aquariums.map((aquarium) => {
+      if (aquarium.id === aquariumId) {
+        return { ...aquarium, isLiked: isFavorite };
+      }
+      return aquarium;
+    });
+
+    setAquariums(newAquariumList);
   };
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
       <td
-        className={`${
-          isMobileView ? "flex justify-center" : "hidden"
-        } md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
+        className={`md:table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium`}
       >
-        <div
-          className={`flex items-center ${isMobileView && "justify-center"}`}
-        >
+        <div className={`flex items-center`}>
           <button
             className="rounded-lg p-4 flex items-center gap-3  text-blue-500 hover:text-blue-300"
-            onClick={() => viewButtonHandler()}
+            onClick={viewButtonHandler}
           >
             <span>View</span>
           </button>
           <button
             type="button"
             className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
-            onClick={() => handleFavoriteChange(item.id)}
+            onClick={() => handleFavoriteChange(singleAquarium.id)}
           >
-            <span className="sr-only">View favorites</span>
+            <span className="sr-only">Add to favorites</span>
             <Image
-              src={item.isLiked ? "/heart-red.svg" : "/heart.svg"}
+              src={singleAquarium.isLiked ? "/heart-red.svg" : "/heart.svg"}
               alt="heart"
               className="group-hover:scale-110 transition flex-none"
               height={16}
