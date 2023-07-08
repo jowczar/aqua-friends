@@ -1,39 +1,78 @@
+import useFirestore from "@/hooks/useFirestore";
+import { LoggedUser } from "@/hooks/useLoggedUser";
+import { updateDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export type AquaViewActionsProps = {
+export type AquaViewUsersActionsProps = {
   item: Record<string, any>;
   items: Record<string, any>[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
   isMobileView?: boolean;
+  loggedUser: LoggedUser | null | undefined;
 };
 
-const AquaViewActions = ({
+const AquaViewUsersActions = ({
   item,
   items,
   setItems,
   isMobileView,
-}: AquaViewActionsProps) => {
+  loggedUser,
+}: AquaViewUsersActionsProps) => {
   const router = useRouter();
+  const firestore = useFirestore();
 
   const viewButtonHandler = () => {
-    router.push(`/view/${item.id}`);
+    router.push(`/view/users/${item.id}`);
   };
 
   const messagesButtonHandler = () => {
     //TODO: implement AquaViewActions messages button logic here
   };
 
-  const likeButtonHandler = (itemId: number) => {
-    const newItems = items.map((item: Record<string, any>) => {
-      if (item.id === itemId) {
-        return { ...item, isLiked: !item.isLiked };
-      }
-      return item;
-    });
+  const handleFriendChange = async (itemId: string) => {
+    if (loggedUser && loggedUser.id) {
+      const usersRef = doc(firestore, "users", loggedUser.id);
 
-    setItems(newItems);
+      let newFriendsList: string[];
+      let isFriend: boolean;
+
+      if (item.isFriend) {
+        newFriendsList = loggedUser.friends.filter(
+          (friendId) => friendId !== itemId
+        );
+        isFriend = false;
+      } else {
+        newFriendsList = [...loggedUser.friends, itemId];
+        isFriend = true;
+      }
+
+      await updateDoc(usersRef, {
+        friends: newFriendsList,
+      });
+
+      const newItems = items.map((item: Record<string, any>) => {
+        if (item.id === itemId) {
+          return { ...item, isFriend: isFriend };
+        }
+        return item;
+      });
+      setItems(newItems);
+    }
   };
+
+  useEffect(() => {
+    if (loggedUser) {
+      const newItems = items.map((item: Record<string, any>) => {
+        if (item.id === loggedUser.id) {
+          return { ...item, isFriend: loggedUser.friends.includes(item.id) };
+        }
+        return item;
+      });
+      setItems(newItems);
+    }
+  }, [loggedUser]);
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
@@ -58,7 +97,7 @@ const AquaViewActions = ({
           >
             <span className="sr-only">View messages</span>
             <Image
-              src="chat.svg"
+              src="/chat.svg"
               alt="chat"
               className="group-hover:scale-110 transition flex-none"
               height={16}
@@ -69,12 +108,12 @@ const AquaViewActions = ({
           <button
             type="button"
             className="rounded-full flex h-8 w-8 group items-center justify-center focus:outline-none"
-            onClick={() => likeButtonHandler(item.id)}
+            onClick={() => handleFriendChange(item.id)}
           >
-            <span className="sr-only">View favorites</span>
+            <span className="sr-only">Add to friend</span>
             <Image
-              src={item.isLiked ? "heart-red.svg" : "heart.svg"}
-              alt="heart"
+              src={item.isFriend ? "/friend-green.svg" : "/friend-basic.svg"}
+              alt="friend"
               className="group-hover:scale-110 transition flex-none"
               height={16}
               width={18}
@@ -87,4 +126,4 @@ const AquaViewActions = ({
   );
 };
 
-export default AquaViewActions;
+export default AquaViewUsersActions;

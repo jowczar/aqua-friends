@@ -1,19 +1,43 @@
 "use client";
 
-import { getUserDataMockById } from "@/components/DataTables/helpers";
 import MonitorCard, { MonitorCardProps } from "@/components/MonitorCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useEffect } from "react";
 
-interface ItemViewPageProps {
+import {
+  generateFirstRowData,
+  generateSecondRowData,
+  generateThirdRowData,
+  useAquariumData,
+} from "./data.logic";
+import { AquariumDataProps } from "../../page";
+
+interface AquariumAquaViewPageProps {
   params: { id: string };
 }
 
-export default function ItemViewPage({ params }: ItemViewPageProps) {
+export type CardData = {
+  column: string;
+  value: string | undefined;
+  iconUrl: string;
+};
+
+export default function AquariumAquaViewPage({
+  params,
+}: AquariumAquaViewPageProps) {
   const router = useRouter();
-  //TODO: right now, im using mock function to get mock data by id, it will be
-  // changed in the future, when api will be finished
-  const itemData = getUserDataMockById(+params.id);
+
+  const { aquariumData, getAquariumData } = useAquariumData(params);
+
+  useEffect(() => {
+    getAquariumData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const firstRowData = generateFirstRowData(aquariumData);
+  const secondRowData = generateSecondRowData(aquariumData);
+  const thirdRowData = generateThirdRowData(aquariumData);
 
   // TODO: get this data from backend
   const data = [
@@ -79,6 +103,34 @@ export default function ItemViewPage({ params }: ItemViewPageProps) {
     </>
   );
 
+  const Cards = ({ data }: { data: CardData[] }) => {
+    return (
+      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
+        {data.map((item, index) => (
+          <div
+            key={index}
+            className="flex w-full text-center items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5"
+          >
+            <div className="flex items-center justify-start text-left w-full">
+              <Image
+                src={item.iconUrl}
+                alt="icon"
+                className="flex"
+                height={30}
+                width={30}
+                aria-hidden="true"
+              />
+              <div className="flex flex-col justify-center ml-2 w-full text-center">
+                {item.column}:
+                <div className="font-bold px-1 text-center">{item.value}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="my-10 px-4 md:px-20">
       <div className={`w-full mb-5 mt-5  md:flex md:justify-between`}>
@@ -89,7 +141,7 @@ export default function ItemViewPage({ params }: ItemViewPageProps) {
         <div className="flex-shrink-0 h-15 w-15 hidden xl:block mr-4">
           <Image
             className="h-15 w-15 rounded-full"
-            src={itemData?.avatar ? itemData?.avatar : "man.png"}
+            src={aquariumData?.avatar ? aquariumData?.avatar : "/man.png"}
             alt="Default avatar"
             height={100}
             width={100}
@@ -97,28 +149,18 @@ export default function ItemViewPage({ params }: ItemViewPageProps) {
         </div>
         <div className="w-full flex flex-col justify-center">
           <div className="text-2xl text-primary font-bold text-center md:text-left">
-            {itemData?.name}
+            {aquariumData?.name}
           </div>
           <div className="text-lg text-primary font-normal text-center md:text-left">
-            {itemData?.email}
+            {aquariumData?.email}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row mb-4 mt-4 gap-5">
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Aquarium Title:
-          <div className="font-bold px-1">{itemData?.aquariumTitle}</div>
-        </div>
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Aquarium Size:
-          <div className="font-bold px-1">{itemData?.aquariumSize}</div>
-        </div>
-        <div className="flex w-full items-center justify-center text-sm text-primary font-light bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-          Health Status:
-          <div className="font-bold px-1">{itemData?.healthStatus}</div>
-        </div>
-      </div>
+      <Cards data={firstRowData} />
+      <Cards data={secondRowData} />
+      <Cards data={thirdRowData} />
+
       <div className="grid md:grid-flow-col grid-rows-2 lg:grid-rows-1 auto-cols-fr gap-4 overflow-x-auto overflow-y-hidden">
         {sensors.map((sensor, index) => (
           <div className="flex-1" key={`sensor_${index}`}>

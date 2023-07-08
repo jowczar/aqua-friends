@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HealthStatus } from "@/enums/HealthStatus.enum";
 import Pagination from "../Pagination";
-import AquaViewActions from "./AquaViewActions";
+import AquaViewAquariumsActions from "./AquaViewAquariumsActions";
 import AquaLifeActions from "./AquaLifeActions";
 import { Environment } from "@/enums/Environment.enum";
 import { paginationDataHandler } from "./helpers";
+import AquaViewUsersActions from "./AquaViewUsersActions";
+import { LoggedUser } from "@/hooks/useLoggedUser";
 
 type DataTableProps = {
   columns: string[];
   data: Record<string, any>[];
   itemsPerPage: number;
-  allowAquaViewActions?: boolean;
+  allowAquaViewUsersActions?: boolean;
+  allowAquaViewAquariumsActions?: boolean;
   allowAquaLifeActions?: boolean;
   allowImages: boolean;
+  loggedUser?: LoggedUser | null | undefined;
 };
 
 type ItemEntries = [
@@ -31,6 +35,7 @@ const excludedKeys = [
   "healthStatus",
   "environment",
   "isLiked",
+  "aquariumData",
 ];
 
 const excludedKeysMobile = [
@@ -41,15 +46,18 @@ const excludedKeysMobile = [
   "name",
   "description",
   "email",
+  "aquariumData",
 ];
 
 const DataTable = ({
   data,
   columns,
   itemsPerPage,
-  allowAquaViewActions,
+  allowAquaViewUsersActions,
   allowAquaLifeActions,
+  allowAquaViewAquariumsActions,
   allowImages,
+  loggedUser,
 }: DataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<Record<string, any>[]>([]);
@@ -142,12 +150,22 @@ const DataTable = ({
                   })}
 
                   {allowAquaLifeActions && <AquaLifeActions isMobileView />}
-                  {allowAquaViewActions && (
-                    <AquaViewActions
+                  {allowAquaViewUsersActions && (
+                    <AquaViewUsersActions
                       item={item}
                       items={items}
                       setItems={setItems}
                       isMobileView={true}
+                      loggedUser={loggedUser}
+                    />
+                  )}
+                  {allowAquaViewAquariumsActions && (
+                    <AquaViewAquariumsActions
+                      item={item}
+                      items={items}
+                      setItems={setItems}
+                      isMobileView={true}
+                      loggedUser={loggedUser}
                     />
                   )}
                 </div>
@@ -192,7 +210,7 @@ const DataTable = ({
                       )
                     }
                   >
-                    {firstColumnData(item)}
+                    {item.name && firstColumnData(item)}
 
                     {Object.entries(item).map(([key, value]: ItemEntries) => {
                       //TODO: Im nots sure if it is the best way to do this, but has no idea for now
@@ -211,11 +229,20 @@ const DataTable = ({
                     {item.hasOwnProperty("environment") && environment(item)}
 
                     {allowAquaLifeActions && <AquaLifeActions />}
-                    {allowAquaViewActions && (
-                      <AquaViewActions
+                    {allowAquaViewUsersActions && (
+                      <AquaViewUsersActions
                         item={item}
                         items={items}
                         setItems={setItems}
+                        loggedUser={loggedUser}
+                      />
+                    )}
+                    {allowAquaViewAquariumsActions && (
+                      <AquaViewAquariumsActions
+                        item={item}
+                        items={items}
+                        setItems={setItems}
+                        loggedUser={loggedUser}
                       />
                     )}
                   </tr>
