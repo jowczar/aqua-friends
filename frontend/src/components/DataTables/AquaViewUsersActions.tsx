@@ -36,7 +36,7 @@ const AquaViewUsersActions = ({
   };
 
   const messagesButtonHandler = () => {
-    //TODO: implement AquaViewActions messages button logic here
+    router.push(`/chat/${singleUser.id}`);
   };
 
   const handleFriendChange = async (itemId: string) => {
@@ -54,7 +54,11 @@ const AquaViewUsersActions = ({
         `Remove ${singleUser.name} to friends for user ${loggedInUserWithDetails.username}`
       );
     } else {
-      newFriendsList = [...loggedInUserWithDetails.friends, itemId];
+      if (loggedInUserWithDetails.friends) {
+        newFriendsList = [...loggedInUserWithDetails.friends, itemId];
+      } else {
+        newFriendsList = [itemId];
+      }
       isFriend = true;
       addLog(
         `Add ${singleUser.name} from friends for user ${loggedInUserWithDetails.username}`

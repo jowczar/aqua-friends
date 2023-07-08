@@ -95,7 +95,14 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
         `Remove ${userData?.name} from friends for user ${loggedInUserWithDetails.username}`
       );
     } else {
-      newFriendsList = [...loggedInUserWithDetails.friends, userData?.id || ""];
+      if (loggedInUserWithDetails.friends) {
+        newFriendsList = [
+          ...loggedInUserWithDetails.friends,
+          userData?.id || "",
+        ];
+      } else {
+        newFriendsList = [userData?.id || ""];
+      }
       isFriend = true;
       addLog(
         `Add ${userData?.name} to friends for user ${loggedInUserWithDetails.username}`
@@ -112,8 +119,9 @@ export default function UserAquaViewPage({ params }: UserAquaViewPageProps) {
     });
   };
 
-  //TODO: add logic here when chats will be applied
-  const handleChatButton = () => {};
+  const handleChatButton = () => {
+    router.push(`/chat/${params.id}`);
+  };
 
   const previousButton = (
     <>

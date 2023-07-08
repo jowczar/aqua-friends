@@ -15,7 +15,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-//TODO: implement firebase app initialized logic and connect it with api, and then remove this console log :gituwa:
 console.log("🔥 Firebase app initialized");
 
 export const FirebaseContext = createContext<FirebaseApp | null>(null);
