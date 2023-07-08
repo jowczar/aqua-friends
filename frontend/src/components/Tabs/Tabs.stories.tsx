@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Tabs, { TabsProps } from ".";
+import TabsElements, { TabsProps } from ".";
 import { useState } from "react";
 import { TabEnum } from "../../enums/Tab.enum";
 

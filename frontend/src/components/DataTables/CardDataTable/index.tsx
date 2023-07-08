@@ -1,21 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Pagination from "../../Pagination";
 import Image from "next/image";
 import { paginationDataHandler } from "../helpers";
+import { AquariumData } from "@/app/(authorized)/creator/page";
+import { AquaItem } from "@/app/(authorized)/creator/AquaDecorPage";
+import Modal from "@/components/Modal";
+import { Water } from "@/enums/Water.enum";
 
 export type CardDataTableProps = {
   columnTitle: string;
-  isSingleAnswer: boolean;
-  items: Record<string, any>[];
+  items: AquaItem[];
+  aquariumData: AquariumData;
+  setAquariumData: React.Dispatch<React.SetStateAction<AquariumData>>;
 };
 
 const CardDataTable = ({
   columnTitle,
-  isSingleAnswer,
   items,
+  aquariumData,
+  setAquariumData,
 }: CardDataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+
+  const [selectedItems, setSelectedItems] = useState<{
+    [key: string]: AquaItem;
+  }>({
+    pump: aquariumData.pump,
+    heater: aquariumData.heater,
+    light: aquariumData.light,
+  });
+
+  useEffect(() => {
+    setSelectedItems({
+      pump: aquariumData.pump,
+      heater: aquariumData.heater,
+      light: aquariumData.light,
+    });
+  }, [aquariumData]);
+
+  const category = columnTitle.toLowerCase();
+
+  const isSingleAnswer = ["pump", "heater", "light"].includes(category);
 
   const itemsPerPage = 6;
 
@@ -25,8 +52,78 @@ const CardDataTable = ({
     currentPage
   );
 
-  const addButtonHandler = () => {
-    //TODO: implement AquaDecorDataTable add button logic here and connect with api
+  const addButtonHandler = (item: AquaItem) => {
+    const multipleCategories = ["plants", "decors", "terrains"];
+
+    const isMultipleItemCategory = multipleCategories.includes(category);
+    const categoryKey = category as keyof AquariumData;
+
+    const otherTypeExists = Object.values(aquariumData).some((data) => {
+      if (Array.isArray(data)) {
+        return data.some((i) => {
+          if (item.water === Water.BOTH) return false;
+          return i.water !== item.water && i.water !== Water.BOTH;
+        });
+      }
+      return data.water !== item.water && data.water !== Water.BOTH;
+    });
+
+    if (otherTypeExists) {
+      setShowModal(true);
+      return;
+    }
+
+    setAquariumData((prevState) => {
+      if (isMultipleItemCategory) {
+        const field = prevState[categoryKey];
+
+        if (Array.isArray(field)) {
+          return {
+            ...prevState,
+            [categoryKey]: [...field, item],
+          };
+        }
+      }
+
+      return {
+        ...prevState,
+        [categoryKey]: item,
+      };
+    });
+
+    if (!isMultipleItemCategory) {
+      setSelectedItems((prevSelectedItems) => ({
+        ...prevSelectedItems,
+        [category]: item,
+      }));
+    }
+  };
+
+  const removeButtonHandler = (item: AquaItem) => {
+    const multipleCategories = ["plants", "decors", "terrains"];
+
+    if (multipleCategories.includes(category)) {
+      setAquariumData((prevState) => {
+        const categoryKey = category as keyof AquariumData;
+
+        const field = prevState[categoryKey];
+
+        if (Array.isArray(field)) {
+          const filteredItems = field.filter(
+            (i: AquaItem) => i.name !== item.name
+          );
+          return {
+            ...prevState,
+            [categoryKey]: filteredItems,
+          };
+        }
+        return prevState;
+      });
+    }
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -75,9 +172,29 @@ const CardDataTable = ({
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           {isSingleAnswer ? (
-                            <input type="radio" name="item" />
+                            <input
+                              type="radio"
+                              name="item"
+                              checked={
+                                selectedItems[category] &&
+                                selectedItems[category].name === item.name
+                              }
+                              onClick={() => addButtonHandler(item as AquaItem)}
+                            />
+                          ) : (aquariumData[category] as AquaItem[]).find(
+                              (i: AquaItem) => i.name === item.name
+                            ) ? (
+                            <button
+                              onClick={() =>
+                                removeButtonHandler(item as AquaItem)
+                              }
+                            >
+                              Remove
+                            </button>
                           ) : (
-                            <button onClick={() => addButtonHandler()}>
+                            <button
+                              onClick={() => addButtonHandler(item as AquaItem)}
+                            >
                               Add
                             </button>
                           )}
@@ -98,6 +215,16 @@ const CardDataTable = ({
           />
         </div>
       </div>
+      {showModal && (
+        <Modal
+          title="Błąd"
+          message="Nie możesz dodać elementu dla Fresh Water, ponieważ jest już element z Salt Water (i odwrotnie)"
+          cancelButtonText="Anuluj"
+          detailsButtonText="Zrozumiałem"
+          onCancelClick={hideModal}
+          onDetailsClick={hideModal}
+        />
+      )}
     </div>
   );
 };

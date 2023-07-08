@@ -1,3 +1,4 @@
+import { TabsElements } from "@/app/(authorized)/creator/page";
 import { TabEnum } from "../../enums/Tab.enum";
 import React from "react";
 import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
@@ -18,7 +19,7 @@ type TabProps = {
 const Dropdown = ({
   currentTab,
   setCurrentTab,
-}: Omit<TabsProps, "className">) => {
+}: Omit<TabsProps, "className" | "tabs">) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentTab((prev) => ({
       ...prev,
@@ -100,9 +101,10 @@ export type CurrentTab = {
 export type TabsProps = {
   currentTab: CurrentTab;
   setCurrentTab: React.Dispatch<React.SetStateAction<CurrentTab>>;
+  tabs: TabsElements;
 };
 
-const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
+const Tabs = ({ currentTab, setCurrentTab, tabs }: TabsProps) => {
   return (
     <div
       className={`inline-flex justify-center rounded-lg w-full mx-auto mr-4`}
@@ -115,8 +117,8 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
           text={"Pumps"}
           isLeft
           isActive={currentTab.tabName === TabEnum.PUMP}
-          shouldShowSuccess={currentTab.shouldShowSuccess}
-          shouldShowWarning={currentTab.shouldShowWarning}
+          shouldShowSuccess={tabs.pump.shouldShowSuccess}
+          shouldShowWarning={tabs.pump.shouldShowWarning}
           showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.PUMP }))
@@ -126,8 +128,8 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
         <Tab
           text={"Heaters"}
           isActive={currentTab.tabName === TabEnum.HEATER}
-          shouldShowSuccess={currentTab.shouldShowSuccess}
-          shouldShowWarning={currentTab.shouldShowWarning}
+          shouldShowSuccess={tabs.heater.shouldShowSuccess}
+          shouldShowWarning={tabs.heater.shouldShowWarning}
           showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.HEATER }))
@@ -137,8 +139,8 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
         <Tab
           text={"Lights"}
           isActive={currentTab.tabName === TabEnum.LIGHT}
-          shouldShowSuccess={currentTab.shouldShowSuccess}
-          shouldShowWarning={currentTab.shouldShowWarning}
+          shouldShowSuccess={tabs.light.shouldShowSuccess}
+          shouldShowWarning={tabs.light.shouldShowWarning}
           showIconsOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.LIGHT }))
@@ -148,7 +150,7 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
         <Tab
           text={"Plants"}
           isActive={currentTab.tabName === TabEnum.PLANTS}
-          numberOfElements={currentTab.numberOfElements}
+          numberOfElements={tabs.plants.numberOfElements}
           showNumbersOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.PLANTS }))
@@ -158,7 +160,7 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
         <Tab
           text={"Decors"}
           isActive={currentTab.tabName === TabEnum.DECORS}
-          numberOfElements={currentTab.numberOfElements}
+          numberOfElements={tabs.decors.numberOfElements}
           showNumbersOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.DECORS }))
@@ -169,7 +171,7 @@ const Tabs = ({ currentTab, setCurrentTab }: TabsProps) => {
           text={"Terrains"}
           isRight
           isActive={currentTab.tabName === TabEnum.TERRAINS}
-          numberOfElements={currentTab.numberOfElements}
+          numberOfElements={tabs.terrains.numberOfElements}
           showNumbersOnly
           onClick={() =>
             setCurrentTab((prev) => ({ ...prev, tabName: TabEnum.TERRAINS }))

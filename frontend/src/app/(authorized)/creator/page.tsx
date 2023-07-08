@@ -4,12 +4,21 @@ import { useState } from "react";
 import CreatorSteps from "@/components/CreatorSteps";
 import { TabEnum } from "@/enums/Tab.enum";
 import AquaSizePage from "./AquaSizePage";
-import AquaDecorPage from "./AquaDecorPage";
+import AquaDecorPage, {
+  AquaItem,
+  Decor,
+  Heater,
+  Light,
+  Plant,
+  Pump,
+  Terrain,
+} from "./AquaDecorPage";
 import AquaSummaryPage from "./AquaSummaryPage";
 import AquaLifePage from "./AquaLifePage";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import { AquaCreatorStep } from "@/enums/AquaCreatorStep.enum";
+import { Water } from "@/enums/Water.enum";
 
 const TOTAL_NUMBER_OF_STEPS = 4;
 
@@ -27,12 +36,29 @@ export type Equipment = {
 };
 
 export type AquariumData = {
-  pump: Equipment;
-  heater: Equipment;
-  light: Equipment;
-  plants: Equipment[];
-  decors: Equipment[];
-  terrains: Equipment[];
+  [key: string]: AquaItem | AquaItem[];
+  pump: Pump;
+  heater: Heater;
+  light: Light;
+  plants: Plant[];
+  decors: Decor[];
+  terrains: Terrain[];
+};
+
+export type TabElement = {
+  tabName: TabEnum;
+  numberOfElements: number;
+  shouldShowSuccess: boolean;
+  shouldShowWarning: boolean;
+};
+
+export type TabsElements = {
+  pump: TabElement;
+  heater: TabElement;
+  light: TabElement;
+  plants: TabElement;
+  decors: TabElement;
+  terrains: TabElement;
 };
 
 export default function Creator() {
@@ -45,6 +71,8 @@ export default function Creator() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [isFreshWater, setIsFreshWater] = useState(true);
+
   const [aquariumDimensions, setAquariumDimensions] =
     useState<AquariumDimensions>({
       length: 10,
@@ -54,34 +82,38 @@ export default function Creator() {
 
   const [aquariumData, setAquariumData] = useState<AquariumData>({
     pump: {
+      height: 0,
       image: "",
-      name: "Pump 1",
-      description: "some desc",
-      value: "some",
+      length: 0,
+      lph: 0,
+      name: "",
+      power: 0,
+      water: Water.BOTH,
+      width: 0,
     },
     heater: {
+      height: 0,
       image: "",
-      name: "Heater 1",
-      description: "some desc",
-      value: "some",
+      length: 0,
+      maxTemperature: 0,
+      minTemperature: 0,
+      name: "",
+      power: 0,
+      water: Water.BOTH,
+      width: 0,
     },
     light: {
+      height: 0,
       image: "",
-      name: "Light 1",
-      description: "some desc",
-      value: "some",
+      length: 0,
+      name: "",
+      power: 0,
+      water: Water.BOTH,
+      width: 0,
     },
-    plants: [
-      { image: "", name: "Plant 1", description: "some desc", value: "some" },
-      { image: "", name: "Plant 2", description: "some desc", value: "some" },
-      { image: "", name: "Plant 3", description: "some desc", value: "some" },
-    ],
-    decors: [
-      { image: "", name: "Decor 1", description: "some desc", value: "some" },
-    ],
-    terrains: [
-      { image: "", name: "Terrain 1", description: "some desc", value: "some" },
-    ],
+    plants: [],
+    decors: [],
+    terrains: [],
   });
 
   const handleNext = () => {
@@ -125,6 +157,54 @@ export default function Creator() {
     shouldShowSuccess: false,
     shouldShowWarning: false,
   });
+
+  const [tabs, setTabs] = useState<TabsElements>({
+    pump: {
+      tabName: TabEnum.PUMP,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: true,
+    },
+    heater: {
+      tabName: TabEnum.HEATER,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: true,
+    },
+    light: {
+      tabName: TabEnum.LIGHT,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: true,
+    },
+    plants: {
+      tabName: TabEnum.PLANTS,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: false,
+    },
+    decors: {
+      tabName: TabEnum.DECORS,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: false,
+    },
+    terrains: {
+      tabName: TabEnum.TERRAINS,
+      numberOfElements: 0,
+      shouldShowSuccess: false,
+      shouldShowWarning: false,
+    },
+  });
+
+  const updateTabsData = (newCurrentTab: TabElement) => {
+    setCurrentTab(newCurrentTab);
+
+    setTabs((prevTabs) => ({
+      ...prevTabs,
+      [newCurrentTab.tabName.toLowerCase()]: newCurrentTab,
+    }));
+  };
 
   const buttons = (
     <>
@@ -192,6 +272,11 @@ export default function Creator() {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 aquariumData={aquariumData}
+                setAquariumData={setAquariumData}
+                tabs={tabs}
+                updateTabsData={updateTabsData}
+                isFreshWater={isFreshWater}
+                setIsFreshWater={setIsFreshWater}
               />
             );
 
