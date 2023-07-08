@@ -11,7 +11,8 @@ const Pagination = ({
   currentPage,
   setCurrentPage,
 }: PaginationProps) => {
-  const pageNumbers = [...Array(totalPages).keys()].map((i) => i + 1);
+  const pageNumbers =
+    totalPages > 0 ? [...Array(totalPages).keys()].map((i) => i + 1) : [];
 
   return (
     <div className="text-center">
