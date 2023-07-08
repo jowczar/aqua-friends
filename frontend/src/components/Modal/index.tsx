@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 type ModalProps = {
   title: string;
-  message: string;
+  message: ReactNode;
   cancelButtonText: string;
   detailsButtonText: string;
   onCancelClick: () => void;
