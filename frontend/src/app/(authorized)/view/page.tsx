@@ -107,9 +107,27 @@ export default function View() {
 
   const aquariumsColumns = getAquariumsColumns(aquariums, setAquariums);
 
+  const recommendations = aquariums.filter(aquarium => aquarium.userId != user.uid).slice(0, 5);
+
   return (
-    <div>
-      <div className="my-10 px-5 lg:px-20">
+    <div className="my-10 px-5 lg:px-20">
+     <div className="mb-4">
+      <h1 className="font-bold text-xl mb-1">You might like...</h1>
+      <div className="flex flex-row gap-1 justify-between">
+        {recommendations.map((recommendation, i) => (
+          <div className="flex flex-col items-center justify-center" key={"recommendation_" + i}>
+            <img
+              className="rounded-full w-20 h-20"
+              src={recommendation.avatar}
+              alt="avatar"
+            />
+            <p className="font-bold">{recommendation.aquariumTitle}</p>
+            <p className="text-sm">{recommendation.aquariumSize}</p>
+          </div>
+        ))}
+      </div>
+     </div>
+      <div className="">
         <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-2">
           <div className="grid-rows-1 md:grid-cols-1 flex justify-center">
             <Switch
