@@ -107,12 +107,12 @@ export default function View() {
 
   const aquariumsColumns = getAquariumsColumns(aquariums, setAquariums);
 
-  const recommendations = aquariums.filter(aquarium => aquarium.userId != user.uid).slice(0, 5);
+  const recommendations = aquariums.filter(aquarium => aquarium.userId != user.uid).sort((a, b) => parseFloat(b.aquariumSize.replace('m^3', '')) - parseFloat(a.aquariumSize.replace('m^3', ''))).slice(0, 5);
 
   return (
     <div className="my-10 px-5 lg:px-20">
      <div className="mb-4">
-      <h1 className="font-bold text-xl mb-1">You might like...</h1>
+      <h1 className="font-bold text-xl mb-2">You might like...</h1>
       <div className="flex flex-row gap-1 justify-between">
         {recommendations.map((recommendation, i) => (
           <div className="flex flex-col items-center justify-center" key={"recommendation_" + i}>
