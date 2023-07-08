@@ -7,6 +7,8 @@ type AquaLifeSummaryCardProps = {
 const AquaLifeSummaryCard = ({ fishes }: AquaLifeSummaryCardProps) => {
   const formatArrayToString = (array: string[]) => array?.join(", ");
 
+  console.log("fishes", fishes);
+
   return (
     <div className="w-full  mx-auto bg-white rounded-xl shadow-sm overflow-hidden  m-4 md:py-4">
       <div className="text-lg md:text-2xl font-light text-center mt-4">
@@ -17,7 +19,9 @@ const AquaLifeSummaryCard = ({ fishes }: AquaLifeSummaryCardProps) => {
           <div className="flex text-sm md:text-lg font-bold gap-2">
             Fishes:{" "}
             <span className="font-normal">
-              {formatArrayToString(fishes?.map((fish: Fish) => fish?.name))}
+              {formatArrayToString(
+                fishes?.map((fish: Fish) => `${fish?.name} [${fish?.amount}]`)
+              )}
             </span>
           </div>
           <div className="flex text-sm md:text-lg font-bold gap-2">

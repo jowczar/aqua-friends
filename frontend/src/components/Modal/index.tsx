@@ -7,6 +7,7 @@ type ModalProps = {
   detailsButtonText: string;
   onCancelClick?: () => void;
   onDetailsClick: () => void;
+  children?: ReactNode;
 };
 
 const Modal = ({
@@ -16,6 +17,7 @@ const Modal = ({
   detailsButtonText,
   onCancelClick,
   onDetailsClick,
+  children,
 }: ModalProps) => {
   return (
     <>
@@ -27,6 +29,9 @@ const Modal = ({
           <span className="bg-primary mx-auto mb-6 inline-block h-1 w-[90px] rounded"></span>
           <p className="text-body-color mb-10 text-base leading-relaxed">
             {message}
+          </p>
+          <p className="text-body-color mb-10 text-base leading-relaxed">
+            {children}
           </p>
           <div className="-mx-3 flex flex-wrap">
             {onCancelClick && (

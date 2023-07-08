@@ -32,6 +32,7 @@ export type Fish = {
   name: string;
   requirements: Requirements;
   species: string;
+  amount: number;
 };
 
 export type FishCompatibility = {
