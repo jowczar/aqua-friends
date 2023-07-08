@@ -173,11 +173,20 @@ export default function Fishes() {
     const fishes = getFishData(firestore, setFishes, true);
   
     // getFishData
-    // const q = query(collection(firestore, "users"), where("admin", "==", true));
-    // await getDocs(q).then((snapshot) => {
-    //   const data = snapshot.docs.map((doc) => doc.data() as Fish);
-    //   // setAdmins(data);
-    // });
+    const q = query(collection(firestore, "freshwater_fish_ruleset"));
+    await getDocs(q).then((snapshot) => {
+      const data = snapshot.docs.map((doc) => [doc.id, doc.data() as Fish]);
+      const newRules = [];
+
+      for (const [fish, rule] of data) {
+        newRules.push({
+          key: fish,
+          rules: rule,
+        })
+      }
+      
+      setRules(newRules);
+    });
   };
 
   useEffect(() => {
