@@ -219,9 +219,7 @@ const CardDataTable = ({
         <Modal
           title="Błąd"
           message="Nie możesz dodać elementu dla Fresh Water, ponieważ jest już element z Salt Water (i odwrotnie)"
-          cancelButtonText="Anuluj"
-          detailsButtonText="Zrozumiałem"
-          onCancelClick={hideModal}
+          detailsButtonText="Zamknij"
           onDetailsClick={hideModal}
         />
       )}

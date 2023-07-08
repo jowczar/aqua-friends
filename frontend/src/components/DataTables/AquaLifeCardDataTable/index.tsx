@@ -170,9 +170,7 @@ const AquaLifeCardDataTable = ({
               , która jest już w twoim akwarium.
             </>
           }
-          cancelButtonText="Anuluj"
-          detailsButtonText="Zrozumiałem"
-          onCancelClick={hideModal}
+          detailsButtonText="Zamknij"
           onDetailsClick={hideModal}
         />
       )}
@@ -197,9 +195,7 @@ const AquaLifeCardDataTable = ({
         <Modal
           title="Sukces"
           message="Rybka została dodana do akwarium."
-          cancelButtonText="Zamknij"
           detailsButtonText="Zamknij"
-          onCancelClick={hideModal}
           onDetailsClick={hideModal}
         />
       )}
