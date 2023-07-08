@@ -170,34 +170,34 @@ const AquaLifeCardDataTable = ({
       </div>
       {showModalNotCompatible && (
         <Modal
-          title="Błąd"
+          title="Error"
           message={
             <>
-              Nie możesz dodać rybki gatunku{" "}
+              You cannot add the fish of species{" "}
               <strong className="text-red-600">{currentFish?.species}</strong>,
-              ponieważ jest niekompatybilna z rybką gatunku{" "}
+              as it is incompatible with the fish of species{" "}
               <strong className="text-red-600">
                 {incompatibleFish?.species}
               </strong>
-              , która jest już w twoim akwarium.
+              that is already in your aquarium.
             </>
           }
-          detailsButtonText="Zamknij"
+          detailsButtonText="Close"
           onDetailsClick={hideModal}
         />
       )}
       {showModalCaution && (
         <Modal
-          title="Ostrzeżenie"
+          title="Warning"
           message={
             <>
-              Czy na pewno chcesz dodać rybkę gatunku{" "}
+              Are you sure you want to add the fish of species{" "}
               <strong className="text-red-600">{currentFish?.species}</strong>?
-              Może nie być to najlepsza opcja.
+              This might not be the best choice.
             </>
           }
-          cancelButtonText="Anuluj"
-          detailsButtonText="Dodaj mimo wszystko"
+          cancelButtonText="Cancel"
+          detailsButtonText="Add Anyway"
           onCancelClick={hideModal}
           onDetailsClick={addFishWithCaution}
         />
@@ -205,18 +205,18 @@ const AquaLifeCardDataTable = ({
 
       {showModalCompatible && (
         <Modal
-          title="Sukces"
-          message="Rybka została dodana do akwarium."
-          detailsButtonText="Zamknij"
+          title="Success"
+          message="The fish has been added to the aquarium."
+          detailsButtonText="Close"
           onDetailsClick={hideModal}
         />
       )}
 
       {showModalWaterTypeMismatch && (
         <Modal
-          title="Błąd"
-          message="Typ wody rybki nie jest zgodny z typem wody akwarium. Nie możesz dodać tej rybki."
-          detailsButtonText="Zamknij"
+          title="Error"
+          message="The water type of the fish is not compatible with the water type of the aquarium. You cannot add this fish."
+          detailsButtonText="Close"
           onDetailsClick={() => setShowModalWaterTypeMismatch(false)}
         />
       )}
